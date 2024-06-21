@@ -1,3 +1,73 @@
 .t-header {
     height: 90px;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.t-header .t-header_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    width: 1280px;
+}
+
+.t-header .t-header_right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.t-header .t-header_right button {
+    padding: 12px 24px;
+    border: unset;
+    box-shadow: 0px 6px 18px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #1178ff;
+    color: #fff;
+}
+
+.t-header .t-header_right button:focus {
+    box-shadow: 0px 6px 18px 0px rgba(0, 0, 0, 0.1);
+    opacity: 0.7;
+}
+
+.t-header .t-header_left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.t-header .t-header_left i {
+    font-size: 40px;
+    color: #dbdbdb;
+}
+
+.t-header .t-header_left a {
+    text-decoration: none;
+}
+
+.t-header .t-header_left a p {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.t-header .t-header_left a p:nth-child(1),
+.t-header .t-header_left a p:nth-child(3) {
+    color: #a8a8a8;
+}
+
+.t-header .t-header_left a p:nth-child(3) {
+    font-weight: 400;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+}
+
+.t-header .t-header_left a p:nth-child(2) {
+    font-size: 18px;
+    color: #000;
 }

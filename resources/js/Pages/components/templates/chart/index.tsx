@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
-import './styles.css';
+import './styles.css'
 import { exampleDataChart, unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
 import { ChartContext } from '../../../pages/home.page/index';
 import { useChart } from '../provider';
 import Loading from '../../atoms/loading';
+import Slider from '../../atoms/slider';
+import { colorsPetal } from '../../atoms/flower';
 
 interface FlowerChartProps {
     isDetail?: boolean;
@@ -23,26 +25,46 @@ export interface Indicator {
     weightedValue: number;
 }
 
-type SortType = 'alphabet' | 'rank';
+type SortType = 'alphabet' | 'rank'
 
-const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail = false }) => {
+const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     const { isFilter, handleSetIsFilter, loading, chartData, handleSetChartData, handleSetLoading } = useChart();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
+    const [filter, setFilter] = useState({
+        housing: '',
+        income: '',
+        jobs: '',
+        community: '',
+        education: '',
+        environment: '',
+        civicEngagement: '',
+        health: '',
+        lifeSatisfaction: '',
+        safety: '',
+        workLifeBalance: '',
+    })
+    const [valueAUnit, setValueAUnit] = useState(0);
+    console.log(valueAUnit);
+    useEffect(() => {
+        const getHeightUnit = document.querySelector('.t-chart_unit div');
+        setValueAUnit((getHeightUnit as any).offsetHeight);
+    }, [window.innerWidth, window.innerHeight])
 
     const handleOnMouseEnterColumn = (id?: number) => {
         setIdColumnHover(Number(id));
     }
+
     const handleOnMouseLeaveColumn = () => { setIdColumnHover(0); }
 
     const handleSortData = (type: 'alphabet' | 'rank') => {
-        setSortBy(type);
+        setSortBy(type)
         handleSetIsFilter(true);
         switch (type) {
             case 'alphabet':
                 const alphabet = chartData?.sort((a: districtItem, b: districtItem) => a.district.localeCompare(b.district));
                 handleSetLoading(true);
-                handleSetChartData(alphabet as districtItem[]);
+                handleSetChartData(alphabet as districtItem[])
                 break;
             case 'rank':
                 const rank = chartData?.sort((a: districtItem, b: districtItem) => a.value - b.value);
@@ -61,6 +83,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail = false }) => {
                 <div className='t-chart_main'>
                     {chartData?.map((item: districtItem, index: number) => (
                         <FlowerColumn
+                            unit={valueAUnit}
                             isFilter={isFilter}
                             data={item.indicators}
                             value={item.value}
@@ -70,38 +93,43 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail = false }) => {
                             onMouseEnter={handleOnMouseEnterColumn}
                             onMouseLeave={handleOnMouseLeaveColumn}
                             handleClickColumn={() => {
-                                console.log(item);
+                                alert(JSON.stringify(item))
                             }}
                         />
                     ))}
                 </div>
             }
             <div className='t-chart_filter'>
-                <h3>Create Your Better Life Index</h3>
-                <p>Rate the topics according to their importance to you:</p>
+                <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
+                <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
                 <div className="t-chart_filter_box">
                     <ul className="t-chart_filter_box_sort">
                         <button
                             className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'alphabet' ? 'active' : '')}
                             onClick={() => {
                                 if (softBy === 'alphabet') return;
-                                handleSortData('alphabet');
+                                handleSortData('alphabet')
                             }}
-                        >alphabetically</button>
+                        >A - Z</button>
                         <button
                             className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'rank' ? 'active' : '')}
                             onClick={() => {
                                 if (softBy === 'rank') return;
-                                handleSortData('rank');
+                                handleSortData('rank')
                             }}
-                        >by rank</button>
+                        >Theo giá trị</button>
                     </ul>
                     <div className="t-chart_filter_box_content">
                         <div className="t-chart_filter_box_content_wrapper">
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Housing:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
+                            {((chartData || [])[0]?.indicators || []).map((item, index) => {
+                                return (
+                                    <div className="t-chart_filter_box_content_item" key={item.weightedValue}>
+                                        <span style={{ color: colorsPetal[index] }}>{item.indicator}</span>
+                                        <Slider step={2} max={10} />
+                                    </div>
+                                )
+                            })}
+                            {/* 
                             <div className="t-chart_filter_box_content_item">
                                 <span>Income:</span>
                                 <input type="range" step={2} max={10} />
@@ -141,13 +169,18 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail = false }) => {
                             <div className="t-chart_filter_box_content_item">
                                 <span>Work-Life Balance:</span>
                                 <input type="range" step={2} max={10} />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     )
+};
+
+FlowerChart.defaultProps = {
+    isDetail: false
+
 };
 
 export default FlowerChart;
