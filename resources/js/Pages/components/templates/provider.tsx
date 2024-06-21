@@ -11,11 +11,14 @@ import { districtItem } from "./chart";
 
 interface ChartContextData {
     chartData: districtItem[] | undefined,
+    chartDataRoot: districtItem[] | undefined,
     handleSetChartData: (data: districtItem[]) => void,
+    handleSetChartDataRoot: (data: districtItem[]) => void,
     loading: boolean,
     handleSetLoading: (data: boolean) => void,
     handleSetIsFilter: (data: boolean) => void,
     isFilter: boolean,
+
 }
 
 interface ChartProviderProps {
@@ -26,9 +29,9 @@ const ChartContext = createContext<ChartContextData>({} as ChartContextData);
 
 const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [chartData, setChartData] = useState<districtItem[]>();
+    const [chartDataRoot, setChartDataCloneRoot] = useState<districtItem[]>();
     const [loading, setLoading] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
-
 
     const handleSetChartData = (data: districtItem[]) => {
         setChartData(data);
@@ -36,11 +39,17 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             setLoading(false)
         }, 1000)
     };
+
+    const handleSetChartDataRoot = (data: districtItem[]) => {
+        setChartDataCloneRoot(data);
+    };
+
+
     const handleSetLoading = (data: boolean) => setLoading(data);
     const handleSetIsFilter = (data: boolean) => setIsFilter(data);
 
     const chartProviderMemory = useMemo(
-        () => ({ chartData, handleSetChartData, loading, handleSetLoading, isFilter, handleSetIsFilter }),
+        () => ({ chartData, handleSetChartData, loading, handleSetLoading, isFilter, handleSetIsFilter, handleSetChartDataRoot, chartDataRoot }),
         [chartData, loading, isFilter]
     );
 

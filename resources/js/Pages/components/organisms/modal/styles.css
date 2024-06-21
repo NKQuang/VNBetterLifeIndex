@@ -1,0 +1,10 @@
+.react-responsive-modal-modal {
+    min-height: 300px;
+    min-width: 30vw;
+    width: fit-content;
+}
+
+.react-responsive-modal-closeButton:focus {
+    outline: unset;
+    border: unset;
+}

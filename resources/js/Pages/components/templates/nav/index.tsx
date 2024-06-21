@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ }) => (
             </div>
             <div className="t-header_right">
                 <button onClick={() => {
-                    window.location.href = '/login';
+                    window.location.href = '/api/user';
                 }}>Đăng nhập</button>
                 <button onClick={() => {
                     window.location.href = '/register';

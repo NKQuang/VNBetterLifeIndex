@@ -10,3 +10,19 @@
     background: rgb(245, 246, 246);
     background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
 }
+
+.p-home .p-home_content {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.p-home_content_wrapper {
+    max-width: 1280px;
+}
+
+.p-home_content_wrapper h2 {
+    font-size: 30px;
+    font-weight: 600;
+}

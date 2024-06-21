@@ -8,6 +8,7 @@ import { useChart } from '../provider';
 import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import { colorsPetal } from '../../atoms/flower';
+import CModal from '../../organisms/modal';
 
 interface FlowerChartProps {
     isDetail?: boolean;
@@ -28,23 +29,14 @@ export interface Indicator {
 type SortType = 'alphabet' | 'rank'
 
 const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
-    const { isFilter, handleSetIsFilter, loading, chartData, handleSetChartData, handleSetLoading } = useChart();
+    const { isFilter, handleSetIsFilter, loading, chartData, handleSetChartData, handleSetLoading, chartDataRoot } = useChart();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
-    const [filter, setFilter] = useState({
-        housing: '',
-        income: '',
-        jobs: '',
-        community: '',
-        education: '',
-        environment: '',
-        civicEngagement: '',
-        health: '',
-        lifeSatisfaction: '',
-        safety: '',
-        workLifeBalance: '',
-    })
+
     const [valueAUnit, setValueAUnit] = useState(0);
+    const [isOpenModal, setIsOpenModal] = useState(false);
+
+
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
         setValueAUnit((getHeightUnit as any).offsetHeight);
@@ -74,42 +66,53 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     }
 
     return (
-        <div className={mapModifiers('t-chart', isDetail && 'detail')}>
-            <div className='t-chart_unit'>
-                {unit.map((i) => (<div key={i}>{i}&nbsp;-</div>))}
-            </div>
-            {loading ? <Loading /> :
-                <div className='t-chart_main'>
-                    {chartData?.map((item: districtItem, index: number) => (
-                        <FlowerColumn
-                            unit={valueAUnit}
-                            isFilter={isFilter}
-                            data={item.indicators}
-                            value={item.value}
-                            index={index + 1}
-                            isHover={index + 1 === idColumnHover}
-                            columnName={item.district}
-                            onMouseEnter={handleOnMouseEnterColumn}
-                            onMouseLeave={handleOnMouseLeaveColumn}
-                            handleClickColumn={() => {
-                                alert(JSON.stringify(item))
-                            }}
-                        />
-                    ))}
+        <>
+            <div className={mapModifiers('t-chart', isDetail && 'detail')}>
+                <div className='t-chart_unit'>
+                    {unit.map((i) => (<div key={i}>{i}&nbsp;-</div>))}
                 </div>
-            }
-            <div className='t-chart_filter'>
-                <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
-                <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
-                <div className="t-chart_filter_box">
+                {loading ? <Loading /> :
+                    <div className='t-chart_main'>
+                        {chartData?.map((item: districtItem, index: number) => (
+                            <FlowerColumn
+                                unit={valueAUnit}
+                                isFilter={isFilter}
+                                data={item.indicators}
+                                value={item.value}
+                                index={index + 1}
+                                isHover={index + 1 === idColumnHover}
+                                columnName={item.district}
+                                onMouseEnter={handleOnMouseEnterColumn}
+                                onMouseLeave={handleOnMouseLeaveColumn}
+                                handleClickColumn={() => {
+                                    alert(JSON.stringify(item))
+                                }}
+                            />
+                        ))}
+                    </div>
+                }
+                <div className='t-chart_filter'>
+                    <div>
+                        <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
+                        <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
+                        <div className="t-chart_filter_box_vote">
+                            <button
+                                className={mapModifiers('t-chart_filter_box_vote')}
+                                onClick={() => {
+                                    setIsOpenModal(true)
+                                }}
+                            >Đánh giá ngay</button>
+                        </div>
+                    </div>
                     <ul className="t-chart_filter_box_sort">
+                        <p>Sắp xếp:</p>
                         <button
                             className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'alphabet' ? 'active' : '')}
                             onClick={() => {
                                 if (softBy === 'alphabet') return;
                                 handleSortData('alphabet')
                             }}
-                        >A - Z</button>
+                        >alphabet</button>
                         <button
                             className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'rank' ? 'active' : '')}
                             onClick={() => {
@@ -118,62 +121,15 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                             }}
                         >Theo giá trị</button>
                     </ul>
-                    <div className="t-chart_filter_box_content">
-                        <div className="t-chart_filter_box_content_wrapper">
-                            {((chartData || [])[0]?.indicators || []).map((item, index) => {
-                                return (
-                                    <div className="t-chart_filter_box_content_item" key={item.weightedValue}>
-                                        <span style={{ color: colorsPetal[index] }}>{item.indicator}</span>
-                                        <Slider step={2} max={10} />
-                                    </div>
-                                )
-                            })}
-                            {/* 
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Income:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Jobs:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Community:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Education:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Environment:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Civic Engagement:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Health:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Life Satisfaction:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Safety:</span>
-                                <input type="range" step={2} max={10} />
-                            </div>
-                            <div className="t-chart_filter_box_content_item">
-                                <span>Work-Life Balance:</span>
-                                <input type="range" step={2} max={10} />
-                            </div> */}
-                        </div>
-                    </div>
+
                 </div>
             </div>
-        </div>
+            <CModal open={isOpenModal} onClose={() => setIsOpenModal(false)} >
+                <div>
+
+                </div>
+            </CModal>
+        </>
     )
 };
 

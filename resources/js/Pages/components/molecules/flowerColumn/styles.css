@@ -22,17 +22,18 @@
 .m-column_hover_content>* {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .m-column_hover_content>*>span {
     font-size: 14px;
-    min-width: 170px;
+    min-width: 180px;
 }
 
 .m-column_hover_content>*>div {
     height: 10px;
     outline: 1px solid #dbdbdb;
+    max-width: 100px;
 }
 
 .m-column_content .m-column_content_name {
@@ -53,7 +54,7 @@
     position: absolute;
     top: 80px;
     left: 70%;
-    min-width: 270px;
+    min-width: 300px;
     min-height: 100px;
     background-color: #78869f;
     box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
@@ -90,16 +91,17 @@
     color: #78869f;
     display: flex;
     justify-content: space-between;
+    gap: 10px;
 }
 
 .m-column_hover_unit span {
-    min-width: 175px;
+    min-width: 180px;
 }
 
 .m-column_hover_unit ul {
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    width: 100px;
 }
 
 .m-column_hover_content {

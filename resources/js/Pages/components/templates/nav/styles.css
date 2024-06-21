@@ -28,6 +28,7 @@
     cursor: pointer;
     background-color: #1178ff;
     color: #fff;
+    font-weight: 600;
 }
 
 .t-header .t-header_right button:focus {
@@ -70,4 +71,10 @@
 .t-header .t-header_left a p:nth-child(2) {
     font-size: 18px;
     color: #000;
+}
+
+@media only screen and (max-width: 1280px) {
+    .t-header .t-header_wrapper {
+        width: 100vw;
+    }
 }

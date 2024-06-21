@@ -90,50 +90,12 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                         <p>{columnName}</p>
                     </div>
                     <div className="m-column_hover_content">
-                        <div>
-                            <span>{data[0].indicator}:</span>
-                            <div style={{ width: data[0].value * 10, backgroundColor: colorsPetal[0] }} />
-                        </div>
-                        <div>
-                            <span>{data[1].indicator}:</span>
-                            <div style={{ width: data[1].value * 10, backgroundColor: colorsPetal[1] }} />
-                        </div>
-                        <div>
-                            <span>{data[2].indicator}:</span>
-                            <div style={{ width: data[2].value * 10, backgroundColor: colorsPetal[2] }} />
-                        </div>
-                        <div>
-                            <span>{data[3].indicator}:</span>
-                            <div style={{ width: data[3].value * 10, backgroundColor: colorsPetal[3] }} />
-                        </div>
-                        <div>
-                            <span>{data[4].indicator}:</span>
-                            <div style={{ width: data[4].value * 10, backgroundColor: colorsPetal[4] }} />
-                        </div>
-                        <div>
-                            <span>{data[5].indicator}:</span>
-                            <div style={{ width: data[5].value * 10, backgroundColor: colorsPetal[5] }} />
-                        </div>
-                        <div>
-                            <span>{data[6].indicator}:</span>
-                            <div style={{ width: data[6].value * 10, backgroundColor: colorsPetal[6] }} />
-                        </div>
-                        <div>
-                            <span>{data[7].indicator}:</span>
-                            <div style={{ width: data[7].value * 10, backgroundColor: colorsPetal[7] }} />
-                        </div>
-                        <div>
-                            <span>{data[8].indicator}:</span>
-                            <div style={{ width: data[8].value * 10, backgroundColor: colorsPetal[8] }} />
-                        </div>
-                        <div>
-                            <span>{data[9].indicator}:</span>
-                            <div style={{ width: data[9].value * 10, backgroundColor: colorsPetal[9] }} />
-                        </div>
-                        <div>
-                            <span>{data[10].indicator}:</span>
-                            <div style={{ width: data[10].value * 10, backgroundColor: colorsPetal[10] }} />
-                        </div>
+                        {data?.map((item, index) => (
+                            <div key={item.value}>
+                                <span>{item.indicator}:</span>
+                                <div style={{ width: (item.value / 10) * 100, backgroundColor: colorsPetal[index] }} />
+                            </div>
+                        ))}
                     </div>
                     <div className="m-column_hover_unit">
                         <span>Estimated:</span>
