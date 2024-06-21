@@ -1,0 +1,137 @@
+.t-chart {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 20px 1fr 320px;
+    padding: 12px 8px 0 4px;
+}
+
+.t-chart .t-chart_main {
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 8px;
+    overflow-y: hidden;
+}
+
+.t-chart .t-chart_unit {
+    height: 480px;
+    width: 20px;
+    display: grid;
+    grid-template-columns: repeat(1fr);
+    animation: animateShowerUnit 1s ease forwards;
+    transition: animation 1s ease;
+    overflow: hidden;
+}
+
+.t-chart .t-chart_unit>* {
+    display: flex;
+    align-items: flex-end;
+    font-size: 12px;
+    color: #7c7c7c;
+}
+
+.t-chart .t-chart_filter {
+    padding: 8px;
+    animation: animateShowerX 1.5s ease-in-out forwards;
+    transition: animation 1.5s ease-in-out;
+}
+
+.t-chart .t-chart_filter .t-chart_filter_box {
+    box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 6px 4px;
+    height: 100%;
+    min-height: 200px;
+    background-color: #78869f;
+    animation: motionY 1.5s ease forwards;
+    transition: animation 1.5s ease;
+}
+
+.t-chart .t-chart_filter .t-chart_filter_box_content {
+    background-color: #fff;
+    height: 92%;
+    width: 100%;
+    border-radius: 0 0 2px 2px;
+    overflow: hidden;
+    padding: 8px;
+}
+
+.t-chart_filter_box_content_item {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.t-chart_filter_box_content_item span {
+    min-width: 120px;
+}
+
+.t-chart .t-chart_filter .t-chart_filter_box_sort {
+    color: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.t-chart_filter_box_sort_item {
+    text-transform: capitalize;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 8px;
+    width: 100%;
+    height: 24px;
+    outline: unset;
+    border: unset;
+    background-color: #78869f;
+    transition: all .5s ease;
+    color: #fff;
+    font-weight: 600;
+}
+
+.t-chart_filter_box_sort_item:focus {
+    background-color: #fff;
+}
+
+.t-chart_filter_box_sort_item-active {
+    background-color: #fff;
+    transition: background-color .5s ease;
+    border-radius: 4px 4px 0 0;
+    color: #000;
+}
+
+@keyframes animateShowerUnit {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes animateShowerX {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes motionY {
+    0% {
+        opacity: 0;
+        transform: translateY(10%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}
