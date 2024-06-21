@@ -1,0 +1,133 @@
+.m-column {
+    width: 70px;
+    position: relative;
+    animation: animateShower 1s ease forwards;
+    transition: animation 1s ease;
+}
+
+.m-column_content {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    transform: translateY(-30px);
+}
+
+.m-column_content svg {
+    transform: translateY(-5px);
+}
+
+.m-column_hover_content>* {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.m-column_hover_content>*>span {
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.m-column_hover_content>*>div {
+    height: 10px;
+    outline: 1px solid #dbdbdb;
+}
+
+.m-column_content .m-column_content_name {
+    transform: rotate(-90deg);
+    font-weight: 500;
+    height: fit-content;
+}
+
+.m-column_content .m-column_content_line {
+    width: 2px;
+    height: calc(100% - 120px);
+    background-color: #b4d1bb;
+    transform: translateY(30px);
+    margin-top: 4px;
+}
+
+.m-column_hover {
+    position: absolute;
+    top: 80px;
+    left: 70%;
+    min-width: 240px;
+    min-height: 100px;
+    background-color: #78869f;
+    box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    border-radius: 4px;
+    padding: 6px;
+    transition: opacity .5s ease-in-out;
+}
+
+
+.m-column-hover {
+    z-index: 20;
+    cursor: pointer;
+    filter: blur(1);
+}
+
+.m-column-hover svg {
+    filter: drop-shadow(#fff);
+}
+
+.m-column_hover_name {
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.m-column_hover_unit {
+    background-color: #ecedf08e;
+    font-weight: 400;
+    font-size: 13px;
+    text-transform: capitalize;
+    padding: 1px 8px 4px;
+    color: #78869f;
+    display: flex;
+    justify-content: space-between;
+}
+
+.m-column_hover_unit span {
+    min-width: 124px;
+}
+
+.m-column_hover_unit ul {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.m-column_hover_content {
+    background-color: #fff;
+    border-radius: 2px;
+    position: relative;
+    height: 100%;
+    min-height: 100px;
+    padding: 8px;
+}
+
+
+@keyframes animateShower {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+@keyframes animateShowerFilter {
+    0% {
+        transform: translateY(20%);
+    }
+
+    100% {
+        transform: translateY(0%);
+    }
+}
