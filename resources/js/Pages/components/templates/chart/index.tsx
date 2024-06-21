@@ -45,7 +45,6 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         workLifeBalance: '',
     })
     const [valueAUnit, setValueAUnit] = useState(0);
-    console.log(valueAUnit);
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
         setValueAUnit((getHeightUnit as any).offsetHeight);
