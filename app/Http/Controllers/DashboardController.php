@@ -64,7 +64,8 @@ class DashboardController extends Controller
 
         // Retrieve the file from the request
         $excelFile = $request->file('excel_file');
-
+        $delete = IndicatorsValue::where('type', 1);
+        $delete->delete();
         // Import the file using Maatwebsite Excel
         Excel::import(new IndicatorsImport, $excelFile);
 
