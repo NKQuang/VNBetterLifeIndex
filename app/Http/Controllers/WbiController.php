@@ -46,7 +46,7 @@ class WbiController extends Controller
 
                 $weight = Weights::where('indicators_id', $indicator->id)->first()->value;
                 $weightNumeric = str_replace('%', '', $weight) / 100; // Chuyển đổi từ % thành số thập phân
-
+                    //dd($weightNumeric);
                 $weightedValue = $indicatorValue * $weightNumeric;
                 $indicatorResults[] = [
                     'indicator' => $indicator->name,

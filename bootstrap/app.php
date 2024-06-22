@@ -13,8 +13,14 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware ->alias([
-            'admin' => \App\Http\Middleware\RoleMiddlware::class,
+            'admin' => \App\Http\Middleware\RoleMiddlware::class    ,
             'web' => \App\Http\Middleware\HandleInertiaRequests::class,
+            'api' => [
+                \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+                'throttle:api',
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
