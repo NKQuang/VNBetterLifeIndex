@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Indicators;
 use App\Models\IndicatorsValue;
 use App\Models\Question;
 use Illuminate\Http\Request;
@@ -52,19 +53,24 @@ class IndicatorValueController extends Controller
         'question_code.*' => 'required|exists:questions,question_code',
         'value' => 'required|array',
         'value.*' => 'required|numeric',
-        'name' => 'required|array',
-        'name.*' => 'required|string|max:255',
+        'indicator_id' => 'required|exists:indicators,id',
     ]);
 
     $questionsId = $request->input('questions_id');
     $questionCodes = $request->input('question_code');
     $values = $request->input('value');
-    $names = $request->input('name');
+    $indicatorId = $request->input('indicator_id');
+
+    // Get the name from the Indicator table using the indicator_id
+    $indicator = Indicators::find($indicatorId);
+    if (!$indicator) {
+        return response()->json(['error' => 'Invalid indicator_id'], 422);
+    }
+    $name = $indicator->name;
 
     foreach ($questionsId as $index => $questionId) {
         $questionCode = $questionCodes[$index];
         $value = $values[$index];
-        $name = $names[$index];
 
         // Check if question_code matches questions_id
         $question = Question::where('id', $questionId)
@@ -89,5 +95,6 @@ class IndicatorValueController extends Controller
         'message' => 'Indicator values submitted successfully'
     ]);
 }
+
 
 }

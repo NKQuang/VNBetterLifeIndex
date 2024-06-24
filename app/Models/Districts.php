@@ -14,6 +14,7 @@ class Districts extends Model
         'name',
         'full_name',
         'full_name_en',
+        'content',
         'regions_code'
     ];
     // Trong model Districts
