@@ -50,6 +50,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [questions, setQuestions] = useState<DropdownType[]>();
 
     const handleUpdateDistrictIndicators = (data: ResponseGetdistricts) => {
+        console.log('handleUpdateDistrictIndicators', data);
         setDistrictIndicators(data);
         const definedQuestions = data.districts[0].questions.map((item) => ({
             id: item.id,
@@ -82,7 +83,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             value: item.indicator,
         }));
         const listDistrict = data.map((item) => ({
-            id: item.indicator_id,
+            id: item.district_id,
             label: item.district,
             value: item.district,
         }))

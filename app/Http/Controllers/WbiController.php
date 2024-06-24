@@ -59,6 +59,7 @@ class WbiController extends Controller
             $wbi = collect($indicatorResults)->sum('weightedValue');
 
             $result[] = [
+                'district_id' =>$district->id,
                 'district' => $district->name,
                 'value' => $wbi,
                 'indicators' => $indicatorResults

@@ -57,7 +57,6 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         questions: undefined as any,
         answers: [],
     });
-    console.log(stateForm);
 
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
@@ -90,20 +89,20 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     const submitIndicators = async (body: any) => {
         await postDistrictsIndicators(body)
             .then((data) => {
-                console.log('success', data)
+                setIsOpenModal(false);
+                //message
             }).catch((error) => {
                 console.log('error', error)
 
             })
     }
 
-
-    const handleValidate = () => {
-        return true;
-    }
+    // const handleValidate = () => {
+    //     return true;
+    // }
 
     const handleSubmit = () => {
-        if (!handleValidate()) return;
+        // if (!handleValidate()) return;
         const body = {
             districts_id: stateForm.district.id,
             questions_id: stateForm.questions.map((i) => i.id),
@@ -201,7 +200,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         title='Chỉ số'
                         placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
                         handleOnChange={(value) => {
-                            const listQuestion = questions?.filter((i: any) => i.group_name === value.label)
+                            const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
+                            console.log('listQuestion', listQuestion)
                             setStateForm({
                                 ...stateForm,
                                 indicator: value,
@@ -211,7 +211,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         }}
                     />
 
-                    {stateForm.indicator && stateForm.district &&
+                    {stateForm.indicator && stateForm.district.id &&
                         <>
                             <h2>Bộ câu hỏi</h2>
                             <ul className='t-chart_form_list'>
