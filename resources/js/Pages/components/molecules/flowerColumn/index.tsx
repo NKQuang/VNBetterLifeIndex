@@ -65,7 +65,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
 
     return (
         <div
-            key={index}
+            key={value}
             style={{ height: value * unit, animation: isFilter ? 'animateShowerFilter 1s ease forwards' : '' }}
             className={mapModifiers("m-column", isHover && "hover")}
             onMouseEnter={() => {

@@ -3,6 +3,7 @@ import './style.css'
 import FlowerChart from '../../components/templates/chart';
 import Header from '../../components/templates/nav';
 import { useChart } from '../../components/templates/provider';
+import { checkLogin, getDistrictsIndicators, getWBI } from '../../services/apis';
 
 export const ChartContext = createContext({} as any);
 
@@ -12,15 +13,9 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/wbi');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        handleSetChartData(data);
-        handleSetChartDataRoot(data);
-        handleSetLoading(false);
-        handleSetIsFilter(false);
+        getWbi();
+        // authorize();
+        getIndicators();
       } catch (error) {
         handleSetIsFilter(false);
         handleSetLoading(false);
@@ -31,6 +26,24 @@ const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
+
+  const getWbi = async () => {
+    const data = await getWBI();
+    handleSetChartData(data);
+    handleSetChartDataRoot(data);
+    handleSetLoading(false);
+    handleSetIsFilter(false);
+  }
+
+  const authorize = async () => {
+    const checklogin: any = checkLogin();
+    console.log(checklogin)
+  }
+
+  const getIndicators = async () => {
+    const districts: any = getDistrictsIndicators();
+    console.log('districts', districts)
+  }
 
   return (
     <div className='p-home'>
