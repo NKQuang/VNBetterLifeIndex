@@ -14,6 +14,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/wbi', [WbiController::class, 'calculateWbi']);
-Route::middleware('auth:sanctum')->get('/check-login', [AuthController::class, 'checkLogin']);
+Route::get('/check-login', [AuthController::class, 'checkLogin']);
 Route::middleware('auth:sanctum')->get('/districts-indicators', [DistrictController::class, 'getDistrictsIndicators']);
 Route::middleware('auth:sanctum')->post('/submit-indicator-value', [IndicatorValueController::class, 'store']);
