@@ -26,10 +26,10 @@ class HttpClient {
 
   // Set Bearer Token here!!!
   setInterceptorRequest() {
-    const token = Cookies.get('token');
+    const token = Cookies.get('login_token');
     return this.INSTANCE.interceptors.request.use(
       async (config) => {
-        config.headers["Authorization"] = `Bearer ${token ?? '2|WyomwpWtSJUtZ7QcFDYrcP7EoHwcog3Bfcxx5X6k26800c6c'}`;
+        config.headers["Authorization"] = `Bearer ${token ?? '44|W6t6xNyyHyd0tFP2WR7iwuw6SHbbNOenyNFh0HtZ81471d74'}`;
         config.headers["Accept"] = 'application/json';
         return config;
       },

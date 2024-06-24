@@ -15,7 +15,7 @@ export const colorsPetal = [
 
 const Flower: React.FC<FlowerProps> = ({ data }) => {
     return (
-        <svg id='flower' viewBox="-110 -110 220 220" height={100} >
+        <svg id='flower' viewBox="-120 -120 240 240" height={160} >
             {data.map((item, i) => (
                 <Petal height={item?.value ?? 0} key={i} angle={i * 30} color={colorsPetal[i]} />
             ))}

@@ -61,6 +61,9 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 refBoxHover.current.style.right = 'unset';
             }
         }
+        const getColumn = document.querySelectorAll(`.t-district_chart_main > *`);
+        getColumn[Math.floor(Number(getColumn.length - 1) / 2 - 0.1)]?.classList.add('column-active')
+
     }, [isHover]);
 
     return (

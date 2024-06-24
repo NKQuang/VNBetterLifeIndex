@@ -10,7 +10,8 @@ const ChartDetailDistrict: React.FC = () => {
         handleShowDetail,
         handleSetLoading,
         chartData,
-        infoDetail
+        infoDetail,
+        handleSetInfoDetail,
     } = useBetterLife();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [valueAUnit, setValueAUnit] = useState(0);
@@ -22,7 +23,7 @@ const ChartDetailDistrict: React.FC = () => {
 
     useEffect(() => {
         const getColumn = document.querySelectorAll(`.t-district_chart_main > *`);
-        getColumn[Math.floor(Number(getColumn.length - 1) / 2 - 0.1)].classList.add('column-active')
+        getColumn[Math.floor(Number(getColumn.length - 1) / 2 - 0.1)]?.classList.add('column-active')
     }, [chartData, infoDetail])
 
     const handleOnMouseEnterColumn = (id?: number) => {
@@ -55,6 +56,10 @@ const ChartDetailDistrict: React.FC = () => {
                             onMouseLeave={handleOnMouseLeaveColumn}
                             isHover={index + 1 === idColumnHover}
                             columnName={item.district}
+                            handleClickColumn={() => {
+                                handleSetInfoDetail(item);
+                                handleSetLoading(true);
+                            }}
                         />
                     ))}
                 </div>
@@ -67,7 +72,9 @@ const ChartDetailDistrict: React.FC = () => {
                         onMouseEnter={handleOnMouseEnterColumn}
                         onMouseLeave={handleOnMouseLeaveColumn}
                         columnName={infoDetail?.district as any}
-                        isHover={false} index={0} />
+                        isHover={false}
+                        index={Number(chartData?.length) + 2}
+                    />
                 </div>
             </div>
         </div>

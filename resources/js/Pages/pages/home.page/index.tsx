@@ -7,6 +7,7 @@ import { checkLogin, getDistrictsIndicators, getWBI } from '../../services/apis'
 import Loading from '../../components/atoms/loading';
 import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
+import Cookies from 'js-cookie';
 
 export const ChartContext = createContext({} as any);
 
@@ -24,7 +25,7 @@ const HomePage: React.FC = () => {
     const fetchData = async () => {
       try {
         getWbi();
-        authorize();
+        // authorize();
         getIndicators();
       } catch (error) {
         handleSetIsFilter(false);
@@ -46,7 +47,9 @@ const HomePage: React.FC = () => {
 
   const authorize = async () => {
     const checklogin: any = checkLogin();
-    console.log(checklogin)
+    if (checklogin.authenticated) {
+      Cookies.set('login_token', checklogin.api_token);
+    }
   }
 
   const getIndicators = async () => {

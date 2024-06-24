@@ -13,10 +13,36 @@
 }
 
 .t-chart_form {
-    height: 70vh;
+    min-height: 60vh;
     width: max-content;
     min-width: 500px;
+    max-width: 550px;
+    width: 100%;
     position: relative;
+}
+
+.t-chart_form h2 {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    text-transform: capitalize;
+    margin-bottom: 8px;
+}
+
+.t-chart_form ul li {
+    width: 100%;
+}
+
+.t-chart_form ul li p {
+    font-size: 16px;
+}
+
+.t-chart_form ul li .a-slider {
+    margin-top: 6px;
+}
+
+.t-chart_form ul li .a-slider .slider-markers .slider-marker {
+    margin-top: 6px;
 }
 
 .t-chart_form_submit {

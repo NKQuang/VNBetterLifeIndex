@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import { districtItem } from "./chart";
-import { ResponseGetdistricts } from "../../services/apis/types";
+import { Question, ResponseGetdistricts } from "../../services/apis/types";
 import { DropdownType } from "../atoms/dropdown";
 
 
@@ -28,6 +28,7 @@ interface ChartContextData {
     isShowDetail: boolean,
     handleSetInfoDetail: (type: districtItem) => void,
     infoDetail: districtItem | undefined,
+    questions?: DropdownType[] | undefined,
 }
 
 interface ChartProviderProps {
@@ -46,10 +47,24 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [indicators, setIndicators] = useState<DropdownType[]>();
     const [isShowDetail, setIsShowDetail] = useState(false);
     const [infoDetail, setInfoDetail] = useState<districtItem>();
-
+    const [questions, setQuestions] = useState<DropdownType[]>();
 
     const handleUpdateDistrictIndicators = (data: ResponseGetdistricts) => {
         setDistrictIndicators(data);
+        const definedQuestions = data.districts[0].questions.map((item) => ({
+            id: item.id,
+            group_id: item.indicator_id,
+            group_name: item.indicator.name,
+            label: item.title,
+            value: item.question_code,
+        }));
+        const listDistrict = data.districts.map((item) => ({
+            id: item.id,
+            label: item.name,
+            value: item.id,
+        }))
+        setDistricts(listDistrict);
+        setQuestions(definedQuestions);
     };
 
     const handleShowDetail = (type: boolean) => {
@@ -72,12 +87,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             label: item.indicator,
             value: item.indicator,
         }));
-        const listDistrict = data.map((item) => ({
-            id: item.indicators,
-            label: item.district,
-            value: item.district,
-        }))
-        setDistricts(listDistrict);
+
         setIndicators(defineIndicators);
         setTimeout(() => {
             setLoading(false)
@@ -109,7 +119,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             handleShowDetail,
             isShowDetail,
             handleSetInfoDetail,
-            infoDetail
+            infoDetail,
+            questions,
         }),
         [chartData, loading, isFilter]
     );

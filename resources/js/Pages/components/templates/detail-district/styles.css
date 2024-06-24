@@ -33,9 +33,10 @@
 
 .t-district_chart_main-flower_active {
     position: absolute;
-    bottom: 15%;
+    bottom: 15px;
     left: 45%;
     transform: scale(1.5);
+    transform-origin: bottom;
 }
 
 .column-active {

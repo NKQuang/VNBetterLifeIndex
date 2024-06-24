@@ -9,8 +9,9 @@ import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import { colorsPetal } from '../../atoms/flower';
 import CModal from '../../organisms/modal';
-import Dropdown from '../../atoms/dropdown';
+import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import { Link } from 'react-router-dom';
+import { postDistrictsIndicators } from '../../../services/apis';
 
 interface FlowerChartProps {
     isDetail?: boolean;
@@ -41,13 +42,20 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         indicators,
         handleSetInfoDetail,
         handleShowDetail,
+        questions,
     } = useBetterLife();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
 
     const [valueAUnit, setValueAUnit] = useState(0);
     const [isOpenModal, setIsOpenModal] = useState(false);
-
+    const [stateForm, setStateForm] = useState({
+        district: undefined as unknown as DropdownType,
+        indicator: undefined as unknown as DropdownType,
+        questions: undefined as any,
+        answers: [],
+    });
+    console.log(stateForm);
 
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
@@ -75,6 +83,33 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 handleSetChartData(rank as districtItem[]);
                 break;
         }
+    }
+
+    const submitIndicators = async (body: any) => {
+        await postDistrictsIndicators(body)
+            .then((data) => {
+                console.log('success', data)
+            }).catch((error) => {
+                console.log('error', error)
+
+            })
+    }
+
+
+    const handleValidate = () => {
+        return true;
+    }
+
+    const handleSubmit = () => {
+        if (!handleValidate()) return;
+        const body = {
+            districts_id: stateForm.district.id,
+            questions_id: stateForm.questions.map((i) => i.id),
+            question_code: stateForm.questions.map((i) => i.value),
+            value: stateForm.answers,
+            indicator_id: stateForm.questions[0].group_id
+        }
+        submitIndicators(body);
     }
 
     return (
@@ -126,7 +161,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 if (softBy === 'alphabet') return;
                                 handleSortData('alphabet')
                             }}
-                        >alphabet</button>
+                        >A - Z</button>
                         <button
                             className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'rank' ? 'active' : '')}
                             onClick={() => {
@@ -145,19 +180,59 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             >
                 <div className='t-chart_form'>
                     <Dropdown
+                        isRequired
+                        value={stateForm.district}
                         options={districts as any}
                         title='Huyện'
                         placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                        handleOnChange={(value) => {
+                            setStateForm({
+                                ...stateForm,
+                                district: value,
+                            })
+                        }}
                     />
                     <Dropdown
+                        isRequired
+                        value={stateForm.indicator}
                         options={indicators as any}
                         title='Chỉ số'
                         placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                        handleOnChange={(value) => {
+                            const listQuestion = questions?.filter((i: any) => i.group_name === value.label)
+                            setStateForm({
+                                ...stateForm,
+                                indicator: value,
+                                questions: listQuestion,
+                                answers: listQuestion?.map((i, idx) => 0) as any,
+                            });
+                        }}
                     />
+
+                    {stateForm.indicator && stateForm.district &&
+                        <>
+                            <h2>Bộ câu hỏi</h2>
+                            <ul className='t-chart_form_list'>
+                                {stateForm?.questions?.map((record, index) => (
+                                    <li key={record.value}>
+                                        <p>{record.label}</p>
+                                        <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
+                                            const newSliderValues = [...stateForm.answers] as any;
+                                            newSliderValues[index] = Number(value);
+                                            setStateForm({
+                                                ...stateForm,
+                                                answers: newSliderValues
+                                            });
+                                        }} />
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    }
                 </div>
                 <div className='t-chart_form_submit'>
                     <button onClick={() => setIsOpenModal(false)}>Hủy</button>
-                    <button>Gửi đánh giá</button>
+                    <button onClick={handleSubmit}>Gửi đánh giá</button>
                 </div>
             </CModal>
         </>
