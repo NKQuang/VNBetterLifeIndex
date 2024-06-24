@@ -4,11 +4,13 @@ import './styles.css'
 import { exampleDataChart, unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
 import { ChartContext } from '../../../pages/home.page/index';
-import { useChart } from '../provider';
+import { useBetterLife } from '../provider';
 import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import { colorsPetal } from '../../atoms/flower';
 import CModal from '../../organisms/modal';
+import Dropdown from '../../atoms/dropdown';
+import { Link } from 'react-router-dom';
 
 interface FlowerChartProps {
     isDetail?: boolean;
@@ -29,7 +31,17 @@ export interface Indicator {
 type SortType = 'alphabet' | 'rank'
 
 const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
-    const { isFilter, handleSetIsFilter, loading, chartData, handleSetChartData, handleSetLoading, chartDataRoot } = useChart();
+    const { isFilter,
+        handleSetIsFilter,
+        loading,
+        chartData,
+        handleSetChartData,
+        handleSetLoading,
+        districts,
+        indicators,
+        handleSetInfoDetail,
+        handleShowDetail,
+    } = useBetterLife();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
 
@@ -85,7 +97,9 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 onMouseEnter={handleOnMouseEnterColumn}
                                 onMouseLeave={handleOnMouseLeaveColumn}
                                 handleClickColumn={() => {
-                                    alert(JSON.stringify(item))
+                                    handleSetInfoDetail(item);
+                                    handleShowDetail(true);
+                                    handleSetLoading(true);
                                 }}
                             />
                         ))}
@@ -124,9 +138,26 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
 
                 </div>
             </div>
-            <CModal open={isOpenModal} onClose={() => setIsOpenModal(false)} >
-                <div>
-
+            <CModal
+                open={isOpenModal}
+                title='Mẫu đánh giá'
+                onClose={() => setIsOpenModal(false)}
+            >
+                <div className='t-chart_form'>
+                    <Dropdown
+                        options={districts as any}
+                        title='Huyện'
+                        placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                    />
+                    <Dropdown
+                        options={indicators as any}
+                        title='Chỉ số'
+                        placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                    />
+                </div>
+                <div className='t-chart_form_submit'>
+                    <button onClick={() => setIsOpenModal(false)}>Hủy</button>
+                    <button>Gửi đánh giá</button>
                 </div>
             </CModal>
         </>

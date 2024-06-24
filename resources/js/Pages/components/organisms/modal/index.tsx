@@ -7,9 +7,10 @@ interface MotionProps {
     open: boolean;
     onClose: () => void;
     children: React.ReactNode;
+    title?: string;
 }
 
-const CModal: React.FC<MotionProps> = ({ open, onClose, children }) => {
+const CModal: React.FC<MotionProps> = ({ open, onClose, children, title }) => {
     return (
         <div className='o-modal'>
             <Modal
@@ -19,6 +20,11 @@ const CModal: React.FC<MotionProps> = ({ open, onClose, children }) => {
                 showCloseIcon
                 closeOnEsc
             >
+                {title &&
+                    <div className='o-modal_header'>
+                        {title}
+                    </div>
+                }
                 {children}
             </Modal>
         </div>

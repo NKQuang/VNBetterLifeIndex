@@ -8,3 +8,12 @@
     outline: unset;
     border: unset;
 }
+
+.o-modal_header {
+    text-align: center;
+    font-weight: 600;
+    color: rgb(29, 51, 110);
+    font-size: 16px;
+    text-transform: uppercase;
+
+}

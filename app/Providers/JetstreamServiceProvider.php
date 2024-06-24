@@ -21,6 +21,7 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Khởi động middleware cookies đăng nhập
         $this->configurePermissions();
 
         Jetstream::deleteUsersUsing(DeleteUser::class);

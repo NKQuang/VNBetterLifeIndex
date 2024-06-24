@@ -1,0 +1,89 @@
+.p-district {
+    width: 100%;
+}
+
+.p-district_back {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 100;
+    transition: all .5s ease-in;
+    color: blueviolet;
+}
+
+.p-district_back:hover {
+    transform: scale(1.1);
+    color: #000;
+    transition: transform .5s ease-in, background-color .5s ease;
+}
+
+.p-district .p-district_chart {
+    height: 100%;
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 8px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.t-district_chart_main-flower_active {
+    position: absolute;
+    bottom: 15%;
+    left: 45%;
+    transform: scale(1.5);
+}
+
+.column-active {
+    margin-right: 500px;
+}
+
+.p-district_chart .t-district_chart_unit {
+    min-height: 600px;
+    position: relative;
+    width: 20px;
+    display: grid;
+    grid-template-columns: repeat(1fr);
+    animation: animateShowerUnit 1s ease forwards;
+    transition: animation 1s ease;
+}
+
+.p-district_chart .t-district_chart_unit>* {
+    display: flex;
+    align-items: flex-end;
+    font-size: 12px;
+    color: #7c7c7c;
+    position: relative;
+}
+
+.p-district_chart .t-district_chart_unit>*::before {
+    content: '';
+    width: calc(100vw);
+    height: 1px;
+    background-color: #dddddd;
+    position: absolute;
+    top: 84%;
+    left: 20px;
+    z-index: 1;
+    transition: background-color 2s ease;
+}
+
+.p-district .p-district_chart .t-district_chart_main {
+    width: 100%;
+    min-height: 600px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 8px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.p-district .p-district_chart .t-district_chart_main::-webkit-scrollbar {
+    display: none;
+}

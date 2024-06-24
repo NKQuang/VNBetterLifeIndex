@@ -8,6 +8,43 @@
     padding: 12px 8px 0 4px;
     border-top: 1px solid #999999;
     border-bottom: 1px solid #999999;
+    background: rgb(245, 246, 246);
+    background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
+}
+
+.t-chart_form {
+    height: 70vh;
+    width: max-content;
+    min-width: 500px;
+    position: relative;
+}
+
+.t-chart_form_submit {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.t-chart_form_submit button {
+    padding: 8px 20px;
+    border: unset;
+    outline: unset;
+    min-width: 120px;
+    border-radius: 4px;
+    background-color: rgb(2, 160, 2);
+    color: #fff;
+    box-shadow: 0px 6px 18px -3px rgba(0, 0, 0, 0.3);
+}
+
+.t-chart_form_submit button:focus {
+    opacity: 0.7;
+}
+
+.t-chart_form_submit button:first-child {
+    background-color: #f00;
+    color: #fff;
 }
 
 .t-chart .t-chart_main {

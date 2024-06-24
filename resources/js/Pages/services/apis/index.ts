@@ -22,7 +22,8 @@ export async function checkLogin() {
 export async function getDistrictsIndicators() {
     try {
         const response = await HttpClient.getMethod("districts-indicators");
-        return response as ResponseGetdistricts;
+        console.log('getDistrictsIndicators', response);
+        return response.data as ResponseGetdistricts;
     } catch (error) {
         console.error("Error:", error);
     }

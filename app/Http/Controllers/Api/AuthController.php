@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class AuthController extends Controller
 {
@@ -34,14 +36,25 @@ class AuthController extends Controller
     }
     public function checkLogin(Request $request)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        $encryptedToken = $request->cookie('login_token');
 
-            // Hủy tất cả token hiện tại của người dùng
+        if (!$encryptedToken) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
+
+        try {
+            // Giải mã giá trị của cookie
+            $decodedToken = Crypt::decryptString($encryptedToken);
+            list($token, $userId) = explode('|', $decodedToken);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'encryptedToken Fail'], 401);
+        }
+
+        // Tìm người dùng dựa trên user_id được lưu trong cookie
+        $user = User::find($userId);
+        if ($user) {
             $user->tokens()->delete();
-            // Tạo token mới
             $token = $user->createToken('API Token')->plainTextToken;
-
             return response()->json([
                 'authenticated' => true,
                 'api_token' => $token,

@@ -7,6 +7,8 @@ import React, {
     useState,
 } from "react";
 import { districtItem } from "./chart";
+import { ResponseGetdistricts } from "../../services/apis/types";
+import { DropdownType } from "../atoms/dropdown";
 
 
 interface ChartContextData {
@@ -18,7 +20,14 @@ interface ChartContextData {
     handleSetLoading: (data: boolean) => void,
     handleSetIsFilter: (data: boolean) => void,
     isFilter: boolean,
-
+    handleUpdateDistrictIndicators: (data: ResponseGetdistricts) => void,
+    districtIndicators: ResponseGetdistricts | undefined,
+    districts: DropdownType[] | undefined,
+    indicators: DropdownType[] | undefined,
+    handleShowDetail: (data: boolean) => void,
+    isShowDetail: boolean,
+    handleSetInfoDetail: (type: districtItem) => void,
+    infoDetail: districtItem | undefined,
 }
 
 interface ChartProviderProps {
@@ -32,9 +41,44 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [chartDataRoot, setChartDataCloneRoot] = useState<districtItem[]>();
     const [loading, setLoading] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
+    const [districtIndicators, setDistrictIndicators] = useState<ResponseGetdistricts>();
+    const [districts, setDistricts] = useState<DropdownType[]>();
+    const [indicators, setIndicators] = useState<DropdownType[]>();
+    const [isShowDetail, setIsShowDetail] = useState(false);
+    const [infoDetail, setInfoDetail] = useState<districtItem>();
+
+
+    const handleUpdateDistrictIndicators = (data: ResponseGetdistricts) => {
+        setDistrictIndicators(data);
+    };
+
+    const handleShowDetail = (type: boolean) => {
+        setIsShowDetail(type);
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000)
+    };
+    const handleSetInfoDetail = (type: districtItem) => {
+        setInfoDetail(type);
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000)
+    }
 
     const handleSetChartData = (data: districtItem[]) => {
         setChartData(data);
+        const defineIndicators = data[0].indicators?.map((item) => ({
+            id: item.value,
+            label: item.indicator,
+            value: item.indicator,
+        }));
+        const listDistrict = data.map((item) => ({
+            id: item.indicators,
+            label: item.district,
+            value: item.district,
+        }))
+        setDistricts(listDistrict);
+        setIndicators(defineIndicators);
         setTimeout(() => {
             setLoading(false)
         }, 1000)
@@ -49,7 +93,24 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const handleSetIsFilter = (data: boolean) => setIsFilter(data);
 
     const chartProviderMemory = useMemo(
-        () => ({ chartData, handleSetChartData, loading, handleSetLoading, isFilter, handleSetIsFilter, handleSetChartDataRoot, chartDataRoot }),
+        () => ({
+            chartData,
+            handleSetChartData,
+            loading,
+            handleSetLoading,
+            isFilter,
+            handleSetIsFilter,
+            handleSetChartDataRoot,
+            chartDataRoot,
+            handleUpdateDistrictIndicators,
+            districtIndicators,
+            districts,
+            indicators,
+            handleShowDetail,
+            isShowDetail,
+            handleSetInfoDetail,
+            infoDetail
+        }),
         [chartData, loading, isFilter]
     );
 
@@ -60,7 +121,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     );
 };
 
-function useChart(): ChartContextData {
+function useBetterLife(): ChartContextData {
     const context = useContext(ChartContext);
     if (!context) {
         throw new Error("useSip must be used within an SipProvider");
@@ -68,4 +129,4 @@ function useChart(): ChartContextData {
     return context;
 }
 
-export { ChartProvider, useChart };
+export { ChartProvider, useBetterLife };

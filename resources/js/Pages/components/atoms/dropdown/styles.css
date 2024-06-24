@@ -1,0 +1,11 @@
+.a-dropdown {
+    margin-bottom: 16px;
+}
+
+.a-dropdown_header {
+    margin-bottom: 4px;
+}
+
+.a-dropdown_header span {
+    color: #f00;
+}
