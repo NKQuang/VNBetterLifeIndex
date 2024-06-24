@@ -20,12 +20,15 @@ const HomePage: React.FC = () => {
     isShowDetail,
     loading,
   } = useBetterLife();
-
+  const token = Cookies.get('login_token');
+  console.log(token);
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!token) {
+          authorize();
+        }
         getWbi();
-        // authorize();
         getIndicators();
       } catch (error) {
         handleSetIsFilter(false);
@@ -47,6 +50,7 @@ const HomePage: React.FC = () => {
 
   const authorize = async () => {
     const checklogin: any = checkLogin();
+    console.log('authorize', checklogin.api_token);
     if (checklogin.authenticated) {
       Cookies.set('login_token', checklogin.api_token);
     }

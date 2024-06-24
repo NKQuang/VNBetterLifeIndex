@@ -29,7 +29,7 @@ class HttpClient {
     const token = Cookies.get('login_token');
     return this.INSTANCE.interceptors.request.use(
       async (config) => {
-        config.headers["Authorization"] = `Bearer ${token ?? '44|W6t6xNyyHyd0tFP2WR7iwuw6SHbbNOenyNFh0HtZ81471d74'}`;
+        config.headers["Authorization"] = `Bearer ${token}`;
         config.headers["Accept"] = 'application/json';
         return config;
       },
