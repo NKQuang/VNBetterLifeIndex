@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\IndicatorValueController;
@@ -14,7 +15,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Home');
-});
+})->name('home.page');
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -24,6 +25,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 Route::get('/charts_json', [App\Http\Controllers\UserController::class, 'charts_json'])->name('chart');
 Route::group(['middleware' => 'admin'], function () {
 

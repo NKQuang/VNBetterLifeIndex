@@ -54,7 +54,8 @@ class DistrictController extends Controller
         }])->get();
 
         $result = $districts->map(function ($district) use ($user, $thirtyDaysAgo) {
-            $questions = Question::with('indicator')->get();
+            $questions = Question::with('indicator:name,id')->get();
+
 
             $questions = $questions->map(function ($question) use ($user, $thirtyDaysAgo, $district) {
                 $indicatorValue = IndicatorsValue::where('districts_id', $district->id)

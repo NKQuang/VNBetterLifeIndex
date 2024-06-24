@@ -17,6 +17,7 @@ class RoleMiddlware
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
+            cookie()->queue(cookie('login_token', auth()->user()->id, 60));
             if (Auth::user()->role =='admin') {
                 return $next($request);
             }
