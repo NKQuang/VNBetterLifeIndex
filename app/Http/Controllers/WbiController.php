@@ -49,6 +49,7 @@ class WbiController extends Controller
                     //dd($weightNumeric);
                 $weightedValue = $indicatorValue * $weightNumeric;
                 $indicatorResults[] = [
+                    'indicator_id' => $indicator->id,
                     'indicator' => $indicator->name,
                     'value' => $indicatorValue,
                     'weightedValue' =>$weightedValue

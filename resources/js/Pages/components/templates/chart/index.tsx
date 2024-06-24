@@ -18,13 +18,14 @@ interface FlowerChartProps {
 }
 
 export interface districtItem {
-    id: string | number;
+    district_id: string | number;
     district: string;
     value: number;
     indicators: Indicator[];
 }
 
 export interface Indicator {
+    indicator_id: string;
     indicator: string;
     value: number;
     weightedValue: number;

@@ -82,7 +82,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             value: item.indicator,
         }));
         const listDistrict = data.map((item) => ({
-            indicators: item.id,
+            id: item.indicator_id,
             label: item.district,
             value: item.district,
         }))
