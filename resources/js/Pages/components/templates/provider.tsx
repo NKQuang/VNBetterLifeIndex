@@ -58,12 +58,6 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             label: item.title,
             value: item.question_code,
         }));
-        const listDistrict = data.districts.map((item) => ({
-            id: item.id,
-            label: item.name,
-            value: item.id,
-        }))
-        setDistricts(listDistrict);
         setQuestions(definedQuestions);
     };
 
@@ -87,7 +81,12 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             label: item.indicator,
             value: item.indicator,
         }));
-
+        const listDistrict = data.map((item) => ({
+            indicators: item.id,
+            label: item.district,
+            value: item.district,
+        }))
+        setDistricts(listDistrict);
         setIndicators(defineIndicators);
         setTimeout(() => {
             setLoading(false)

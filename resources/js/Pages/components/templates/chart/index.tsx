@@ -18,6 +18,7 @@ interface FlowerChartProps {
 }
 
 export interface districtItem {
+    id: string | number;
     district: string;
     value: number;
     indicators: Indicator[];
