@@ -74,7 +74,6 @@ const HomePage: React.FC = () => {
   const authorize = async () => {
     const check: any = await checkLogin();
     if (check.authenticated) {
-      Cookies.set('login_token', JSON.stringify(check.api_token));
       localStorage.setItem('login_token', check.api_token);
       localStorage.setItem('account', JSON.stringify(check.user));
       setTimeout(() => {

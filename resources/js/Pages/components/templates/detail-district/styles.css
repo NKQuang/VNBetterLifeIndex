@@ -50,6 +50,7 @@
 
 .t-district_chart_main-flower_active #flower {
     transform: scale(1.5);
+    cursor: pointer;
 }
 
 .t-district_chart_main-flower_active .m-column {
