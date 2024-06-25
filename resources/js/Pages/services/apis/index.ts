@@ -13,7 +13,6 @@ export async function getWBI() {
 export async function checkLogin() {
     try {
         const response = await HttpClient.getMethod("check-login");
-        console.log('checkLogin', response)
         return response?.data;
     } catch (error) {
         console.error("Error:", error);

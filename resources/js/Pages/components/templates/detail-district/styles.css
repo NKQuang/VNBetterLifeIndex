@@ -35,12 +35,12 @@
     position: absolute;
     bottom: 15px;
     left: 45%;
-    transform: scale(1.5);
+    transform: scale(1.4);
     transform-origin: bottom;
 }
 
 .column-active {
-    margin-right: 500px;
+    margin-right: 300px;
 }
 
 .p-district_chart .t-district_chart_unit {

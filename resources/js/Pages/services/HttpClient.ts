@@ -1,8 +1,10 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import Cookies from 'js-cookie';
+import { useBetterLife } from "../components/templates/provider";
 class HttpClient {
   private static _instance: HttpClient;
   INSTANCE!: AxiosInstance;
+
 
   constructor() {
     this._init();
@@ -26,10 +28,11 @@ class HttpClient {
 
   // Set Bearer Token here!!!
   setInterceptorRequest() {
-    const token = Cookies.get('login_token');
+    const CookieToken = Cookies.get('login_token');
+    const localStoreToken = localStorage.getItem('login_token');
     return this.INSTANCE.interceptors.request.use(
       async (config) => {
-        config.headers["Authorization"] = `Bearer ${token}`;
+        config.headers["Authorization"] = `Bearer ${localStoreToken || CookieToken || ''}`;
         config.headers["Accept"] = 'application/json';
         return config;
       },

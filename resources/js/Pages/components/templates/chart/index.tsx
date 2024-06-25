@@ -12,6 +12,7 @@ import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import { Link } from 'react-router-dom';
 import { postDistrictsIndicators } from '../../../services/apis';
+import { toast } from 'react-toastify';
 
 interface FlowerChartProps {
     isDetail?: boolean;
@@ -45,6 +46,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         handleSetInfoDetail,
         handleShowDetail,
         questions,
+        isSignIn
     } = useBetterLife();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
@@ -56,6 +58,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         indicator: undefined as unknown as DropdownType,
         questions: undefined as any,
         answers: [],
+        loading: false,
     });
 
     useEffect(() => {
@@ -90,7 +93,11 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         await postDistrictsIndicators(body)
             .then((data) => {
                 setIsOpenModal(false);
-                //message
+                setStateForm({
+                    ...stateForm,
+                    loading: false,
+                });
+                toast.success('Gửi đánh giá thành công!')
             }).catch((error) => {
                 console.log('error', error)
 
@@ -110,6 +117,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             value: stateForm.answers,
             indicator_id: stateForm.questions[0].group_id
         }
+        setStateForm({
+            ...stateForm,
+            loading: true,
+        });
         submitIndicators(body);
     }
 
@@ -146,12 +157,14 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
                         <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
                         <div className="t-chart_filter_box_vote">
-                            <button
-                                className={mapModifiers('t-chart_filter_box_vote')}
-                                onClick={() => {
-                                    setIsOpenModal(true)
-                                }}
-                            >Đánh giá ngay</button>
+                            {isSignIn &&
+                                <button
+                                    className={mapModifiers('t-chart_filter_box_vote')}
+                                    onClick={() => {
+                                        setIsOpenModal(true)
+                                    }}
+                                >Đánh giá ngay</button>
+                            }
                         </div>
                     </div>
                     <ul className="t-chart_filter_box_sort">
@@ -234,7 +247,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 </div>
                 <div className='t-chart_form_submit'>
                     <button onClick={() => setIsOpenModal(false)}>Hủy</button>
-                    <button onClick={handleSubmit}>Gửi đánh giá</button>
+                    <button onClick={handleSubmit}>
+                        {stateForm.loading ? <Loading />
+                            :
+                            'Gửi đánh giá'
+                        }
+                    </button>
                 </div>
             </CModal>
         </>

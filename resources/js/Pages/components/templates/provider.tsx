@@ -29,6 +29,10 @@ interface ChartContextData {
     handleSetInfoDetail: (type: districtItem) => void,
     infoDetail: districtItem | undefined,
     questions?: DropdownType[] | undefined,
+    isSignIn: boolean,
+    handleUpdateSignIn: (data: boolean) => void,
+    token: string | undefined;
+    handleSetToken: (data: any) => void,
 }
 
 interface ChartProviderProps {
@@ -48,11 +52,17 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [isShowDetail, setIsShowDetail] = useState(false);
     const [infoDetail, setInfoDetail] = useState<districtItem>();
     const [questions, setQuestions] = useState<DropdownType[]>();
+    const [isSignIn, setIsSignIn] = useState(false);
+    const [token, setToken] = useState(undefined);
+
+    const handleSetToken = (newToken: any) => setToken(newToken)
+
+    const handleUpdateSignIn = (value: boolean) => setIsSignIn(value)
 
     const handleUpdateDistrictIndicators = (data: ResponseGetdistricts) => {
         console.log('handleUpdateDistrictIndicators', data);
         setDistrictIndicators(data);
-        const definedQuestions = data.districts[0].questions.map((item) => ({
+        const definedQuestions = ((data.districts ?? [])[0]?.questions || []).map((item) => ({
             id: item.id,
             group_id: item.indicator_id,
             group_name: item.indicator.name,
@@ -121,8 +131,23 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             handleSetInfoDetail,
             infoDetail,
             questions,
+            handleUpdateSignIn,
+            isSignIn,
+            handleSetToken,
+            token
         }),
-        [chartData, loading, isFilter]
+        [chartData,
+            loading,
+            isFilter,
+            chartDataRoot,
+            districtIndicators,
+            districts,
+            indicators,
+            isShowDetail,
+            infoDetail,
+            questions,
+            isSignIn,
+            token]
     );
 
     return (

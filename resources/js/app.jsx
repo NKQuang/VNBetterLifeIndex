@@ -3,6 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { BrowserRouter } from 'react-router-dom';
+import { ChartProvider } from './Pages/components/templates/provider.tsx';
 
 createInertiaApp({
   resolve: name => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
@@ -10,7 +11,9 @@ createInertiaApp({
     const root = createRoot(el);
     root.render(
       <BrowserRouter>
-        <App {...props} />
+        <ChartProvider>
+          <App {...props} />
+        </ChartProvider>
       </BrowserRouter>
     );
   },

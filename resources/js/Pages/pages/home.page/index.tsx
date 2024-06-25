@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import './style.css'
 import FlowerChart from '../../components/templates/chart';
 import Header from '../../components/templates/nav';
@@ -8,6 +8,7 @@ import Loading from '../../components/atoms/loading';
 import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
 import Cookies from 'js-cookie';
+import { ToastContainer } from 'react-toastify';
 
 export const ChartContext = createContext({} as any);
 
@@ -19,13 +20,28 @@ const HomePage: React.FC = () => {
     handleUpdateDistrictIndicators,
     isShowDetail,
     loading,
+    handleUpdateSignIn,
   } = useBetterLife();
-  const token = Cookies.get('login_token');
-  console.log(token);
+
+  const cookieToken = Cookies.get('login_token');
+  const localStoreToken = localStorage.getItem('login_token');
+
+  const [token, setToken] = useState({
+    cookie: cookieToken,
+    local: localStoreToken
+  });
+
+  useEffect(() => {
+    setToken({
+      cookie: cookieToken,
+      local: localStoreToken
+    })
+  }, [cookieToken, localStoreToken])
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!token) {
+        if (!token.cookie && !token.local) {
           authorize();
         }
         getWbi();
@@ -49,16 +65,19 @@ const HomePage: React.FC = () => {
   }
 
   const authorize = async () => {
-    const checklogin: any = checkLogin();
-    console.log('authorize', checklogin.api_token);
-    if (checklogin.authenticated) {
-      Cookies.set('login_token', checklogin.api_token);
+    const check: any = checkLogin();
+    console.log('checkLogin', checkLogin);
+    if (check.authenticated) {
+      Cookies.set('login_token', check.api_token);
+      localStorage.setItem('login_token', check.api_token);
+    } else {
+      handleUpdateSignIn(false);
     }
   }
 
   const getIndicators = async () => {
     const districts: any = await getDistrictsIndicators();
-    handleUpdateDistrictIndicators(districts);
+    handleUpdateDistrictIndicators(districts ?? {} as any);
   }
 
   return (
@@ -80,14 +99,24 @@ const HomePage: React.FC = () => {
           <FlowerChart />
           <div className='p-home_content'>
             <div className='p-home_content_wrapper'>
-              <h2>How’s life?</h2>
-              <p>There is more to life than the cold numbers of GDP and economic statistics – This Index allows you to compare well-being across countries, based on 11 topics the OECD has identified as essential, in the areas of material living conditions and quality of life.</p>
-              <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span>
+              <h2>Cuộc sống thế nào?</h2>
+              <p>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
             </div>
           </div>
         </div>
       }
-
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div >
   )
 };
