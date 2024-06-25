@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -46,13 +47,20 @@ class AuthController extends Controller
         try {
             // Giải mã giá trị của cookie
             $decodedToken = Crypt::decryptString($encryptedToken);
-            list($token, $userId) = explode('|', $decodedToken);
+
+            // Tách chuỗi thành mảng bằng dấu '|'
+            $parts = explode('|', $decodedToken);
+
+            // Lấy phần tử thứ hai (chỉ số 1) trong mảng
+            $number = $parts[1];
+            $userId = DB::table('personal_access_tokens')->where('id',$number)->first();
+            //list($token, $userId) = explode('|', $decodedToken);
         } catch (\Exception $e) {
             return response()->json(['error' => 'encryptedToken Fail'], 401);
         }
 
         // Tìm người dùng dựa trên user_id được lưu trong cookie
-        $user = User::find($userId);
+        $user = User::find($userId->tokenable_id);
         if ($user) {
             $user->tokens()->delete();
             $token = $user->createToken('API Token')->plainTextToken;
