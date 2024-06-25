@@ -3,6 +3,8 @@ import './index.css'
 import './App.css'
 import HomePage from './pages/home.page/index.tsx'
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Home() {
     const routes = [
@@ -25,6 +27,18 @@ function Home() {
                     ))}
                 </Routes>
             </React.StrictMode>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </div>
     )
 }

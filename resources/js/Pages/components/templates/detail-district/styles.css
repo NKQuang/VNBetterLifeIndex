@@ -1,5 +1,7 @@
 .p-district {
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .p-district_back {
@@ -27,8 +29,7 @@
     align-items: flex-end;
     gap: 8px;
     padding: 8px;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .t-district_chart_main-flower_active {
@@ -37,6 +38,8 @@
     left: 45%;
     transform: scale(1.4);
     transform-origin: bottom;
+    transition-behavior: initial;
+    z-index: 0;
 }
 
 .column-active {

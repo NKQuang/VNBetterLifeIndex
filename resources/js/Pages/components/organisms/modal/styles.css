@@ -2,6 +2,7 @@
     min-height: 300px;
     min-width: 30vw;
     width: fit-content;
+    border-radius: 8px;
 }
 
 .react-responsive-modal-closeButton:focus {
@@ -16,4 +17,19 @@
     font-size: 16px;
     text-transform: uppercase;
 
+}
+
+.o-modal-lv1 .react-responsive-modal-modal {
+    z-index: 100 !important;
+}
+
+.o-modal-lv2 .react-responsive-modal-modal {
+    z-index: 200 !important;
+    height: fit-content;
+    width: fit-content;
+    min-height: unset;
+}
+
+.o-modal-lv3 .react-responsive-modal-modal {
+    z-index: 300 !important;
 }

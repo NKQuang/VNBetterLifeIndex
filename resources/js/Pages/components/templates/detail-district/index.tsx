@@ -12,6 +12,8 @@ const ChartDetailDistrict: React.FC = () => {
         chartData,
         infoDetail,
         handleSetInfoDetail,
+        districtIndicators,
+        handleSetDistrictActive
     } = useBetterLife();
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [valueAUnit, setValueAUnit] = useState(0);
@@ -59,6 +61,8 @@ const ChartDetailDistrict: React.FC = () => {
                             handleClickColumn={() => {
                                 handleSetInfoDetail(item);
                                 handleSetLoading(true);
+                                const districtActive = districtIndicators?.districts.filter((i) => i.id === item.district_id);
+                                handleSetDistrictActive((districtActive || [])[0]);
                             }}
                         />
                     ))}

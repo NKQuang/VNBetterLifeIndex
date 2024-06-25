@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
 import './styles.css'
-import { exampleDataChart, unit } from '../../../assets/data';
+import { unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
-import { ChartContext } from '../../../pages/home.page/index';
 import { useBetterLife } from '../provider';
 import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
-import { colorsPetal } from '../../atoms/flower';
 import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
-import { Link } from 'react-router-dom';
-import { postDistrictsIndicators } from '../../../services/apis';
+import { getWBI, postDistrictsIndicators } from '../../../services/apis';
 import { toast } from 'react-toastify';
 
 interface FlowerChartProps {
@@ -46,8 +43,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         handleSetInfoDetail,
         handleShowDetail,
         questions,
-        isSignIn
+        isSignIn,
+        districtIndicators,
+        handleSetDistrictActive
     } = useBetterLife();
+
+    const localStoreToken = localStorage.getItem('login_token');
+
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
 
@@ -59,7 +61,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         questions: undefined as any,
         answers: [],
         loading: false,
+        confirm: false,
+        isValidated: false,
     });
+    const [updateData, setUpdateData] = useState<any>();
 
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
@@ -89,27 +94,48 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         }
     }
 
+    const getWbi = async () => {
+        const data = await getWBI();
+        setUpdateData(data);
+        handleSetChartData(data);
+        handleSetLoading(true);
+        handleSetIsFilter(false);
+    }
+
     const submitIndicators = async (body: any) => {
         await postDistrictsIndicators(body)
             .then((data) => {
                 setIsOpenModal(false);
                 setStateForm({
-                    ...stateForm,
+                    district: undefined as unknown as DropdownType,
+                    indicator: undefined as unknown as DropdownType,
+                    questions: undefined as any,
+                    answers: [],
                     loading: false,
-                });
-                toast.success('Gửi đánh giá thành công!')
+                    confirm: false,
+                    isValidated: false,
+                })
+                toast.success('Gửi đánh giá thành công!');
+                getWbi();
             }).catch((error) => {
                 console.log('error', error)
 
             })
     }
 
-    // const handleValidate = () => {
-    //     return true;
-    // }
+    const handleValidate = () => {
+        if (stateForm.answers.some((i) => i === 0)) {
+            setStateForm({
+                ...stateForm,
+                confirm: true,
+            })
+            return false
+        }
+        return true;
+    }
 
-    const handleSubmit = () => {
-        // if (!handleValidate()) return;
+    const handleSubmit = (isValidated: boolean = false) => {
+        if (!handleValidate() && !isValidated) return;
         const body = {
             districts_id: stateForm.district.id,
             questions_id: stateForm.questions.map((i) => i.id),
@@ -132,7 +158,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 </div>
                 {loading ? <Loading /> :
                     <div className='t-chart_main'>
-                        {chartData?.map((item: districtItem, index: number) => (
+                        {(chartData || updateData || [])?.map((item: districtItem, index: number) => (
                             <FlowerColumn
                                 unit={valueAUnit}
                                 isFilter={isFilter}
@@ -147,6 +173,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     handleSetInfoDetail(item);
                                     handleShowDetail(true);
                                     handleSetLoading(true);
+                                    const districtActive = districtIndicators?.districts.filter((i) => i.id === item.district_id);
+                                    handleSetDistrictActive((districtActive || [])[0]);
                                 }}
                             />
                         ))}
@@ -157,7 +185,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
                         <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
                         <div className="t-chart_filter_box_vote">
-                            {isSignIn &&
+                            {localStoreToken &&
                                 <button
                                     className={mapModifiers('t-chart_filter_box_vote')}
                                     onClick={() => {
@@ -214,7 +242,6 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
                         handleOnChange={(value) => {
                             const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
-                            console.log('listQuestion', listQuestion)
                             setStateForm({
                                 ...stateForm,
                                 indicator: value,
@@ -224,7 +251,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         }}
                     />
 
-                    {stateForm.indicator && stateForm.district.id &&
+                    {stateForm.indicator && stateForm.district?.id &&
                         <>
                             <h2>Bộ câu hỏi</h2>
                             <ul className='t-chart_form_list'>
@@ -247,11 +274,39 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 </div>
                 <div className='t-chart_form_submit'>
                     <button onClick={() => setIsOpenModal(false)}>Hủy</button>
-                    <button onClick={handleSubmit}>
+                    <button onClick={() => {
+                        handleSubmit(false)
+                    }}>
                         {stateForm.loading ? <Loading />
                             :
                             'Gửi đánh giá'
                         }
+                    </button>
+                </div>
+            </CModal>
+            <CModal
+                open={stateForm.confirm}
+                title='Xác nhận đánh giá'
+                onClose={() => setStateForm({
+                    ...stateForm,
+                    confirm: false,
+                })}
+                zIndex="lv2"
+            >
+                <div className="t-chart_form_confirm">
+                    Bạn có chắc chắc muốn đánh giá 0 điểm.
+                </div>
+                <div className='t-chart_form_submit'>
+                    <button onClick={() => {
+                        setStateForm({
+                            ...stateForm,
+                            confirm: false,
+                        })
+                    }}>Hủy</button>
+                    <button onClick={() => {
+                        handleSubmit(true);
+                    }}>
+                        Tiếp tục
                     </button>
                 </div>
             </CModal>

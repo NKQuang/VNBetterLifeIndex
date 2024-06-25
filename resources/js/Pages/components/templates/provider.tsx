@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import { districtItem } from "./chart";
-import { Question, ResponseGetdistricts } from "../../services/apis/types";
+import { District, Question, ResponseGetdistricts } from "../../services/apis/types";
 import { DropdownType } from "../atoms/dropdown";
 
 
@@ -33,6 +33,8 @@ interface ChartContextData {
     handleUpdateSignIn: (data: boolean) => void,
     token: string | undefined;
     handleSetToken: (data: any) => void,
+    districtActive: District | undefined;
+    handleSetDistrictActive: (data: District) => void;
 }
 
 interface ChartProviderProps {
@@ -54,13 +56,14 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [questions, setQuestions] = useState<DropdownType[]>();
     const [isSignIn, setIsSignIn] = useState(false);
     const [token, setToken] = useState(undefined);
+    const [districtActive, setDistrictActive] = useState<District>();
 
     const handleSetToken = (newToken: any) => setToken(newToken)
+    const handleSetDistrictActive = (newActive: District) => setDistrictActive(newActive);
 
     const handleUpdateSignIn = (value: boolean) => setIsSignIn(value)
 
     const handleUpdateDistrictIndicators = (data: ResponseGetdistricts) => {
-        console.log('handleUpdateDistrictIndicators', data);
         setDistrictIndicators(data);
         const definedQuestions = ((data.districts ?? [])[0]?.questions || []).map((item) => ({
             id: item.id,
@@ -134,7 +137,9 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             handleUpdateSignIn,
             isSignIn,
             handleSetToken,
-            token
+            token,
+            districtActive,
+            handleSetDistrictActive
         }),
         [chartData,
             loading,
@@ -147,6 +152,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             infoDetail,
             questions,
             isSignIn,
+            districtActive,
             token]
     );
 

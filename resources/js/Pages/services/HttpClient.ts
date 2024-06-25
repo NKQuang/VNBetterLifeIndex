@@ -28,11 +28,12 @@ class HttpClient {
 
   // Set Bearer Token here!!!
   setInterceptorRequest() {
-    const CookieToken = Cookies.get('login_token');
+    const cookieToken = Cookies.get('login_token');
     const localStoreToken = localStorage.getItem('login_token');
+
     return this.INSTANCE.interceptors.request.use(
       async (config) => {
-        config.headers["Authorization"] = `Bearer ${localStoreToken || CookieToken || ''}`;
+        config.headers["Authorization"] = `Bearer ${localStoreToken ?? cookieToken}`;
         config.headers["Accept"] = 'application/json';
         return config;
       },

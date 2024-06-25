@@ -8,7 +8,6 @@ import Loading from '../../components/atoms/loading';
 import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
 import Cookies from 'js-cookie';
-import { ToastContainer } from 'react-toastify';
 
 export const ChartContext = createContext({} as any);
 
@@ -21,6 +20,8 @@ const HomePage: React.FC = () => {
     isShowDetail,
     loading,
     handleUpdateSignIn,
+    isSignIn,
+    districtActive
   } = useBetterLife();
 
   const cookieToken = Cookies.get('login_token');
@@ -45,7 +46,6 @@ const HomePage: React.FC = () => {
           authorize();
         }
         getWbi();
-        getIndicators();
       } catch (error) {
         handleSetIsFilter(false);
         handleSetLoading(false);
@@ -56,6 +56,12 @@ const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (token.local) {
+      getIndicators();
+    }
+  }, [token.local, isSignIn]);
+
 
   const getWbi = async () => {
     const data = await getWBI();
@@ -65,11 +71,14 @@ const HomePage: React.FC = () => {
   }
 
   const authorize = async () => {
-    const check: any = checkLogin();
-    console.log('checkLogin', checkLogin);
+    const check: any = await checkLogin();
     if (check.authenticated) {
-      Cookies.set('login_token', check.api_token);
+      Cookies.set('login_token', JSON.stringify(check.api_token));
       localStorage.setItem('login_token', check.api_token);
+      localStorage.setItem('account', JSON.stringify(check.user));
+      setTimeout(() => {
+        handleUpdateSignIn(true);
+      }, 2000);
     } else {
       handleUpdateSignIn(false);
     }
@@ -80,20 +89,36 @@ const HomePage: React.FC = () => {
     handleUpdateDistrictIndicators(districts ?? {} as any);
   }
 
+  const renderContenDistrictActive = () => {
+    return (
+      <div className='p-home_content p-home_desc'>
+        <div className='p-home_content_wrapper'>
+          <h2>{districtActive?.full_name}</h2>
+          <p>
+            {districtActive?.content}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='p-home'>
       <Header />
       {isShowDetail ?
-        <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
-          {
-            loading ?
-              <Loading />
-              :
-              <>
-                <ChartDetailDistrict />
-              </>
-          }
-        </div>
+        <>
+          <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
+            {
+              loading ?
+                <Loading />
+                :
+                <>
+                  <ChartDetailDistrict />
+                </>
+            }
+          </div>
+          {renderContenDistrictActive()}
+        </>
         :
         <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
           <FlowerChart />
@@ -105,18 +130,7 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       }
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+
     </div >
   )
 };

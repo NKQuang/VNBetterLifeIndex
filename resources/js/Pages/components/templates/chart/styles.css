@@ -73,6 +73,18 @@
     color: #fff;
 }
 
+.t-chart_form_submit button .dot-spinner,
+.t-chart_form_submit button .a-loading {
+    height: 20px;
+    width: 20px;
+    background-color: transparent;
+}
+
+.t-chart_form_submit button {
+    display: flex;
+    justify-content: center;
+}
+
 .t-chart .t-chart_main {
     height: 100%;
     display: flex;
@@ -291,6 +303,14 @@
     position: relative;
     z-index: 10;
 }
+
+.t-chart_form_confirm {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
 
 
 @keyframes animateShowerUnit {

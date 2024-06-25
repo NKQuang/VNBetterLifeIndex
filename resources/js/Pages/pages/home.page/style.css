@@ -44,3 +44,18 @@
     font-size: 30px;
     font-weight: 600;
 }
+
+.p-home .p-home_desc .p-home_content_wrapper {
+    width: 100%;
+}
+
+.p-home .p-home_desc .p-home_content_wrapper h2 {
+    text-align: left;
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.p-home .p-home_desc .p-home_content_wrapper p {
+    text-align: left;
+    margin-top: 20px;
+}

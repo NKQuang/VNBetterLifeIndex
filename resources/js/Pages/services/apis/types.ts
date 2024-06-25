@@ -13,6 +13,7 @@ export interface District {
     updated_at: null;
     questions: Question[];
     indicator_values: any[];
+    content: any;
 }
 
 export interface Question {
