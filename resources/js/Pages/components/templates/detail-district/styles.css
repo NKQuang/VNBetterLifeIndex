@@ -10,7 +10,7 @@
     left: 10px;
     font-size: 24px;
     cursor: pointer;
-    z-index: 100;
+    z-index: 200;
     transition: all .5s ease-in;
     color: blueviolet;
 }
@@ -29,17 +29,31 @@
     align-items: flex-end;
     gap: 8px;
     padding: 8px;
-    overflow: hidden;
+    overflow: hidden !important;
+    position: relative;
+    z-index: 100;
 }
 
 .t-district_chart_main-flower_active {
     position: absolute;
     bottom: 15px;
     left: 45%;
-    transform: scale(1.4);
-    transform-origin: bottom;
-    transition-behavior: initial;
-    z-index: 0;
+}
+
+.t-district_chart_main-flower_active .m-column_content_line {
+    background-color: rgb(29, 173, 29) !important;
+}
+
+.t-district_chart_main-flower_active .m-column_content_name {
+    font-weight: 700;
+}
+
+.t-district_chart_main-flower_active #flower {
+    transform: scale(1.5);
+}
+
+.t-district_chart_main-flower_active .m-column {
+    height: 350px;
 }
 
 .column-active {
