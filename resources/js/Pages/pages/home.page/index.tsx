@@ -8,6 +8,7 @@ import Loading from '../../components/atoms/loading';
 import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
 import Cookies from 'js-cookie';
+import Footer from '../../components/templates/footer';
 
 export const ChartContext = createContext({} as any);
 
@@ -130,7 +131,7 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       }
-
+      <Footer />
     </div >
   )
 };

@@ -15,6 +15,7 @@ interface FlowerColumnProps {
     value: number;
     data: Indicator[];
     handleClickColumn?: () => void;
+    isDetail?: boolean;
 }
 const FlowerColumn: React.FC<FlowerColumnProps> = ({
     columnName,
@@ -26,7 +27,8 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
     value,
     isFilter,
     unit,
-    handleClickColumn
+    handleClickColumn,
+    isDetail = false,
 }) => {
     const refName = useRef<any>(null);
     const refLine = useRef<HTMLDivElement>(null);
@@ -69,7 +71,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
     return (
         <div
             key={value}
-            style={{ height: value * unit, animation: isFilter ? 'animateShowerFilter 1s ease forwards' : '' }}
+            style={{ height: isDetail ? 400 : value * unit, animation: isFilter ? 'animateShowerFilter 1s ease forwards' : '' }}
             className={mapModifiers("m-column", isHover && "hover")}
             onMouseEnter={() => {
                 if (onMouseEnter) onMouseEnter(index);

@@ -78,6 +78,7 @@ const ChartDetailDistrict: React.FC = () => {
                         columnName={infoDetail?.district as any}
                         isHover={false}
                         index={Number(chartData?.length) + 2}
+                        isDetail
                     />
                 </div>
             </div>
