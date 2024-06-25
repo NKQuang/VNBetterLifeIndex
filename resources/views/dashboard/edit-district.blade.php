@@ -23,6 +23,11 @@
                         <label for="full_name_en" class="block text-sm font-medium text-gray-700">Tên quốc tế</label>
                         <input type="text" name="full_name_en" id="full_name_en" value="{{ $district->full_name_en }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
+                    <div class="mb-4">
+                        <label for="full_name_en" class="block text-sm font-medium text-gray-700">Thông tin thêm</label>
+                        <textarea rows="5" type="text" name="content" id="content" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ $district->content }}</textarea>
+                    </div>
+
                     <div class="flex justify-end">
                         <button type="submit" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-300">Cập nhật</button>
                     </div>
