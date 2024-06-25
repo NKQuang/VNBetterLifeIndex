@@ -14,6 +14,8 @@
                             <th class="px-6 py-3 font-bold text-left uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">MÃ</th>
                             <th class="px-6 py-3 pl-2 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tên huyện</th>
                             <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Tên quốc tế</th>
+                            <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Mô tả</th>
+
                             <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th>
                         </tr>
                     </thead>
@@ -30,6 +32,11 @@
                             <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                 <span class="font-semibold leading-tight text-xs text-slate-400">{{ $row->full_name_en }}</span>
                             </td>
+                            <td class="p-2 text-center align-middle bg-transparent border-b shadow-transparent  break-words whitespace-normal ">
+                                <span class="font-semibold leading-tight text-xs text-slate-400 "> {{ $row->content ?? 'N/A' }}</span>
+                            </td>
+
+
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                 <a href="{{ route('districts.edit', $row->id) }}" class="font-semibold leading-tight text-xs text-blue-400"> Cập nhật </a>
                             </td>

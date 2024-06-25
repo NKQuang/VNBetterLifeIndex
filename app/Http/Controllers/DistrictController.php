@@ -29,6 +29,7 @@ class DistrictController extends Controller
             'name' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
             'full_name_en' => 'nullable|string|max:255',
+            'content' => 'nullable'
         ]);
 
         $district = Districts::find($id);
