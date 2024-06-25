@@ -116,13 +116,13 @@
                             <div class="border-t border-gray-200"></div>
 
                             <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}" x-data>
+                            <form method="POST" action="{{ route('custom.logout') }}" x-data>
                                 @csrf
 
-                                <x-dropdown-link href="{{ route('logout') }}"
-                                         @click.prevent="$root.submit();">
+                                <x-responsive-nav-link href="{{ route('custom.logout') }}" onclick="clearAndSubmit()"
+                                                       @click.prevent="$root.submit();">
                                     {{ __('Log Out') }}
-                                </x-dropdown-link>
+                                </x-responsive-nav-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
@@ -177,11 +177,11 @@
                 @endif
 
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}" x-data>
+                <form method="POST" action="{{ route('custom.logout') }}" x-data >
                     @csrf
 
-                    <x-responsive-nav-link href="{{ route('logout') }}"
-                                   @click.prevent="$root.submit();">
+                    <x-responsive-nav-link href="{{ route('custom.logout') }}" onclick="clearAndSubmit()"
+                                           @click.prevent="$root.submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
@@ -222,3 +222,27 @@
         </div>
     </div>
 </nav>
+<script>
+    function clearAndSubmit() {
+        // Xóa localStorage và sessionStorage
+        console.log('Clearing localStorage and sessionStorage');
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Xóa tất cả cookies
+
+
+        // Đặt thời gian hết hạn cho cookies (nếu vẫn còn tồn tại)
+        let cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i];
+            let eqPos = cookie.indexOf("=");
+            let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+        }
+
+        // Gửi form logout
+        console.log('Submitting form');
+        document.querySelector('form').submit();
+    }
+</script>
