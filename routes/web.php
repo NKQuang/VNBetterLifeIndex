@@ -26,7 +26,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+Route::post('/logout', [LogoutController::class, 'logout'])->name('custom.logout');
 Route::get('/charts_json', [App\Http\Controllers\UserController::class, 'charts_json'])->name('chart');
 Route::group(['middleware' => 'admin'], function () {
 

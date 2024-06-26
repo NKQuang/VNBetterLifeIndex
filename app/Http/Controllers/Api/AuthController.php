@@ -38,6 +38,7 @@ class AuthController extends Controller
     {
         $encryptedToken = $request->cookie('login_token');
 
+
         if (!$encryptedToken) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }

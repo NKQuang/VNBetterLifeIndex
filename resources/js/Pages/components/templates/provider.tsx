@@ -10,7 +10,7 @@ import { districtItem } from "./chart";
 import { District, Question, ResponseGetdistricts } from "../../services/apis/types";
 import { DropdownType } from "../atoms/dropdown";
 
-
+type ThemeType = 'light' | 'dark';
 interface ChartContextData {
     chartData: districtItem[] | undefined,
     chartDataRoot: districtItem[] | undefined,
@@ -35,6 +35,9 @@ interface ChartContextData {
     handleSetToken: (data: any) => void,
     districtActive: District | undefined;
     handleSetDistrictActive: (data: District) => void;
+    sreenWidth: number;
+    handleSetTheme: (newTheme: ThemeType) => void;
+    theme: ThemeType;
 }
 
 interface ChartProviderProps {
@@ -57,6 +60,16 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [isSignIn, setIsSignIn] = useState(false);
     const [token, setToken] = useState(undefined);
     const [districtActive, setDistrictActive] = useState<District>();
+    const [sreenWidth, setSreenWidth] = useState(window.innerWidth);
+    const [theme, setTheme] = useState<ThemeType>('light');
+
+    useEffect(() => {
+        window.addEventListener("resize", () => {
+            setSreenWidth(window.innerWidth);
+        });
+    }, [window.innerWidth])
+
+    const handleSetTheme = (newTheme: ThemeType) => setTheme(newTheme);
 
     const handleSetToken = (newToken: any) => setToken(newToken)
     const handleSetDistrictActive = (newActive: District) => setDistrictActive(newActive);
@@ -139,7 +152,10 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             handleSetToken,
             token,
             districtActive,
-            handleSetDistrictActive
+            handleSetDistrictActive,
+            sreenWidth,
+            theme,
+            handleSetTheme,
         }),
         [chartData,
             loading,
@@ -153,7 +169,10 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             questions,
             isSignIn,
             districtActive,
-            token]
+            token,
+            sreenWidth,
+            theme
+        ]
     );
 
     return (

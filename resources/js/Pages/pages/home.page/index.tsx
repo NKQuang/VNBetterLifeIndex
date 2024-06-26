@@ -9,6 +9,7 @@ import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
 import Cookies from 'js-cookie';
 import Footer from '../../components/templates/footer';
+import MobileSreen from '../../components/templates/mobile';
 
 export const ChartContext = createContext({} as any);
 
@@ -22,7 +23,8 @@ const HomePage: React.FC = () => {
     loading,
     handleUpdateSignIn,
     isSignIn,
-    districtActive
+    districtActive,
+    sreenWidth
   } = useBetterLife();
 
   const cookieToken = Cookies.get('login_token');
@@ -102,36 +104,49 @@ const HomePage: React.FC = () => {
     )
   }
 
-  return (
-    <div className='p-home'>
-      <Header />
-      {isShowDetail ?
-        <>
-          <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
-            {
-              loading ?
-                <Loading />
-                :
-                <>
-                  <ChartDetailDistrict />
-                </>
+  const handleRender = () => {
+    return (
+      sreenWidth > 1024 ?
+        (
+          <div className='p-home'>
+            <Header />
+            {isShowDetail ?
+              <>
+                <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
+                  {
+                    loading ?
+                      <Loading />
+                      :
+                      <>
+                        <ChartDetailDistrict />
+                      </>
+                  }
+                </div>
+                {renderContenDistrictActive()}
+              </>
+              :
+              <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
+                <FlowerChart />
+                <div className='p-home_content'>
+                  <div className='p-home_content_wrapper'>
+                    <h2>Cuộc sống thế nào?</h2>
+                    <p>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
+                  </div>
+                </div>
+              </div>
             }
-          </div>
-          {renderContenDistrictActive()}
-        </>
-        :
-        <div className={mapModifiers('p-home_chart', isShowDetail && 'detail', loading && isShowDetail && 'loading')}>
-          <FlowerChart />
-          <div className='p-home_content'>
-            <div className='p-home_content_wrapper'>
-              <h2>Cuộc sống thế nào?</h2>
-              <p>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
-            </div>
-          </div>
-        </div>
-      }
-      <Footer />
-    </div >
+            <Footer />
+          </div >
+        ) : (
+          <MobileSreen />
+        )
+    )
+  }
+
+  return (
+    <>
+      {handleRender()}
+    </>
   )
 };
 

@@ -16,6 +16,7 @@ interface FlowerColumnProps {
     data: Indicator[];
     handleClickColumn?: () => void;
     isDetail?: boolean;
+    isMobile?: boolean;
 }
 const FlowerColumn: React.FC<FlowerColumnProps> = ({
     columnName,
@@ -29,49 +30,26 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
     unit,
     handleClickColumn,
     isDetail = false,
+    isMobile = false,
 }) => {
     const refName = useRef<any>(null);
     const refLine = useRef<HTMLDivElement>(null);
     const refColumn = useRef<HTMLDivElement>(null);
-    const refBoxHover = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (refLine.current && refColumn.current) {
-            refLine.current.style.height = `${refColumn.current?.offsetHeight - 80 - refName.current?.offsetHeight
+            refLine.current.style.height = `${Number(refColumn.current?.offsetHeight) - 80 - refName.current?.offsetHeight
                 }px` as any;
         }
     }, [value]);
 
-    useEffect(() => {
-        if (isHover && refBoxHover.current) {
-            const { top, left } = refBoxHover.current.getBoundingClientRect();
-            const windowWidth = (window.innerWidth - 340) / 12
-
-            if (top >= 300) {
-                refBoxHover.current.style.top = 'unset';
-                refBoxHover.current.style.bottom = '50%';
-            } else {
-                refBoxHover.current.style.bottom = 'unset'; // Reset lại khi điều kiện không đúng
-                refBoxHover.current.style.top = '80px'; // Reset lại khi điều kiện không đúng
-            }
-
-            if (left >= windowWidth * 5) {
-                refBoxHover.current.style.left = 'unset';
-                refBoxHover.current.style.right = '70%';
-            } else {
-                refBoxHover.current.style.left = '70%'; // Reset lại khi điều kiện không đúng
-                refBoxHover.current.style.right = 'unset';
-            }
-        }
-        const getColumn = document.querySelectorAll(`.t-district_chart_main > *`);
-        getColumn[Math.floor(Number(getColumn.length - 1) / 2 - 0.1)]?.classList.add('column-active')
-
-    }, [isHover]);
-
     return (
         <div
             key={value}
-            style={{ height: isDetail ? 400 : value * unit, animation: isFilter ? 'animateShowerFilter 1s ease forwards' : '' }}
+            style={{
+                height: Number(isDetail ? 400 : value * unit),
+                animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
+            }}
             className={mapModifiers("m-column", isHover && "hover")}
             onMouseEnter={() => {
                 if (onMouseEnter) onMouseEnter(index);
@@ -82,38 +60,24 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
             ref={refColumn}
             onClick={handleClickColumn}
         >
-            <div className="m-column_content">
-                <Flower data={data} />
-                <div ref={refName} className="m-column_content_name">
-                    {columnName}
+            {isMobile ?
+                <div
+                    className={mapModifiers("m-column_content", isMobile ? 'mobile' : 'normal')}>
+                    <div ref={refName} className="m-column_content_name">
+                        {columnName}
+                    </div>
+                    <Flower data={data} />
+                    <div ref={refLine} className="m-column_content_line" />
                 </div>
-                <div ref={refLine} className="m-column_content_line" />
-            </div>
-            {isHover && (
-                <div className="m-column_hover" ref={refBoxHover}>
-                    <div className="m-column_hover_name">
-                        <p>{columnName}</p>
+                :
+                <div className="m-column_content">
+                    <Flower data={data} />
+                    <div ref={refName} className="m-column_content_name">
+                        {columnName}
                     </div>
-                    <div className="m-column_hover_content">
-                        {data?.map((item, index) => (
-                            <div key={item.value}>
-                                <span>{item.indicator}:</span>
-                                <div style={{ width: (item.value / 10) * 100, backgroundColor: colorsPetal[index] }} />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="m-column_hover_unit">
-                        <span>Estimated:</span>
-                        <ul>
-                            <li>
-                                0
-                            </li>
-                            <li>5</li>
-                            <li>10</li>
-                        </ul>
-                    </div>
+                    <div ref={refLine} className="m-column_content_line" />
                 </div>
-            )}
+            }
         </div>
     );
 };

@@ -27,12 +27,13 @@ export interface Indicator {
 
 interface FlowerChartProps {
     isDetail?: boolean;
+    isMobile?: boolean;
 }
 
 
 type SortType = 'alphabet' | 'rank'
 
-const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
+const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail, isMobile }) => {
     const { isFilter,
         handleSetIsFilter,
         loading,
@@ -153,7 +154,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
 
     return (
         <>
-            <div className={mapModifiers('t-chart', isDetail && 'detail')}>
+            <div className={mapModifiers('t-chart', isDetail && 'detail', isMobile ? 'mobile' : 'normal')}>
                 <div className='t-chart_unit'>
                     {unit.map((i) => (<div key={i}>{i}&nbsp;-</div>))}
                 </div>
@@ -161,6 +162,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     <div className='t-chart_main'>
                         {(chartData || updateData || [])?.map((item: districtItem, index: number) => (
                             <FlowerColumn
+                                isMobile={isMobile}
                                 unit={valueAUnit}
                                 isFilter={isFilter}
                                 data={item.indicators}
@@ -181,40 +183,42 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         ))}
                     </div>
                 }
-                <div className='t-chart_filter'>
-                    <div>
-                        <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
-                        <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
-                        <div className="t-chart_filter_box_vote">
-                            {localStoreToken &&
-                                <button
-                                    className={mapModifiers('t-chart_filter_box_vote')}
-                                    onClick={() => {
-                                        setIsOpenModal(true)
-                                    }}
-                                >Đánh giá ngay</button>
-                            }
+                {!isMobile &&
+                    <div className='t-chart_filter'>
+                        <div>
+                            <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
+                            <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
+                            <div className="t-chart_filter_box_vote">
+                                {localStoreToken &&
+                                    <button
+                                        className={mapModifiers('t-chart_filter_box_vote')}
+                                        onClick={() => {
+                                            setIsOpenModal(true)
+                                        }}
+                                    >Đánh giá ngay</button>
+                                }
+                            </div>
                         </div>
-                    </div>
-                    <ul className="t-chart_filter_box_sort">
-                        <p>Sắp xếp:</p>
-                        <button
-                            className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'alphabet' ? 'active' : '')}
-                            onClick={() => {
-                                if (softBy === 'alphabet') return;
-                                handleSortData('alphabet')
-                            }}
-                        >A - Z</button>
-                        <button
-                            className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'rank' ? 'active' : '')}
-                            onClick={() => {
-                                if (softBy === 'rank') return;
-                                handleSortData('rank')
-                            }}
-                        >Theo giá trị</button>
-                    </ul>
+                        <ul className="t-chart_filter_box_sort">
+                            <p>Sắp xếp:</p>
+                            <button
+                                className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'alphabet' ? 'active' : '')}
+                                onClick={() => {
+                                    if (softBy === 'alphabet') return;
+                                    handleSortData('alphabet')
+                                }}
+                            >A - Z</button>
+                            <button
+                                className={mapModifiers('t-chart_filter_box_sort_item', softBy === 'rank' ? 'active' : '')}
+                                onClick={() => {
+                                    if (softBy === 'rank') return;
+                                    handleSortData('rank')
+                                }}
+                            >Theo giá trị</button>
+                        </ul>
 
-                </div>
+                    </div>
+                }
             </div>
             <CModal
                 open={isOpenModal}
@@ -315,9 +319,9 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     )
 };
 
-FlowerChart.defaultProps = {
+FlowerChartMobile.defaultProps = {
     isDetail: false
 
 };
 
-export default FlowerChart;
+export default FlowerChartMobile;

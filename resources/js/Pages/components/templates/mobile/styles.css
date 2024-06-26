@@ -1,0 +1,114 @@
+.t-mobile {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.t-mobile .t-mobile_menu {
+  position: absolute;
+  height: fit-content;
+  width: 100vw;
+  top: -70px;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
+  transition: top 1s ease-in-out, box-shadow 1s ease-in;
+  z-index: 1;
+}
+
+.t-mobile-light .t-mobile_menu {
+  background-color: #393939;
+  color: #ffffff;
+}
+
+.t-mobile-dark .t-mobile_menu {
+  background-color: #ffffff;
+  color: #393939;
+}
+
+.t-mobile .t-mobile_menu li {
+  list-style: none;
+  cursor: pointer;
+  padding: 20px 16px;
+  border-bottom: 1px solid #dbdbdb;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.t-mobile .t-mobile_menu li:last-child {
+  border-bottom: unset;
+}
+
+.t-mobile .t-mobile_header {
+  height: 70px;
+  width: 100vw;
+  position: sticky;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.t-mobile-light .t-mobile_header {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
+}
+
+.t-mobile-dark .t-mobile_header {
+  background-color: #393939;
+  box-shadow: 0px 0px 7px 0px rgba(255, 255, 255, 0.774);
+}
+
+.t-mobile_header_action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 30px;
+  margin-right: 12px;
+}
+
+.t-mobile_header_action button {
+  border: unset;
+  background-color: unset;
+  cursor: pointer;
+}
+
+.t-mobile_header_action button:focus {
+  background-color: unset;
+}
+
+.t-mobile_header_action button:first-child {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.t-mobile-dark .t-mobile_header_action button:first-child {
+  background-color: #fff;
+  transition: background-color .1s ease;
+}
+
+.t-mobile_header_action button img {
+  height: 30px;
+  width: 47px;
+}
+
+.t-mobile_header_logo {
+  height: 100%;
+  width: 100%;
+  margin-left: 12px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.t-mobile_header_icon {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}

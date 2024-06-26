@@ -1,4 +1,4 @@
-.t-chart {
+.t-chart-mobile {
     width: 100%;
     height: fit-content;
     min-height: 600px;
@@ -6,7 +6,6 @@
     display: grid;
     grid-template-columns: 20px 1fr 320px;
     padding: 12px 8px 0 4px;
-    border-top: 1px solid #999999;
     border-bottom: 1px solid #999999;
     background: rgb(245, 246, 246);
     background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
@@ -16,7 +15,9 @@
     width: 100vw;
     display: grid;
     grid-template-columns: 20px 1fr;
-    min-height: 40vh;
+    min-height: 50vh;
+    border: unset;
+    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
 }
 
 .t-chart_form {
@@ -92,7 +93,7 @@
     justify-content: center;
 }
 
-.t-chart .t-chart_main {
+.t-chart-mobile .t-chart_main {
     height: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -103,11 +104,11 @@
     overflow-x: scroll;
 }
 
-.t-chart .t-chart_main::-webkit-scrollbar {
+.t-chart-mobile .t-chart_main::-webkit-scrollbar {
     display: none;
 }
 
-.t-chart .t-chart_unit {
+.t-chart-mobile .t-chart_unit {
     width: 20px;
     display: grid;
     grid-template-columns: repeat(1fr);
@@ -115,7 +116,7 @@
     transition: animation 1s ease;
 }
 
-.t-chart .t-chart_unit>* {
+.t-chart-mobile .t-chart_unit>* {
     display: flex;
     align-items: flex-end;
     font-size: 12px;
@@ -123,7 +124,7 @@
     position: relative;
 }
 
-.t-chart .t-chart_unit>*::before {
+.t-chart-mobile .t-chart_unit>*::before {
     content: '';
     width: calc(100vw);
     height: 1px;
@@ -135,7 +136,7 @@
     transition: background-color 2s ease;
 }
 
-.t-chart .t-chart_filter {
+.t-chart-mobile .t-chart_filter {
     padding: 8px;
     animation: animateShowerX 1.5s ease-in-out forwards;
     transition: animation 1.5s ease-in-out;
@@ -144,7 +145,7 @@
     justify-content: space-between;
 }
 
-.t-chart .t-chart_filter h3 {
+.t-chart-mobile .t-chart_filter h3 {
     color: #04566e;
     font-family: TheSerif;
     font-size: 20px;
@@ -153,7 +154,7 @@
     margin: 0px 0px 10px
 }
 
-.t-chart .t-chart_filter h3~p {
+.t-chart-mobile .t-chart_filter h3~p {
     color: #464646;
     font-family: BerniniSansWeb;
     font-size: 15px;
@@ -161,7 +162,7 @@
     margin: 0px 0px 10px
 }
 
-.t-chart .t-chart_filter .t-chart_filter_box {
+.t-chart-mobile .t-chart_filter .t-chart_filter_box {
     box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 6px 4px;
@@ -172,7 +173,7 @@
     transition: animation 1.5s ease;
 }
 
-.t-chart .t-chart_filter .t-chart_filter_box_content {
+.t-chart-mobile .t-chart_filter .t-chart_filter_box_content {
     background-color: #fff;
     height: fit-content;
     width: 100%;
@@ -181,7 +182,7 @@
     padding: 8px;
 }
 
-.t-chart .t-chart_filter .t-chart_filter_box_content_wrapper {
+.t-chart-mobile .t-chart_filter .t-chart_filter_box_content_wrapper {
     min-height: 400px;
 }
 
@@ -205,7 +206,7 @@
     color: #233d94;
 }
 
-.t-chart .t-chart_filter .t-chart_filter_box_sort {
+.t-chart-mobile .t-chart_filter .t-chart_filter_box_sort {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -214,7 +215,7 @@
     gap: 10px;
 }
 
-.t-chart .t-chart_filter .t-chart_filter_box_sort p {
+.t-chart-mobile .t-chart_filter .t-chart_filter_box_sort p {
     width: max-content;
     min-width: 60px;
     font-weight: 600;

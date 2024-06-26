@@ -123,12 +123,13 @@
                                     <div class="border-t border-gray-200"></div>
 
                                     <!-- Authentication -->
-                                    <form method="POST" action="{{ route('logout') }}" x-data>
+                                    <form method="POST" action="{{ route('custom.logout') }}" x-data @submit.prevent="clearAndSubmit">
                                         @csrf
 
-                                        <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                                        <x-responsive-nav-link href="{{ route('custom.logout') }}"
+                                                               @click.prevent="$root.submit();">
                                             {{ __('Log Out') }}
-                                        </x-dropdown-link>
+                                        </x-responsive-nav-link>
                                     </form>
                                 </x-slot>
                             </x-dropdown>
@@ -202,11 +203,12 @@
                             </x-responsive-nav-link>
                         @endif
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}" x-data>
+                        <form method="POST" action="{{ route('custom.logout') }}" x-data @submit.prevent="clearAndSubmit">
                             @csrf
 
-                            <x-responsive-nav-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
-                                <span class="text-gray-700 hover:text-indigo-500">{{ __('Log Out') }}</span>
+                            <x-responsive-nav-link href="{{ route('custom.logout') }}"
+                                                   @click.prevent="$root.submit();">
+                                {{ __('Log Out') }}
                             </x-responsive-nav-link>
                         </form>
                     @else
@@ -255,3 +257,21 @@
         </div>
     </div>
 </nav>
+<script>
+   function clearAndSubmit() {
+        // Xóa localStorage và sessionStorage
+        console.log('Clearing localStorage and sessionStorage');
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Xóa tất cả cookies
+        console.log('Clearing cookies');
+        document.cookie.split(";").forEach(function(c) {
+            document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/";
+        });
+
+        // Gửi form logout
+        console.log('Submitting form');
+        document.querySelector('form').submit();
+    }
+</script>

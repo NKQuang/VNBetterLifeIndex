@@ -1,0 +1,58 @@
+.t-mobile_body {
+  height: calc(100vh - 70px);
+  width: 100vw;
+  position: relative;
+  z-index: 0;
+}
+
+.t-mobile_body_flower {
+  height: fit-content;
+  width: fit-content;
+}
+
+.t-mobile_body-dark {
+  background-color: #393939;
+}
+
+.t-mobile_body .t-mobile_body_action {
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 20%;
+}
+
+.t-mobile_body .t-mobile_body_action button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  outline: unset;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: unset;
+  background-color: transparent;
+}
+
+
+.t-mobile_body .t-mobile_body_action button img {
+  height: 40px;
+  width: 40px;
+}
+
+.t-mobile_body .t-mobile_body_prev_next {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 40%;
+  padding: 10px;
+}
+
+.t-mobile_body .t-mobile_body_prev_next button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  outline: unset;
+  border: 1px solid #dbdbdb;
+}
