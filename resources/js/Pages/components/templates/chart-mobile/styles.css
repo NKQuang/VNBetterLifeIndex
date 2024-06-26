@@ -20,7 +20,7 @@
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
 }
 
-.t-chart_form {
+.t-chart-mobile .t-chart_form {
     min-height: 60vh;
     width: max-content;
     min-width: 500px;
@@ -29,7 +29,7 @@
     position: relative;
 }
 
-.t-chart_form h2 {
+.t-chart-mobile .t-chart_form h2 {
     text-align: center;
     font-weight: 600;
     font-size: 18px;
@@ -37,23 +37,23 @@
     margin-bottom: 8px;
 }
 
-.t-chart_form ul li {
+.t-chart-mobile .t-chart_form ul li {
     width: 100%;
 }
 
-.t-chart_form ul li p {
+.t-chart-mobile .t-chart_form ul li p {
     font-size: 16px;
 }
 
-.t-chart_form ul li .a-slider {
+.t-chart-mobile .t-chart_form ul li .a-slider {
     margin-top: 6px;
 }
 
-.t-chart_form ul li .a-slider .slider-markers .slider-marker {
+.t-chart-mobile .t-chart_form ul li .a-slider .slider-markers .slider-marker {
     margin-top: 6px;
 }
 
-.t-chart_form_submit {
+.t-chart-mobile .t-chart_form_submit {
     width: 100%;
     display: flex;
     align-items: center;
@@ -61,7 +61,7 @@
     gap: 20px;
 }
 
-.t-chart_form_submit button {
+.t-chart-mobile .t-chart_form_submit button {
     padding: 8px 20px;
     border: unset;
     outline: unset;
@@ -72,28 +72,28 @@
     box-shadow: 0px 6px 18px -3px rgba(0, 0, 0, 0.3);
 }
 
-.t-chart_form_submit button:focus {
+.t-chart-mobile .t-chart_form_submit button:focus {
     opacity: 0.7;
 }
 
-.t-chart_form_submit button:first-child {
+.t-chart-mobile .t-chart_form_submit button:first-child {
     background-color: #f00;
     color: #fff;
 }
 
-.t-chart_form_submit button .dot-spinner,
-.t-chart_form_submit button .a-loading {
+.t-chart-mobile .t-chart_form_submit button .dot-spinner,
+.t-chart-mobile .t-chart_form_submit button .a-loading {
     height: 20px;
     width: 20px;
     background-color: transparent;
 }
 
-.t-chart_form_submit button {
+.t-chart-mobile .t-chart_form_submit button {
     display: flex;
     justify-content: center;
 }
 
-.t-chart-mobile .t-chart_main {
+.t-chart-mobile .t-chart-mobile .t-chart_main {
     height: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -186,7 +186,7 @@
     min-height: 400px;
 }
 
-.t-chart_filter_box_content_item {
+.t-chart-mobile .t-chart_filter_box_content_item {
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -195,12 +195,12 @@
     padding-bottom: 4px;
 }
 
-.t-chart_filter_box_content_item:last-child {
+.t-chart-mobile .t-chart_filter_box_content_item:last-child {
     border-bottom: unset;
     padding-bottom: unset;
 }
 
-.t-chart_filter_box_content_item span {
+.t-chart-mobile .t-chart_filter_box_content_item span {
     min-width: 180px;
     font-weight: 600;
     color: #233d94;
@@ -222,7 +222,7 @@
     color: #04566e;
 }
 
-.t-chart_filter_box_sort_item {
+.t-chart-mobile .t-chart_filter_box_sort_item {
     text-transform: capitalize;
     font-weight: 500;
     cursor: pointer;
@@ -242,30 +242,30 @@
     border-radius: 8px;
 }
 
-.t-chart_filter_box_sort_item:focus {
+.t-chart-mobile .t-chart_filter_box_sort_item:focus {
     opacity: 0.8;
 }
 
-.t-chart_filter_box_sort_item-active {
+.t-chart-mobile .t-chart_filter_box_sort_item-active {
     background-color: #0059ff;
     transition: background-color .5s ease;
     color: #fff;
 }
 
-.t-chart_filter_box_content .t-chart_filter_box_content_item {
+.t-chart-mobile .t-chart_filter_box_content .t-chart_filter_box_content_item {
     margin: 8px 0;
     display: flex;
     align-items: center;
 }
 
-.t-chart_filter_box_vote {
+.t-chart-mobile .t-chart_filter_box_vote {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.t-chart_filter_box_vote button {
+.t-chart-mobile .t-chart_filter_box_vote button {
     width: fit-content;
     background-color: #fff;
     color: #000;

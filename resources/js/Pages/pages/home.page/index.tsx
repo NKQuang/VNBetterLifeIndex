@@ -117,9 +117,7 @@ const HomePage: React.FC = () => {
                     loading ?
                       <Loading />
                       :
-                      <>
-                        <ChartDetailDistrict />
-                      </>
+                      <ChartDetailDistrict />
                   }
                 </div>
                 {renderContenDistrictActive()}

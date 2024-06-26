@@ -162,6 +162,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         {(chartData || updateData || [])?.map((item: districtItem, index: number) => (
                             <FlowerColumn
                                 unit={valueAUnit}
+                                isMobile={false}
                                 isFilter={isFilter}
                                 data={item.indicators}
                                 value={item.value}
@@ -186,14 +187,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         <h3>Tạo chỉ số cuộc sống tốt đẹp hơn của bạn</h3>
                         <p>Đánh giá các chủ đề theo mức độ quan trọng của chúng đối với bạn:</p>
                         <div className="t-chart_filter_box_vote">
-                            {localStoreToken &&
-                                <button
-                                    className={mapModifiers('t-chart_filter_box_vote')}
-                                    onClick={() => {
-                                        setIsOpenModal(true)
-                                    }}
-                                >Đánh giá ngay</button>
-                            }
+                            <button
+                                className={mapModifiers('t-chart_filter_box_vote')}
+                                onClick={() => {
+                                    setIsOpenModal(true)
+                                }}
+                            >Chia sẻ cảm nhận của bạn về hạnh phúc</button>
                         </div>
                     </div>
                     <ul className="t-chart_filter_box_sort">

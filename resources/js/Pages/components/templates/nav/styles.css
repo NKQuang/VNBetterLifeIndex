@@ -62,6 +62,7 @@
 .t-header .t-header_left a p {
     font-size: 17px;
     font-weight: 700;
+    text-align: center;
 }
 
 .t-header .t-header_left a p:nth-child(1),

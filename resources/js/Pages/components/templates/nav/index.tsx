@@ -23,9 +23,8 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 <div className="t-header_left">
                     <i className="fa-solid fa-earth-americas"></i>
                     <a href="/" className="site-header__logo js-site-header__logo">
-                        <p>Vũng Tàu</p>
-                        <p>Better Life</p>
-                        <p>Index</p>
+                        <p>Chỉ số </p>
+                        <p>phồn vinh & hạnh phúc</p>
                     </a>
                 </div>
                 <div className="t-header_right">
