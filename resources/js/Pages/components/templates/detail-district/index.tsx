@@ -49,7 +49,6 @@ const ChartDetailDistrict: React.FC = () => {
                 <div className='t-district_chart_main'>
                     {chartData?.filter((column) => column.district !== infoDetail?.district)?.map((item: districtItem, index: number) => (
                         <FlowerColumn
-                            isMobile={false}
                             unit={valueAUnit}
                             isFilter={false}
                             data={item.indicators}
@@ -70,7 +69,6 @@ const ChartDetailDistrict: React.FC = () => {
                 </div>
                 <div className='t-district_chart_main-flower_active'>
                     <FlowerColumn
-                        isMobile={false}
                         unit={valueAUnit}
                         isFilter={false}
                         data={infoDetail?.indicators as any}
@@ -78,7 +76,7 @@ const ChartDetailDistrict: React.FC = () => {
                         onMouseEnter={handleOnMouseEnterColumn}
                         onMouseLeave={handleOnMouseLeaveColumn}
                         columnName={infoDetail?.district as any}
-                        isHover={false}
+                        isHover={Number(chartData?.length) + 2 === idColumnHover}
                         index={Number(chartData?.length) + 2}
                         isDetail
                     />
@@ -89,3 +87,4 @@ const ChartDetailDistrict: React.FC = () => {
 }
 
 export default ChartDetailDistrict;
+ChartDetailDistrict;

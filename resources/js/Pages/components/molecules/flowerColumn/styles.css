@@ -43,9 +43,20 @@
 
 
 .m-column_hover_content>*>div {
-    height: 10px;
+    height: 12px;
     outline: 1px solid #dbdbdb;
     max-width: 100px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 4px;
+}
+
+.m-column_hover_content>*>div>p {
+    position: absolute;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .m-column_content .m-column_content_name {
@@ -127,8 +138,14 @@
     padding: 8px;
 }
 
-.m-column_content-mobile .m-column_content_name {
+.m-column_content-mobile .m-column_content_name,
+.m-column_content-mobile p {
     transform: unset;
+    text-align: center;
+}
+
+.m-column-mobile {
+    width: 90px;
 }
 
 .m-column_content-mobile svg {}

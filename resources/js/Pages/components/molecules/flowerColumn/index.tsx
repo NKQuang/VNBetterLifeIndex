@@ -39,10 +39,10 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
 
     useEffect(() => {
         if (refLine.current && refColumn.current) {
-            refLine.current.style.height = `${Number(refColumn.current?.offsetHeight) - 80 - refName.current?.offsetHeight
+            refLine.current.style.height = `${Number(value * unit + 40) - 80 - refName.current?.offsetHeight
                 }px` as any;
         }
-    }, [value]);
+    }, [value, refLine.current, unit]);
 
     useEffect(() => {
         if (isHover && refBoxHover.current) {
@@ -74,10 +74,10 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
         <div
             key={value}
             style={{
-                height: Number(isDetail ? 400 : value * unit),
+                height: Number(value * unit + 40),
                 animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
             }}
-            className={mapModifiers("m-column", isHover && "hover")}
+            className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal')}
             onMouseEnter={() => {
                 if (onMouseEnter) onMouseEnter(index);
             }}
@@ -89,7 +89,9 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
         >
             {isMobile ?
                 <div
-                    className={mapModifiers("m-column_content", isMobile ? 'mobile' : 'normal')}>
+                    className={mapModifiers("m-column_content", isMobile ? 'mobile' : 'normal')}
+                >
+                    <p>{value.toFixed(2)}</p>
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>
@@ -98,6 +100,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 </div>
                 :
                 <div className="m-column_content">
+                    <p>{value.toFixed(2)}</p>
                     <Flower data={data} />
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
@@ -114,7 +117,9 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                         {data?.map((item, index) => (
                             <div key={item.value}>
                                 <span>{item.indicator}:</span>
-                                <div style={{ width: (item.value / 10) * 100, backgroundColor: colorsPetal[index] }} />
+                                <div style={{ width: (item.value / 10) * 100, backgroundColor: colorsPetal[index] }} >
+                                    <p>{item.value.toFixed(2)}</p>
+                                </div>
                             </div>
                         ))}
                     </div>

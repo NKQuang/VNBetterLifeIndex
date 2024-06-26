@@ -38,6 +38,8 @@
     position: absolute;
     bottom: 15px;
     left: 45%;
+    transform-origin: bottom;
+    transform: scale(1.1);
 }
 
 .t-district_chart_main-flower_active .m-column_content_line {
@@ -100,7 +102,7 @@
     gap: 8px;
     padding: 8px;
     overflow-y: hidden;
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 
 .p-district .p-district_chart .t-district_chart_main::-webkit-scrollbar {
