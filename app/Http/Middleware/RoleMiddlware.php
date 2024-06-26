@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddlware
@@ -18,7 +19,10 @@ class RoleMiddlware
     {
         if (Auth::check()) {
             if (Auth::user()) {
-                cookie()->queue(cookie('login_token', auth()->user()->id, 60));
+                $user = Auth::user();
+                $user->tokens()->delete();
+                $token = $user->createToken('API Token')->plainTextToken;
+                Cookie::queue(Cookie::make('login_token',$token, 60));
             }
 
             if (Auth::user()->role =='admin') {
