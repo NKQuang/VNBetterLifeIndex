@@ -25,7 +25,7 @@
             <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
             <link rel="stylesheet" href="{{ asset('assets/css/loopple/loopple.css') }}">
         </head>
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 
         <!-- Styles -->
         @livewireStyles
