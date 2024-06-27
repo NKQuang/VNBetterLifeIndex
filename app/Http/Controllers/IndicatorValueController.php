@@ -51,12 +51,12 @@ class IndicatorValueController extends Controller
         'value' => 'required|array',
         'value.*' => 'required|numeric',
         'indicator_id' => 'required|exists:indicators,id',
-        'full_name' => 'required_without:user_id|string|max:255',
-        'gender' => 'required_without:user_id|integer|in:0,1',
-        'phone_number' => 'required_without:user_id|string|max:15',
-        'address' => 'required_without:user_id|string|max:255',
-        'old' => 'required_without:user_id|integer|min:0',
-        'profession' => 'required_without:user_id|string|max:255',
+        'full_name' => 'nullable|string|max:255',
+        'gender' => 'nullable|integer|in:0,1',
+        'phone_number' => 'nullable|string|max:15',
+        'address' => 'nullable|string|max:255',
+        'old' => 'nullable|integer|min:0',
+        'profession' => 'nullable|string|max:255',
     ]);
 
     // Lấy user_id từ request
