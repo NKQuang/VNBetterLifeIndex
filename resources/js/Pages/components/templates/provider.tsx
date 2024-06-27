@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import { districtItem } from "./chart";
-import { District, Question, ResponseGetdistricts } from "../../services/apis/types";
+import { District, Question, ResponseGetdistricts, User } from "../../services/apis/types";
 import { DropdownType } from "../atoms/dropdown";
 
 type ThemeType = 'light' | 'dark';
@@ -38,6 +38,7 @@ interface ChartContextData {
     sreenWidth: number;
     handleSetTheme: (newTheme: ThemeType) => void;
     theme: ThemeType;
+    userInfo: User | undefined;
 }
 
 interface ChartProviderProps {
@@ -62,6 +63,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [districtActive, setDistrictActive] = useState<District>();
     const [sreenWidth, setSreenWidth] = useState(window.innerWidth);
     const [theme, setTheme] = useState<ThemeType>('light');
+    const [userInfo, setUserInfo] = useState<User>();
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -104,7 +106,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const handleSetChartData = (data: districtItem[]) => {
         setChartData(data);
         const defineIndicators = data[0].indicators?.map((item) => ({
-            id: item.value,
+            id: item.indicator_id,
             label: item.indicator,
             value: item.indicator,
         }));
@@ -156,6 +158,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             sreenWidth,
             theme,
             handleSetTheme,
+            userInfo
         }),
         [chartData,
             loading,
@@ -171,7 +174,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             districtActive,
             token,
             sreenWidth,
-            theme
+            theme,
+            userInfo
         ]
     );
 

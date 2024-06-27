@@ -61,24 +61,109 @@
 
 .t-header .t-header_left a p {
     font-size: 17px;
-    font-weight: 700;
-    text-align: center;
+    font-weight: 800;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
 }
 
-.t-header .t-header_left a p:nth-child(1),
-.t-header .t-header_left a p:nth-child(3) {
-    color: #a8a8a8;
+.t-header .t-header_left a p:nth-child(1) {
+    transform: translateX(-5px);
+    color: #0077ff;
 }
 
 .t-header .t-header_left a p:nth-child(3) {
-    font-weight: 400;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 18px;
+    transform: translateX(-10px);
+    color: #a58c00;
 }
 
 .t-header .t-header_left a p:nth-child(2) {
-    font-size: 18px;
-    color: #000;
+    transform: translateX(5px);
+    color: #00a53f;
+
+}
+
+.t-header_form {
+    width: 100%;
+    height: 100%;
+}
+
+.t-header_form .t-header_form_item {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.t-header_form .t-header_form_item:last-child {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.t-header_form .t-header_form_item p {
+    margin-bottom: 4px;
+}
+
+.t-header_form .t-header_form_item input {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.t-header_form .t-header_form_item:last-child input {
+    width: 15px
+}
+
+.t-header_form .t-header_form_item:last-child p {
+    margin: 0;
+}
+
+.t-header_form .t-header_form_item:last-child input:focus {
+    outline: unset;
+    border: unset;
+}
+
+.t-header_form_action {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.t-header_form_action a {
+    color: #1178ff;
+}
+
+.t-header_form_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+}
+
+.t-header_form_button button {
+    padding: 8px 20px;
+    background-color: rgb(0, 110, 255);
+    color: #fff;
+    min-width: 100px;
+    border-radius: 6px;
+}
+
+.t-header_form_button button .a-loading {
+    background-color: transparent;
+}
+
+.t-header_form_button button .a-loading .dot-spinner {
+    height: 22px;
+    width: 22px;
+}
+
+.t-header_form_button button:focus {
+    opacity: 0.7;
+}
+
+.t-header_form_button button:first-child {
+    background-color: #f00;
+    color: #fff;
 }
 
 @media only screen and (max-width: 1280px) {

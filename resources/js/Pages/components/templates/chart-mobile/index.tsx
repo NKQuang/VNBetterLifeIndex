@@ -162,7 +162,7 @@ const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail, isMobile }) =
                     <div className='t-chart_main'>
                         {(chartData || updateData || [])?.map((item: districtItem, index: number) => (
                             <FlowerColumn
-                                isMobile={true}
+                                isMobile={isMobile}
                                 unit={valueAUnit}
                                 isFilter={isFilter}
                                 data={item.indicators}

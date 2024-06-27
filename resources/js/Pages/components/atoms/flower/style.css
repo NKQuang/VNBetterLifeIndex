@@ -2,4 +2,30 @@
     height: 100px;
     min-height: 100px;
     max-height: 100px;
+    animation: flowerShower 1s ease-out forwards;
+    transition: animation 1s ease-in;
+}
+
+@keyframes flowerShower {
+    0% {
+        transform: rotate(90deg) scale(0.4);
+        transform-origin: center;
+    }
+
+    100% {
+        transform-origin: center;
+        transform: rotate(0) scale(1.4) translateY(-7px)
+    }
+}
+
+@keyframes flowerShowerMobile {
+    0% {
+        transform: rotate(90deg) scale(0.4);
+        transform-origin: center;
+    }
+
+    100% {
+        transform-origin: center;
+        transform: rotate(0) scale(1.6) translateY(0px)
+    }
 }

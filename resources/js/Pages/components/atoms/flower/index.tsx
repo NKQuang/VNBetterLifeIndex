@@ -2,6 +2,7 @@ import React from 'react';
 import Petal from '../petal';
 import './style.css'
 import { districtItem, Indicator } from '../../templates/chart';
+import { useBetterLife } from '../../templates/provider';
 
 interface FlowerProps {
     data: Indicator[];
@@ -14,8 +15,10 @@ export const colorsPetal = [
 ];
 
 const Flower: React.FC<FlowerProps> = ({ data }) => {
+    const { sreenWidth
+    } = useBetterLife();
     return (
-        <svg id='flower' viewBox="-120 -120 240 240" height={180} >
+        <svg id='flower' viewBox="-140 -140 280 280" height={200} style={{ animation: sreenWidth > 1024 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}>
             {data.map((item, i) => (
                 <Petal height={item?.value ?? 0} key={i} angle={i * 30} color={colorsPetal[i]} />
             ))}

@@ -18,7 +18,7 @@
 }
 
 .t-mobile-light .t-mobile_menu {
-  background-color: #393939;
+  background-color: #a7a7a7;
   color: #ffffff;
 }
 
@@ -104,6 +104,15 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 8px;
+}
+
+.t-mobile_header_logo p {
+  font-size: 32px;
+  font-weight: 800;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-transform: uppercase;
+  color: #00a53f;
 }
 
 .t-mobile_header_icon {

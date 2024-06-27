@@ -57,6 +57,7 @@
     position: absolute;
     font-size: 11px;
     font-weight: 600;
+    color: #fff;
 }
 
 .m-column_content .m-column_content_name {
@@ -147,10 +148,6 @@
 .m-column-mobile {
     width: 90px;
 }
-
-.m-column_content-mobile svg {}
-
-.m-column_content-mobile .m-column_content_line {}
 
 @keyframes animateShower {
     0% {

@@ -12,11 +12,12 @@ interface MotionProps {
     onClose: () => void;
     title?: string;
     zIndex?: ZIndex;
+    className?: string;
 }
 
-const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex }) => {
+const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex, className }) => {
     return (
-        <div className={mapModifiers('o-modal', zIndex)}>
+        <div className={mapModifiers('o-modal', zIndex, className)}>
             <Modal
                 open={open}
                 onClose={onClose}
@@ -24,7 +25,7 @@ const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex 
                 showCloseIcon
                 closeOnEsc
                 classNames={{
-                    root: mapModifiers('o-modal', zIndex)
+                    root: mapModifiers('o-modal', zIndex, className)
                 }}
             >
                 {title &&

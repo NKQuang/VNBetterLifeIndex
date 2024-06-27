@@ -16,6 +16,7 @@ export const ChartContext = createContext({} as any);
 const HomePage: React.FC = () => {
   const {
     handleSetChartData,
+    handleSetChartDataRoot,
     handleSetLoading,
     handleSetIsFilter,
     handleUpdateDistrictIndicators,
@@ -27,27 +28,21 @@ const HomePage: React.FC = () => {
     sreenWidth
   } = useBetterLife();
 
-  const cookieToken = Cookies.get('login_token');
   const localStoreToken = localStorage.getItem('login_token');
 
   const [token, setToken] = useState({
-    cookie: cookieToken,
     local: localStoreToken
   });
 
   useEffect(() => {
     setToken({
-      cookie: cookieToken,
       local: localStoreToken
     })
-  }, [cookieToken, localStoreToken])
+  }, [localStoreToken])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!token.cookie && !token.local) {
-          authorize();
-        }
         getWbi();
       } catch (error) {
         handleSetIsFilter(false);
@@ -61,7 +56,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (token.local) {
-      getIndicators();
+      // getIndicators();
     }
   }, [token.local, isSignIn]);
 
@@ -69,22 +64,11 @@ const HomePage: React.FC = () => {
   const getWbi = async () => {
     const data = await getWBI();
     handleSetChartData(data);
+    handleSetChartDataRoot(data);
     handleSetLoading(false);
     handleSetIsFilter(false);
   }
 
-  const authorize = async () => {
-    const check: any = await checkLogin();
-    if (check.authenticated) {
-      localStorage.setItem('login_token', check.api_token);
-      localStorage.setItem('account', JSON.stringify(check.user));
-      setTimeout(() => {
-        handleUpdateSignIn(true);
-      }, 2000);
-    } else {
-      handleUpdateSignIn(false);
-    }
-  }
 
   const getIndicators = async () => {
     const districts: any = await getDistrictsIndicators();

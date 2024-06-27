@@ -36,3 +36,20 @@ export interface Indicator {
     created_at: null;
     updated_at: null;
 }
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    email_verified_at: Date;
+    two_factor_confirmed_at: null;
+    role: string;
+    phone: string;
+    address: string;
+    status: string;
+    current_team_id: null;
+    profile_photo_path: null;
+    created_at: Date;
+    updated_at: Date;
+    profile_photo_url: string;
+}

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
 import './styles.css'
-import { unit } from '../../../assets/data';
+import { RangeOld, relationship, unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
 import { useBetterLife } from '../provider';
 import Loading from '../../atoms/loading';
@@ -46,7 +46,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         questions,
         isSignIn,
         districtIndicators,
-        handleSetDistrictActive
+        handleSetDistrictActive,
+        chartDataRoot,
     } = useBetterLife();
 
     const localStoreToken = localStorage.getItem('login_token');
@@ -56,6 +57,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
 
     const [valueAUnit, setValueAUnit] = useState(0);
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalConfirm, setIsOpenModalConfirm] = useState(false);
     const [stateForm, setStateForm] = useState({
         district: undefined as unknown as DropdownType,
         indicator: undefined as unknown as DropdownType,
@@ -66,6 +68,14 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         isValidated: false,
     });
     const [updateData, setUpdateData] = useState<any>();
+    const [states, setStates] = useState({
+        username: '',
+        password: '',
+        isHidePassword: false,
+        isOpenFormLogin: false,
+        pendding: false,
+    })
+    const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
 
     useEffect(() => {
         const getHeightUnit = document.querySelector('.t-chart_unit div');
@@ -151,6 +161,21 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         submitIndicators(body);
     }
 
+    const handleSubmitLogin = () => {
+
+    }
+
+    const handleSortAllowIndicator = (id: any) => {
+        setIdIndicatorsActive(id);
+        const newList = chartDataRoot?.map((item) => ({
+            ...item,
+            value: item.indicators.find((i: Indicator) => i.indicator_id === id)?.value
+        }))?.sort((a: any, b: any) => a.value - b.value);
+        console.table(newList)
+        handleSetChartData(newList as any);
+        handleSetLoading(true);
+    }
+
     return (
         <>
             <div className={mapModifiers('t-chart', isDetail && 'detail')}>
@@ -190,9 +215,38 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                             <button
                                 className={mapModifiers('t-chart_filter_box_vote')}
                                 onClick={() => {
-                                    setIsOpenModal(true)
+                                    if (isSignIn) {
+                                        setIsOpenModal(true)
+                                    } else {
+                                        setIsOpenModalConfirm(true)
+                                    }
                                 }}
                             >Chia sẻ cảm nhận của bạn về hạnh phúc</button>
+                        </div>
+                    </div>
+                    <div className='t-chart_soft'>
+                        <div className='t-chart_soft_wrapper'>
+                            <h2>Sắp xếp theo chỉ số</h2>
+                            {indicators?.map((item, index) => (
+                                <div
+                                    key={index}
+                                    style={idIndicatorsActive === item.id ? {
+                                        backgroundColor: '#afcbff',
+                                        borderRadius: 4,
+                                    } : {}}
+                                    onClick={() => {
+                                        handleSortAllowIndicator(item.id)
+                                    }}
+                                >
+                                    <p>{item.label}</p>
+                                </div>
+                            ))}
+                            <button onClick={() => {
+                                if (idIndicatorsActive === 99) return;
+                                handleSetChartData(chartDataRoot as any);
+                                handleSetLoading(true);
+                                setIdIndicatorsActive(99);
+                            }}>Reset</button>
                         </div>
                     </div>
                     <ul className="t-chart_filter_box_sort">
@@ -215,63 +269,193 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
 
                 </div>
             </div>
+            {/* Form xác nhận đánh giá*/}
+            <CModal
+                open={isOpenModalConfirm}
+                title='Xác nhận'
+                onClose={() => setIsOpenModalConfirm(false)}
+                zIndex="lv3"
+                className='comfirm'
+            >
+                <div className="t-chart_choose" style={{ marginTop: 20, fontSize: 16, textAlign: 'center' }}>
+                    Khi bạn chia sẻ mà không đăng nhập, bạn không thể xem lại các thông tin đã đánh giá và cập nhật các chỉ số đánh giá của bạn. Đăng nhập để được nhiều quyền lợi hơn.
+                </div>
+                <div className='t-chart_form_submit' style={{ marginTop: 20 }}>
+                    <button onClick={() => {
+                        setIsOpenModalConfirm(false);
+                        setStates({ ...states, isOpenFormLogin: true })
+                    }}>
+                        Đăng nhập
+                    </button>
+                    <button onClick={() => {
+                        setIsOpenModal(true)
+                        setIsOpenModalConfirm(false);
+                    }} >
+                        Chia sẻ ngay
+                    </button>
+                </div>
+            </CModal>
+            {/* Form Đánh giá */}
             <CModal
                 open={isOpenModal}
                 title='Mẫu đánh giá'
                 onClose={() => setIsOpenModal(false)}
+                zIndex="lv2"
+                className='form-rating'
             >
-                <div className='t-chart_form'>
-                    <Dropdown
-                        isRequired
-                        value={stateForm.district}
-                        options={districts as any}
-                        title='Huyện'
-                        placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
-                        handleOnChange={(value) => {
-                            setStateForm({
-                                ...stateForm,
-                                district: value,
-                            })
-                        }}
-                    />
-                    <Dropdown
-                        isRequired
-                        value={stateForm.indicator}
-                        options={indicators as any}
-                        title='Chỉ số'
-                        placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
-                        handleOnChange={(value) => {
-                            const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
-                            setStateForm({
-                                ...stateForm,
-                                indicator: value,
-                                questions: listQuestion,
-                                answers: listQuestion?.map((i, idx) => 0) as any,
-                            });
-                        }}
-                    />
+                {isSignIn ?
+                    <div className={mapModifiers('t-chart_form t-chart_form_signin')}>
+                        <Dropdown
+                            isRequired
+                            value={stateForm.district}
+                            options={districts as any}
+                            title='Huyện'
+                            placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                            handleOnChange={(value) => {
+                                setStateForm({
+                                    ...stateForm,
+                                    district: value,
+                                })
+                            }}
+                        />
+                        <Dropdown
+                            isRequired
+                            value={stateForm.indicator}
+                            options={indicators as any}
+                            title='Chỉ số'
+                            placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                            handleOnChange={(value) => {
+                                const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
+                                setStateForm({
+                                    ...stateForm,
+                                    indicator: value,
+                                    questions: listQuestion,
+                                    answers: listQuestion?.map((i, idx) => 0) as any,
+                                });
+                            }}
+                        />
 
-                    {stateForm.indicator && stateForm.district?.id &&
-                        <>
-                            <h2>Bộ câu hỏi</h2>
-                            <ul className='t-chart_form_list'>
-                                {stateForm?.questions?.map((record, index) => (
-                                    <li key={record.value}>
-                                        <p>{record.label}</p>
-                                        <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
-                                            const newSliderValues = [...stateForm.answers] as any;
-                                            newSliderValues[index] = Number(value);
-                                            setStateForm({
-                                                ...stateForm,
-                                                answers: newSliderValues
-                                            });
-                                        }} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </>
-                    }
-                </div>
+                        {stateForm.indicator && stateForm.district?.id &&
+                            <>
+                                <h2>Bộ câu hỏi</h2>
+                                <ul className='t-chart_form_list'>
+                                    {stateForm?.questions?.map((record, index) => (
+                                        <li key={record.value}>
+                                            <p>{record.label}</p>
+                                            <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
+                                                const newSliderValues = [...stateForm.answers] as any;
+                                                newSliderValues[index] = Number(value);
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    answers: newSliderValues
+                                                });
+                                            }} />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </>
+                        }
+                    </div>
+                    : <>
+                        <div className='t-chart_info_customer'>
+                            <div className='t-chart_info_item'>
+                                <p>Họ tên</p>
+                                <input
+                                    type='text'
+                                    autoFocus
+                                    placeholder=''
+                                    onChange={(event) => { }}
+                                />
+                            </div>
+                            <div className='t-chart_info_item'>
+                                <p>Số điện thoại</p>
+                                <input
+                                    type='text'
+                                    autoFocus
+                                    placeholder=''
+                                    onChange={(event) => { }}
+                                />
+                            </div>
+                            <Dropdown
+                                options={RangeOld}
+                                title='Độ tuổi'
+                                placeholder='Chọn độ tuổi của bạn'
+                                handleOnChange={(value) => {
+
+                                }}
+                            />
+                            <div className='t-chart_info_item'>
+                                <p>Nghề nghiệp</p>
+                                <input
+                                    type='text'
+                                    autoFocus
+                                    placeholder=''
+                                    onChange={(event) => { }}
+                                />
+                            </div>
+                            <Dropdown
+                                options={relationship}
+                                title='Tình trạng hôn nhân'
+                                placeholder='Chọn tình trạng hôn nhân của bạn'
+                                handleOnChange={(value) => {
+
+                                }}
+                            />
+                        </div>
+                        <div className='t-chart_form'>
+                            <Dropdown
+                                isRequired
+                                value={stateForm.district}
+                                options={districts as any}
+                                title='Huyện'
+                                placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                                handleOnChange={(value) => {
+                                    setStateForm({
+                                        ...stateForm,
+                                        district: value,
+                                    })
+                                }}
+                            />
+                            <Dropdown
+                                isRequired
+                                value={stateForm.indicator}
+                                options={indicators as any}
+                                title='Chỉ số'
+                                placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                                handleOnChange={(value) => {
+                                    const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
+                                    setStateForm({
+                                        ...stateForm,
+                                        indicator: value,
+                                        questions: listQuestion,
+                                        answers: listQuestion?.map((i, idx) => 0) as any,
+                                    });
+                                }}
+                            />
+
+                            {stateForm.indicator && stateForm.district?.id &&
+                                <>
+                                    <h2>Bộ câu hỏi</h2>
+                                    <ul className='t-chart_form_list'>
+                                        {stateForm?.questions?.map((record, index) => (
+                                            <li key={record.value}>
+                                                <p>{record.label}</p>
+                                                <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
+                                                    const newSliderValues = [...stateForm.answers] as any;
+                                                    newSliderValues[index] = Number(value);
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        answers: newSliderValues
+                                                    });
+                                                }} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
+                            }
+                        </div>
+                    </>
+                }
                 <div className='t-chart_form_submit'>
                     <button onClick={() => setIsOpenModal(false)}>Hủy</button>
                     <button onClick={() => {
@@ -284,6 +468,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     </button>
                 </div>
             </CModal>
+            {/* Form xác nhận gửi đánh giá với 1 chỉ số 0 điểm */}
             <CModal
                 open={stateForm.confirm}
                 title='Xác nhận đánh giá'
@@ -291,7 +476,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     ...stateForm,
                     confirm: false,
                 })}
-                zIndex="lv2"
+                zIndex="lv3"
             >
                 <div className="t-chart_form_confirm">
                     Bạn có chắc chắc muốn đánh giá 0 điểm.
@@ -307,6 +492,64 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         handleSubmit(true);
                     }}>
                         Tiếp tục
+                    </button>
+                </div>
+            </CModal>
+            {/* Form đăng nhập */}
+            <CModal
+                open={states.isOpenFormLogin}
+                onClose={function (): void {
+                    setStates({ ...states, isOpenFormLogin: false })
+                }}
+                title={'Đăng nhập ngay'}
+                className='form'
+            >
+                <div className='t-header_form'>
+                    <div className='t-header_form_item'>
+                        <p>Email</p>
+                        <input
+                            type='text'
+                            autoFocus
+                            value={states.username}
+                            placeholder='Vui lòng nhập email...'
+                            onChange={(event) => setStates({ ...states, username: event.target.value })}
+                        />
+                    </div>
+                    <div className='t-header_form_item'>
+                        <p>Mật khẩu</p>
+                        <input
+                            type={!states.isHidePassword ? 'password' : 'text'}
+                            value={states.password}
+                            placeholder='Vui lòng nhập mật khẩu...'
+                            onChange={(event) => setStates({ ...states, password: event.target.value })}
+                            onKeyPress={(event) => {
+                                console.log(event)
+                                if (event.key === "Enter") {
+                                    handleSubmit();
+                                }
+                            }}
+                        />
+                    </div>
+                    <div className='t-header_form_item'>
+                        <input type="checkbox" value={states.isHidePassword as any} onChange={(event) => {
+                            setStates({ ...states, isHidePassword: event.target.checked })
+                        }} />
+                        <p onClick={() => setStates({ ...states, isHidePassword: !states.isHidePassword })}>Hiện mật khẩu</p>
+                    </div>
+                </div>
+                <div className='t-header_form_action'>
+                    <a href='/register'>Tạo mới tài khoản</a>
+                </div>
+                <div className='t-header_form_button'>
+                    <button onClick={function (): void {
+                        setStates({ ...states, isOpenFormLogin: false })
+                    }}>Hủy</button>
+                    <button onClick={handleSubmitLogin}>
+                        {states.pendding ?
+                            <Loading />
+                            :
+                            'Đăng nhập'
+                        }
                     </button>
                 </div>
             </CModal>

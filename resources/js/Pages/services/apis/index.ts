@@ -19,6 +19,15 @@ export async function checkLogin() {
     }
 }
 
+export async function loginWithAccount(body: any) {
+    try {
+        const response = await HttpClient.postMethod("login", body);
+        return response?.data;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 export async function getDistrictsIndicators() {
     try {
         const response = await HttpClient.getMethod("districts-indicators");
@@ -45,3 +54,4 @@ export async function postSubmitIndicator() {
         console.error("Error:", error);
     }
 }
+

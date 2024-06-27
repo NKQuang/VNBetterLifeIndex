@@ -43,6 +43,7 @@ const HeaderMobile: React.FC<MobileSreenProps> = ({
             <header className='t-mobile_header'>
                 <div className='t-mobile_header_logo'>
                     <img className="t-mobile_header_icon" src={icLogo}></img>
+                    <p>WBI</p>
                 </div>
                 <div className='t-mobile_header_action'>
                     {/* <button>

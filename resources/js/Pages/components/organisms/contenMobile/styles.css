@@ -56,3 +56,60 @@
   outline: unset;
   border: 1px solid #dbdbdb;
 }
+
+.t-mobile_body .t-mobile_body_filter {
+  width: 100vw;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: #78869f;
+  padding: 8px 0;
+}
+
+.t-mobile_body .t-mobile_body_indicator {
+  width: 100vw;
+  min-height: 100px;
+  padding: 8px 0;
+}
+
+.t-mobile_body .t-mobile_body_filter p {
+  color: #fff;
+  font-size: 16px;
+}
+
+.t-mobile_body .t-mobile_body_filter button {
+  margin-top: 8px;
+  width: fit-content;
+  min-width: 120px;
+  display: flex;
+  justify-content: center;
+  border: 1px solid #f00;
+  background-color: #f00;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 0;
+}
+
+.t-mobile_body .t-mobile_body_filter .t-mobile_body_filter_wrapper {
+  width: 100%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  overflow-x: scroll;
+  padding-top: 12px;
+}
+
+.t-mobile_body .t-mobile_body_filter .t-mobile_body_filter_wrapper>* {
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  min-width: 50px;
+}
+
+.t-mobile_body .t-mobile_body_filter .t-mobile_body_filter_wrapper>*>img {
+  height: 24px;
+  width: 24px;
+}
