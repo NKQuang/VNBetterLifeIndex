@@ -42,26 +42,19 @@ class DistrictController extends Controller
 
     public function getDistrictsIndicators(Request $request)
     {
-        $user = Auth::user();
-        if (!$user) {
-            return response()->json(['authenticated' => false]);
-        }
-
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
-        $districts = Districts::with(['indicatorValues' => function($query) use ($user, $thirtyDaysAgo) {
-            $query->where('user_id', $user->id)
-                  ->where('created_at', '>=', $thirtyDaysAgo);
+        $districts = Districts::with(['indicatorValues' => function($query) use ($thirtyDaysAgo) {
+            $query->where('created_at', '>=', $thirtyDaysAgo);
         }])->get();
 
-        $result = $districts->map(function ($district) use ($user, $thirtyDaysAgo) {
+        $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
             $questions = Question::with('indicator:name,id')->get();
 
 
-            $questions = $questions->map(function ($question) use ($user, $thirtyDaysAgo, $district) {
+            $questions = $questions->map(function ($question) use ( $thirtyDaysAgo, $district) {
                 $indicatorValue = IndicatorsValue::where('districts_id', $district->id)
                                                 ->where('question_code', $question->question_code)
-                                                ->where('user_id', $user->id)
                                                 ->where('created_at', '>=', $thirtyDaysAgo)
                                                 ->first();
                 $question->evaluated = $indicatorValue ? true : false;
@@ -74,7 +67,6 @@ class DistrictController extends Controller
         });
 
         return response()->json([
-            'authenticated' => true,
             'districts' => $result,
         ]);
     }
