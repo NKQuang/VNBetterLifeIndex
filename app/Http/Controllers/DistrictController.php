@@ -44,9 +44,10 @@ class DistrictController extends Controller
     {
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
-        $districts = Districts::with(['indicatorValues' => function($query) use ($thirtyDaysAgo) {
-            $query->where('created_at', '>=', $thirtyDaysAgo);
-        }])->get();
+        $districts = Districts::where('regions_code', 77)
+    ->with(['indicatorValues' => function($query) use ($thirtyDaysAgo) {
+        $query->where('created_at', '>=', $thirtyDaysAgo);
+    }])->get();
 
         $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
             $questions = Question::with('indicator:name,id')->get();

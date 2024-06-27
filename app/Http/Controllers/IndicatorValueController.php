@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Indicators;
 use App\Models\IndicatorsValue;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,13 +40,9 @@ class IndicatorValueController extends Controller
     }
     public function store(Request $request)
 {
-    $user = Auth::user();
-    if (!$user) {
-        return response()->json(['authenticated' => false]);
-    }
-
     // Validate request data
     $request->validate([
+        'user_id' => 'sometimes', // User ID không bắt buộc, nhưng nếu có phải tồn tại trong bảng users
         'districts_id' => 'required|exists:districts,id',
         'questions_id' => 'required|array',
         'questions_id.*' => 'required|exists:questions,id',
@@ -54,7 +51,25 @@ class IndicatorValueController extends Controller
         'value' => 'required|array',
         'value.*' => 'required|numeric',
         'indicator_id' => 'required|exists:indicators,id',
+        'full_name' => 'required_without:user_id|string|max:255',
+        'gender' => 'required_without:user_id|integer|in:0,1',
+        'phone_number' => 'required_without:user_id|string|max:15',
+        'address' => 'required_without:user_id|string|max:255',
+        'old' => 'required_without:user_id|integer|min:0',
+        'profession' => 'required_without:user_id|string|max:255',
     ]);
+
+    // Lấy user_id từ request
+    $userId = $request->input('user_id');
+    $user = null;
+
+    // Nếu user_id được cung cấp, tìm người dùng tương ứng
+    if ($userId) {
+        $user = User::find($userId);
+        if (!$user) {
+            return response()->json(['error' => 'Invalid user_id'], 422);
+        }
+    }
 
     $questionsId = $request->input('questions_id');
     $questionCodes = $request->input('question_code');
@@ -86,7 +101,20 @@ class IndicatorValueController extends Controller
         $indicatorValue->question_code = $questionCode;
         $indicatorValue->value = $value;
         $indicatorValue->name = $name;
-        $indicatorValue->user_id = $user->id;
+
+        // If user is authenticated, use their ID
+        if ($user) {
+            $indicatorValue->user_id = $user->id;
+        } else {
+            // If user is not authenticated, use anonymous data
+            $indicatorValue->full_name = $request->full_name;
+            $indicatorValue->gender = $request->gender;
+            $indicatorValue->phone_number = $request->phone_number;
+            $indicatorValue->address = $request->address;
+            $indicatorValue->old = $request->old;
+            $indicatorValue->profession = $request->profession;
+        }
+
         $indicatorValue->type = 0;
         $indicatorValue->save();
     }
@@ -95,6 +123,8 @@ class IndicatorValueController extends Controller
         'message' => 'Indicator values submitted successfully'
     ]);
 }
+
+
 
 
 }

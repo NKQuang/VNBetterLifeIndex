@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -82,6 +84,35 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Đăng xuất thành công'], 200);
+    }
+    public function register(Request $request)
+    {
+        // Validate request data
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email', // Email is required
+            'phone' => 'required|string|max:15|unique:users,phone', // Phone is required
+            'password' => 'required|string|min:8|confirmed', // Ensure password confirmation
+            'terms' => 'required|accepted', // Ensure terms are accepted
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Create the user
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Return the user and a success message
+        return response()->json([
+            'message' => 'User registered successfully',
+            'user' => $user,
+        ]);
     }
 }
 
