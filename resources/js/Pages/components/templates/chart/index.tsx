@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
 import './styles.css'
-import { RangeOld, relationship, unit } from '../../../assets/data';
+import { gender, RangeOld, relationship, unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
 import { useBetterLife } from '../provider';
 import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
-import { getWBI, postDistrictsIndicators } from '../../../services/apis';
+import { getWBI, loginWithAccount, postDistrictsIndicators } from '../../../services/apis';
 import { toast } from 'react-toastify';
 
 export interface districtItem {
@@ -48,9 +48,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         districtIndicators,
         handleSetDistrictActive,
         chartDataRoot,
+        userInfo,
+        handleUpdateSignIn,
+        handleSetInfoUser,
     } = useBetterLife();
-
-    const localStoreToken = localStorage.getItem('login_token');
 
     const [idColumnHover, setIdColumnHover] = useState(0);
     const [softBy, setSortBy] = useState<SortType>('alphabet');
@@ -66,6 +67,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         loading: false,
         confirm: false,
         isValidated: false,
+        fullName: "",
+        relationship: undefined as unknown as DropdownType,
+        phoneNumber: "",
+        old: undefined as unknown as DropdownType,
+        profession: '',
+        gender: undefined as unknown as DropdownType,
     });
     const [updateData, setUpdateData] = useState<any>();
     const [states, setStates] = useState({
@@ -118,6 +125,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             .then((data) => {
                 setIsOpenModal(false);
                 setStateForm({
+                    ...stateForm,
                     district: undefined as unknown as DropdownType,
                     indicator: undefined as unknown as DropdownType,
                     questions: undefined as any,
@@ -125,6 +133,11 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     loading: false,
                     confirm: false,
                     isValidated: false,
+                    fullName: "",
+                    relationship: undefined as unknown as DropdownType,
+                    phoneNumber: "",
+                    old: undefined as unknown as DropdownType,
+                    profession: "",
                 })
                 toast.success('Gửi đánh giá thành công!');
                 getWbi();
@@ -152,8 +165,15 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             questions_id: stateForm.questions.map((i) => i.id),
             question_code: stateForm.questions.map((i) => i.value),
             value: stateForm.answers,
-            indicator_id: stateForm.questions[0].group_id
-        }
+            indicator_id: stateForm.questions[0].group_id,
+            full_name: stateForm.fullName ?? userInfo?.name,
+            relationship: stateForm.relationship.label,
+            phone_number: stateForm.phoneNumber ?? userInfo?.phone,
+            old: stateForm.old.value,
+            profession: stateForm.profession,
+            user_id: userInfo?.id ?? null,
+            gender: stateForm.gender.value
+        };
         setStateForm({
             ...stateForm,
             loading: true,
@@ -161,8 +181,41 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         submitIndicators(body);
     }
 
-    const handleSubmitLogin = () => {
+    const handleLogin = async (body: any) => {
+        const response = await loginWithAccount(body);
+        if (response?.authenticated) {
+            const { api_token, user } = response;
+            localStorage.setItem('login_token', api_token);
+            localStorage.setItem('account', JSON.stringify(user));
+            console.log(JSON.stringify(user));
+            setStates({
+                ...states,
+                pendding: false,
+                isOpenFormLogin: false,
+                username: '',
+                password: '',
+                isHidePassword: false,
+            });
+            handleUpdateSignIn(true);
+            handleSetInfoUser(user);
+            toast.success('Đăng nhập thành công!')
+        } else {
+            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            setStates({
+                ...states,
+                pendding: false,
+            });
+        }
+    }
 
+
+    const handleSubmitLogin = () => {
+        const body = {
+            email: states.username,
+            password: states.password,
+        }
+        handleLogin(body);
+        setStates({ ...states, pendding: true })
     }
 
     const handleSortAllowIndicator = (id: any) => {
@@ -364,7 +417,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     type='text'
                                     autoFocus
                                     placeholder=''
-                                    onChange={(event) => { }}
+                                    value={stateForm.fullName}
+                                    onChange={(event) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            fullName: event.target.value,
+                                        })
+                                    }}
                                 />
                             </div>
                             <div className='t-chart_info_item'>
@@ -373,15 +432,37 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     type='text'
                                     autoFocus
                                     placeholder=''
-                                    onChange={(event) => { }}
+                                    value={stateForm.phoneNumber}
+                                    onChange={(event) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            phoneNumber: event.target.value,
+                                        })
+                                    }}
                                 />
                             </div>
+                            <Dropdown
+                                options={gender}
+                                title='Giới tính'
+                                placeholder='Chọn giới tính ...'
+                                value={stateForm.gender}
+                                handleOnChange={(value) => {
+                                    setStateForm({
+                                        ...stateForm,
+                                        gender: value,
+                                    })
+                                }}
+                            />
                             <Dropdown
                                 options={RangeOld}
                                 title='Độ tuổi'
                                 placeholder='Chọn độ tuổi của bạn'
+                                value={stateForm.old}
                                 handleOnChange={(value) => {
-
+                                    setStateForm({
+                                        ...stateForm,
+                                        old: value,
+                                    })
                                 }}
                             />
                             <div className='t-chart_info_item'>
@@ -390,7 +471,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     type='text'
                                     autoFocus
                                     placeholder=''
-                                    onChange={(event) => { }}
+                                    onChange={(event) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            profession: event.target.value,
+                                        })
+                                    }}
                                 />
                             </div>
                             <Dropdown
@@ -398,7 +484,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 title='Tình trạng hôn nhân'
                                 placeholder='Chọn tình trạng hôn nhân của bạn'
                                 handleOnChange={(value) => {
-
+                                    setStateForm({
+                                        ...stateForm,
+                                        relationship: value,
+                                    })
                                 }}
                             />
                         </div>

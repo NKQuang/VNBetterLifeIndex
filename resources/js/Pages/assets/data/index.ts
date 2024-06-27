@@ -169,3 +169,9 @@ export const relationship = [
     { label: 'Độc thân', value: 'single' },
     { label: 'Đã có gia đình', value: 'married' },
 ]
+
+export const gender = [
+    { label: 'Nam', value: 0 },
+    { label: 'Nữ', value: 1 },
+]
+

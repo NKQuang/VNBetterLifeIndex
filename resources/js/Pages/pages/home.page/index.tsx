@@ -22,13 +22,16 @@ const HomePage: React.FC = () => {
     handleUpdateDistrictIndicators,
     isShowDetail,
     loading,
-    handleUpdateSignIn,
+    districtIndicators,
     isSignIn,
+    handleUpdateSignIn,
     districtActive,
-    sreenWidth
+    sreenWidth,
+    handleSetInfoUser
   } = useBetterLife();
 
   const localStoreToken = localStorage.getItem('login_token');
+  const localStoreAccount = localStorage.getItem('account');
 
   const [token, setToken] = useState({
     local: localStoreToken
@@ -52,13 +55,17 @@ const HomePage: React.FC = () => {
     handleSetIsFilter(false);
     handleSetLoading(true);
     fetchData();
+    if (localStoreAccount) {
+      handleSetInfoUser(JSON.parse(localStoreAccount));
+      handleUpdateSignIn(true);
+    }
   }, []);
 
   useEffect(() => {
-    if (token.local) {
+    if (!districtIndicators) {
       getIndicators();
     }
-  }, [token.local, isSignIn]);
+  }, [token.local, districtIndicators]);
 
 
   const getWbi = async () => {

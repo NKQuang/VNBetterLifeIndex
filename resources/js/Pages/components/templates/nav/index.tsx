@@ -13,11 +13,14 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ }) => {
     const {
         handleUpdateSignIn,
-        handleUpdateDistrictIndicators,
+        infoDetail,
+        handleSetInfoUser,
     } = useBetterLife();
+    const localStoreAccount = localStorage.getItem('account');
 
 
     const [info, setInfo] = useState<any>({});
+
 
     const [states, setStates] = useState({
         username: '',
@@ -25,12 +28,20 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         isHidePassword: false,
         isOpenFormLogin: false,
         pendding: false,
-    })
+    });
 
-    const getIndicators = async () => {
-        const districts: any = await getDistrictsIndicators();
-        handleUpdateDistrictIndicators(districts ?? {} as any);
-    }
+
+    useEffect(() => {
+        setInfo(infoDetail);
+    }, [infoDetail])
+
+    useEffect(() => {
+        if (localStoreAccount) {
+            handleSetInfoUser(JSON.parse(localStoreAccount));
+            handleUpdateSignIn(true);
+            setInfo(JSON.parse(localStoreAccount));
+        }
+    }, [localStoreAccount])
 
     const handleLogin = async (body: any) => {
         const response = await loginWithAccount(body);
@@ -50,9 +61,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             setInfo(user)
             handleUpdateSignIn(true);
             toast.success('Đăng nhập thành công!')
-            setTimeout(() => {
-                getIndicators();
-            }, 2000)
         } else {
             toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
             setStates({

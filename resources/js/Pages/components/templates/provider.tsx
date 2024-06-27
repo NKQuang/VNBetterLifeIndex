@@ -39,6 +39,7 @@ interface ChartContextData {
     handleSetTheme: (newTheme: ThemeType) => void;
     theme: ThemeType;
     userInfo: User | undefined;
+    handleSetInfoUser: (newTheme: User) => void;
 }
 
 interface ChartProviderProps {
@@ -72,6 +73,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     }, [window.innerWidth])
 
     const handleSetTheme = (newTheme: ThemeType) => setTheme(newTheme);
+    const handleSetInfoUser = (newTheme: User) => setUserInfo(newTheme);
 
     const handleSetToken = (newToken: any) => setToken(newToken)
     const handleSetDistrictActive = (newActive: District) => setDistrictActive(newActive);
@@ -158,7 +160,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             sreenWidth,
             theme,
             handleSetTheme,
-            userInfo
+            userInfo,
+            handleSetInfoUser
         }),
         [chartData,
             loading,
