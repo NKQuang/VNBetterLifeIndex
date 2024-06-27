@@ -54,8 +54,7 @@ class IndicatorValueController extends Controller
         'full_name' => 'required_without:user_id|string|max:255',
         'gender' => 'required_without:user_id|integer|in:0,1',
         'phone_number' => 'required_without:user_id|string|max:15',
-        'address' => 'required_without:user_id|string|max:255',
-        'old' => 'required_without:user_id|integer|min:0',
+        'old' => 'required_without:user_id|string|in:0-15,15-25,25-35,35-45,45-55,55-65,>65',
         'profession' => 'required_without:user_id|string|max:255',
     ]);
 
@@ -110,7 +109,6 @@ class IndicatorValueController extends Controller
             $indicatorValue->full_name = $request->full_name;
             $indicatorValue->gender = $request->gender;
             $indicatorValue->phone_number = $request->phone_number;
-            $indicatorValue->address = $request->address;
             $indicatorValue->old = $request->old;
             $indicatorValue->profession = $request->profession;
         }
@@ -123,6 +121,7 @@ class IndicatorValueController extends Controller
         'message' => 'Indicator values submitted successfully'
     ]);
 }
+
 
 
 
