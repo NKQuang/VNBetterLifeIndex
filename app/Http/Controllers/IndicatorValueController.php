@@ -42,7 +42,7 @@ class IndicatorValueController extends Controller
 {
     // Validate request data
     $request->validate([
-        'user_id' => 'sometimes', // User ID không bắt buộc, nhưng nếu có phải tồn tại trong bảng users
+        'user_id' => 'sometimes|exists:users,id', // User ID không bắt buộc, nhưng nếu có phải tồn tại trong bảng users
         'districts_id' => 'required|exists:districts,id',
         'questions_id' => 'required|array',
         'questions_id.*' => 'required|exists:questions,id',
@@ -51,12 +51,11 @@ class IndicatorValueController extends Controller
         'value' => 'required|array',
         'value.*' => 'required|numeric',
         'indicator_id' => 'required|exists:indicators,id',
-        'full_name' => 'nullable|string|max:255',
-        'gender' => 'nullable|integer|in:0,1',
-        'phone_number' => 'nullable|string|max:15',
-        'address' => 'nullable|string|max:255',
-        'old' => 'nullable|integer|min:0',
-        'profession' => 'nullable|string|max:255',
+        'full_name' => 'required_without:user_id|string|max:255',
+        'gender' => 'required_without:user_id|integer|in:0,1',
+        'phone_number' => 'required_without:user_id|string|max:15',
+        'old' => 'required_without:user_id|string|in:0-15,15-25,25-35,35-45,45-55,55-65,>65',
+        'profession' => 'required_without:user_id|string|max:255',
     ]);
 
     // Lấy user_id từ request
@@ -110,7 +109,6 @@ class IndicatorValueController extends Controller
             $indicatorValue->full_name = $request->full_name;
             $indicatorValue->gender = $request->gender;
             $indicatorValue->phone_number = $request->phone_number;
-            $indicatorValue->address = $request->address;
             $indicatorValue->old = $request->old;
             $indicatorValue->profession = $request->profession;
         }
@@ -123,6 +121,7 @@ class IndicatorValueController extends Controller
         'message' => 'Indicator values submitted successfully'
     ]);
 }
+
 
 
 

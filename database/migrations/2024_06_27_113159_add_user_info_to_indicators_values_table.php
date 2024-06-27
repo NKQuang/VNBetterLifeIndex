@@ -17,8 +17,7 @@ class AddUserInfoToIndicatorsValuesTable extends Migration
             $table->string('full_name')->nullable();
             $table->tinyInteger('gender')->nullable(); // 0: Nam, 1: Nữ
             $table->string('phone_number')->nullable();
-            $table->string('address')->nullable();
-            $table->integer('old')->nullable();
+            $table->enum('old', ['0-15', '15-25', '25-35', '35-45', '45-55', '55-65', '>65']);
             $table->string('profession')->nullable();
 
         });
