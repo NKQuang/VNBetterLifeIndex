@@ -42,7 +42,7 @@ class IndicatorValueController extends Controller
 {
     // Validate request data
     $request->validate([
-        'user_id' => 'sometimes|exists:users,id', // User ID không bắt buộc, nhưng nếu có phải tồn tại trong bảng users
+        'user_id' => 'sometimes', // User ID không bắt buộc, nhưng nếu có phải tồn tại trong bảng users
         'districts_id' => 'required|exists:districts,id',
         'questions_id' => 'required|array',
         'questions_id.*' => 'required|exists:questions,id',
