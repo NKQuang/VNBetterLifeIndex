@@ -43,6 +43,7 @@ class HttpClient {
   async getMethod(path: string, params?: Record<string, any>): Promise<any> {
     try {
       const response = await this.INSTANCE.get(path, { params });
+
       return response;
     } catch (error) {
       const e = error as AxiosError;

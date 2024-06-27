@@ -159,7 +159,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     }
 
     const handleSubmit = (isValidated: boolean = false) => {
-        if (!handleValidate() && !isValidated) return;
+        if (!handleValidate()) return;
         const body = {
             districts_id: stateForm.district.id,
             questions_id: stateForm.questions.map((i) => i.id),
@@ -167,12 +167,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             value: stateForm.answers,
             indicator_id: stateForm.questions[0].group_id,
             full_name: stateForm.fullName ?? userInfo?.name,
-            relationship: stateForm.relationship.label,
+            relationship: stateForm.relationship?.label,
             phone_number: stateForm.phoneNumber ?? userInfo?.phone,
-            old: stateForm.old.value,
+            old: stateForm.old?.value,
             profession: stateForm.profession,
             user_id: userInfo?.id ?? null,
-            gender: stateForm.gender.value
+            gender: stateForm.gender?.value
         };
         setStateForm({
             ...stateForm,
@@ -614,7 +614,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                             onKeyPress={(event) => {
                                 console.log(event)
                                 if (event.key === "Enter") {
-                                    handleSubmit();
+                                    handleSubmitLogin();
                                 }
                             }}
                         />
