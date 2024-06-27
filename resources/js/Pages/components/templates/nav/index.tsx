@@ -81,6 +81,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         <p>phồn vinh</p>
                         <p>hạnh phúc</p>
                     </a>
+                    <div>(WBI)</div>
                 </div>
                 <div className="t-header_right">
                     {info?.name ?

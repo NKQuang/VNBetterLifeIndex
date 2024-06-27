@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (token.local) {
-      // getIndicators();
+      getIndicators();
     }
   }, [token.local, isSignIn]);
 

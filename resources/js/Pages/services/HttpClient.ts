@@ -20,7 +20,7 @@ class HttpClient {
   _init() {
     if (!this.INSTANCE) {
       this.INSTANCE = axios.create({
-        baseURL: 'https://betterlife.vietstats.vn/api/',
+        baseURL: 'http://127.0.0.1:8000/api/',
       });
       this.setInterceptorRequest();
     }

@@ -55,6 +55,14 @@
     color: #dbdbdb;
 }
 
+.t-header .t-header_left div {
+    font-size: 40px;
+    font-weight: 800;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    color: #0300a5;
+}
+
 .t-header .t-header_left a {
     text-decoration: none;
 }
