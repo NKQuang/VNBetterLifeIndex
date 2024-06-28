@@ -52,6 +52,7 @@ class DashboardController extends Controller
     }
     public function getAllWeights() {
         $datalist = Weights::paginate(7);
+
         $data['weight'] = $datalist;
         $data["title"] ="Quản lý trọng số";
         return view('dashboard.weights',$data);

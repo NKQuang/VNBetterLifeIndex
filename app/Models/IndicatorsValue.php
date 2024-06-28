@@ -17,6 +17,7 @@ class IndicatorsValue extends Model
         'districts_id',
         'question_code',
         'user_id',
+        'marital_status',
         'created_at',
         'updated_at'
     ];

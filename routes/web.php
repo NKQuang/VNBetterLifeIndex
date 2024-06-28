@@ -10,6 +10,7 @@ use App\Http\Controllers\WeightController;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Jetstream\Http\Controllers\Livewire\UserProfileController;
 
 //Route::get('/', [App\Http\Controllers\HomeController::class,'index'])->name('home');
 
@@ -25,7 +26,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
+//Route::middleware('logincookies')->get('/user/profile');
+Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
 Route::post('/logout', [LogoutController::class, 'logout'])->name('custom.logout');
 Route::get('/charts_json', [App\Http\Controllers\UserController::class, 'charts_json'])->name('chart');
 Route::group(['middleware' => 'admin'], function () {
@@ -60,8 +62,8 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('/populations/store', [PopulationController::class, 'store'])->name('populations.store');
 
     Route::delete('/weights/{id}', [WeightController::class, 'destroy'])->name('weights.destroy');
-    Route::get('/weights/{id}/edit', [WeightController::class, 'edit'])->name('weights.edit');
-    Route::put('/weights/{id}', [WeightController::class, 'update'])->name('weights.update');
+    Route::get('/weights/edit', [WeightController::class, 'edit'])->name('weights.edit');
+    Route::put('/weights/update', [WeightController::class, 'update'])->name('weights.update');
     Route::get('/weights/create', [WeightController::class, 'create'])->name('weights.create');
     Route::post('/weights', [WeightController::class, 'store'])->name('weights.store');
 

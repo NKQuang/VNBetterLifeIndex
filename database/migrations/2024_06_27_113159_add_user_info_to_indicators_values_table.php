@@ -19,7 +19,7 @@ class AddUserInfoToIndicatorsValuesTable extends Migration
             $table->string('phone_number')->nullable();
             $table->enum('old', ['0-15', '15-25', '25-35', '35-45', '45-55', '55-65', '>65']);
             $table->string('profession')->nullable();
-
+            $table->string('marital_status')->nullable();
         });
     }
 
@@ -31,7 +31,7 @@ class AddUserInfoToIndicatorsValuesTable extends Migration
     public function down()
     {
         Schema::table('indicators_values', function (Blueprint $table) {
-            $table->dropColumn(['full_name', 'gender', 'phone_number', 'address', 'old', 'profession']);
+            $table->dropColumn(['full_name', 'gender', 'phone_number', 'address', 'old', 'profession','marital_status']);
         });
     }
 }

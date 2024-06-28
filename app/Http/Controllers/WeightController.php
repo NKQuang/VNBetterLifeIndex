@@ -19,10 +19,10 @@ class WeightController extends Controller
         return redirect()->back()->with('error', 'Không tìm thấy dữ liệu để xóa');
     }
 
-    public function edit($id)
+    public function edit()
     {
 
-        $weight = Weights::find($id);
+        $weight = Weights::all();
         $indicators = Indicators::all();
         if ($weight) {
             $data['title'] = "Chỉnh sữa trọng số";
@@ -32,25 +32,47 @@ class WeightController extends Controller
 
 
     }
-
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        // Validate the input
         $request->validate([
-            'name' => 'required|string|max:255',
-            'value' => 'required|regex:/^\d+(\.\d+)?%$/',
-            'indicators_id' => 'required|exists:indicators,id',
+            'id.*' => 'required|exists:weights,id',
+            'name.*' => 'required|string|max:255',
+            'value.*' => ['required', 'regex:/^\d+(\.\d+)?%$/'],
+            'indicators_id.*' => 'required|exists:indicators,id',
         ]);
 
-        $weight = Weights::find($id);
-        if ($weight) {
-            $weight->name = $request->name;
-            $weight->value = $request->value;
-            $weight->indicators_id = $request->indicators_id;
-            $weight->save();
-            return redirect()->route('dashboard.weights')->with('success', 'Cập nhật thành công');
+        // Retrieve the weights from the request
+        $ids = $request->input('id');
+        $names = $request->input('name');
+        $values = $request->input('value');
+        $indicators_ids = $request->input('indicators_id');
+
+        // Convert value percentages to numbers and calculate the total
+        $totalValue = 0;
+        foreach ($values as $value) {
+            $number = floatval(rtrim($value, '%'));
+            $totalValue += $number;
         }
-        return redirect()->back()->with('error', 'Không tìm thấy dữ liệu để cập nhật');
+
+        // Check if total value exceeds 100%
+        if ($totalValue > 100) {
+            return redirect()->back()->withErrors(['value' => 'Tổng giá trị không được vượt quá 100%'])->withInput();
+        }
+
+        // Update weights
+        foreach ($ids as $index => $id) {
+            $weight = Weights::findOrFail($id);
+            $weight->name = $names[$index];
+            $weight->value = $values[$index];
+            $weight->indicators_id = $indicators_ids[$index];
+            $weight->save();
+        }
+
+        // Redirect or return response
+        return redirect()->route('dashboard.weights')->with('success', 'Cập nhật trọng số thành công');
     }
+
     public function create()
     {
         $data['title'] ="Thêm mới trọng số";

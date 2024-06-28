@@ -29,7 +29,7 @@
 
                             <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Câu hỏi?</th>
                             <th class="px-6 py-3 font-bold text-center uppercase align-middle bg-transparent border-b border-gray-200 shadow-none text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">Ngày đánh giá</th>
-                            <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th>
+                            {{-- <th class="px-6 py-3 font-semibold capitalize align-middle bg-transparent border-b border-gray-200 border-solid shadow-none tracking-none whitespace-nowrap text-slate-400 opacity-70"></th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -52,14 +52,14 @@
                             <td class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent" >
                                 <span class="font-semibold leading-tight text-xs text-slate-400">{{date('d/m/Y', strtotime($row->created_at))}}</span>
                             </td>
-                            <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
+                            {{-- <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                 <form action="{{ route('dashboard.indicator-values.delete', $row->id) }}" method="POST" class="inline-block">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-semibold leading-tight text-xs text-red-400" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"> Xóa </button>
                                 </form>
                                 <a href="{{ route('dashboard.indicator-values.edit', $row->id) }}" class="font-semibold leading-tight text-xs text-green-400"> Sửa </a>
-                            </td>
+                            </td> --}}
                         </tr>
                         @endforeach
                     </tbody>
