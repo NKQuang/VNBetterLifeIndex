@@ -55,3 +55,12 @@ export async function postRegisterAccount(body: any) {
     }
 }
 
+export async function postLogout() {
+    try {
+        const response = await HttpClient.postMethod("logout");
+        return response?.data;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+

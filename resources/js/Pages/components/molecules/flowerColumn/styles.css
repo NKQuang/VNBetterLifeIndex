@@ -1,7 +1,7 @@
 .m-column {
     width: 70px;
     position: relative;
-    /* animation: animateShower 1s ease forwards; */
+    animation: animateShower 1s ease forwards;
     transition: animation 1s ease;
 }
 

@@ -11,6 +11,34 @@
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
 }
 
+.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile {
+    transform: scale(1.4);
+    transform-origin: bottom;
+}
+
+
+.t-chart-mobile .t-chart_main .m-column-flower-active {
+    margin: 0 90px;
+}
+
+.t-chart-mobile .t-chart_main .m-column-flower-active svg {
+    filter: drop-shadow(3px 2px 1px #494949)
+}
+
+/* 
+.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile svg {
+    filter: drop-shadow(1px 5px 1px #7c4119)
+}
+
+.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile .m-column_content_line {
+    width: 4px;
+    background-color: rgb(0, 184, 40);
+}
+
+.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile .m-column_content_name {
+    color: rgb(0, 92, 20);
+} */
+
 .t-chart-mobile .t-chart_form {
     min-height: 60vh;
     width: max-content;

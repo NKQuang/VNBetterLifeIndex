@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css'
 import CModal from '../../organisms/modal';
-import { loginWithAccount, postRegisterAccount } from '../../../services/apis';
+import { loginWithAccount, postLogout, postRegisterAccount } from '../../../services/apis';
 import Loading from '../../atoms/loading';
 import { toast } from 'react-toastify';
 import { useBetterLife } from '../provider';
@@ -15,6 +15,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     const {
         handleUpdateSignIn,
         infoDetail,
+        userInfo,
         handleSetInfoUser,
     } = useBetterLife();
     const localStoreAccount = localStorage.getItem('account');
@@ -64,7 +65,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             const { api_token, user } = response;
             localStorage.setItem('login_token', api_token);
             localStorage.setItem('account', JSON.stringify(user));
-            console.log(JSON.stringify(user));
             setStatesLogin({
                 ...statesLogin,
                 pendding: false,
@@ -73,6 +73,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 password: '',
                 isHidePassword: false,
             });
+            handleSetInfoUser(user)
             setInfo(user)
             handleUpdateSignIn(true);
             toast.success('Đăng nhập thành công!')
@@ -175,6 +176,14 @@ const Header: React.FC<HeaderProps> = ({ }) => {
 
         xhr.send();
     };
+
+    const handleLogout = async () => {
+        await postLogout().then(() => {
+            localStorage.clear();
+            window.location.reload();
+        })
+    }
+
     return (
         <header className='t-header'>
             <div className="t-header_wrapper">
@@ -188,13 +197,10 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                     <div>(WBI)</div>
                 </div>
                 <div className="t-header_right">
-                    {info?.name ?
+                    {info?.name || userInfo?.name ?
                         <>
-                            <p onClick={handleProfileRedirect}>Xin chào, {info?.name}</p>
-                            <button style={{ backgroundColor: '#f00', height: 32, padding: '6px 12px' }} onClick={() => {
-                                localStorage.clear();
-                                window.location.reload();
-                            }}>Đăng xuất</button>
+                            <p onClick={handleProfileRedirect}>Xin chào, {info?.name ?? userInfo?.name}</p>
+                            <button style={{ backgroundColor: '#f00', height: 32, padding: '6px 12px' }} onClick={handleLogout}>Đăng xuất</button>
                         </>
                         :
                         <>
