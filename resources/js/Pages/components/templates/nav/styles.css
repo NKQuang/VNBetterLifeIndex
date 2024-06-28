@@ -100,14 +100,7 @@
     margin-bottom: 20px;
 }
 
-.t-header_form .t-header_form_item:last-child {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    margin-bottom: 4px;
-}
+
 
 .t-header_form .t-header_form_item p {
     margin-bottom: 4px;
@@ -118,12 +111,9 @@
     border-radius: 8px;
 }
 
-.t-header_form .t-header_form_item:last-child input {
-    width: 15px
-}
-
 .t-header_form .t-header_form_item:last-child p {
     margin: 0;
+    cursor: pointer;
 }
 
 .t-header_form .t-header_form_item:last-child input:focus {
@@ -138,6 +128,7 @@
 
 .t-header_form_action a {
     color: #1178ff;
+    cursor: pointer;
 }
 
 .t-header_form_button {
@@ -172,6 +163,56 @@
 .t-header_form_button button:first-child {
     background-color: #f00;
     color: #fff;
+}
+
+
+.t-header_signup {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.t-header_signup .t-header_signup_item {
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.t-header_signup .t-header_signup_item p {
+    margin-bottom: 4px;
+}
+
+.t-header_signup .t-header_signup_item span {
+    height: 19px;
+    min-height: 19px;
+    margin-left: 4px;
+    display: block;
+}
+
+.t-header_signup .t-header_signup_item p span {
+    color: #f00;
+    display: inline-block;
+}
+
+.t-header_signup .t-header_signup_item input {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.t-header_signup .t-header_signup_item-error {
+    color: #f00;
+}
+
+.t-header_signup .t-header_signup_item-error input {
+    border-color: #f00;
+}
+
+.t-header_form_toogle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 4px;
 }
 
 @media only screen and (max-width: 1280px) {

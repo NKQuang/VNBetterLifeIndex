@@ -254,6 +254,9 @@
     border-bottom: 1px solid #dbdbdb;
     padding: 2px 8px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .t-chart .t-chart_filter .t-chart_soft .t-chart_soft_wrapper>div:hover {
@@ -275,6 +278,11 @@
     border-radius: 2px 2px 12px 12px;
     background-color: #f00;
     color: #fff;
+}
+
+.t-chart .t-chart_filter .t-chart_soft .t-chart_soft_wrapper>* img {
+    width: 20px;
+    height: 20px;
 }
 
 .t-chart_filter_box_sort_item {

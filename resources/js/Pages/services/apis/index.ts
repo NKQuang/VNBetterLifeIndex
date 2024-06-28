@@ -46,9 +46,9 @@ export async function postDistrictsIndicators(body: any) {
     }
 }
 
-export async function postSubmitIndicator() {
+export async function postRegisterAccount(body: any) {
     try {
-        const response = await HttpClient.postMethod("submit-indicator-value");
+        const response = await HttpClient.postMethod("register", body);
         return response?.data;
     } catch (error) {
         console.error("Error:", error);

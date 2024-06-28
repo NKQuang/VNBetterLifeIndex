@@ -156,18 +156,18 @@ export const exampleDataChart = [
 export const unit = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
 
 export const RangeOld = [
+    { label: '0 - 15 Tuổi', value: '0-15' },
     { label: '15 - 25 Tuổi', value: '15-25' },
     { label: '25 - 35 Tuổi', value: '25-35' },
     { label: '35 - 45 Tuổi', value: '35-45' },
     { label: '45 - 55 Tuổi', value: '45-55' },
     { label: '55 - 65 Tuổi', value: '55-65' },
-    { label: '65 - 75 Tuổi', value: '65-75' },
-    { label: '75 - 85 Tuổi', value: '75-85' },
+    { label: 'Lớn hơn 65 Tuổi', value: '> 65' },
 ]
 
 export const relationship = [
-    { label: 'Độc thân', value: 'single' },
-    { label: 'Đã có gia đình', value: 'married' },
+    { label: 'Độc thân/Đã ly hôn', value: 'Độc thân/Đã ly hôn' },
+    { label: 'Đã kết hôn', value: 'Đã kết hôn' },
 ]
 
 export const gender = [
@@ -175,3 +175,11 @@ export const gender = [
     { label: 'Nữ', value: 1 },
 ]
 
+export const profession = [
+    { label: 'Học sinh/Sinh viên', value: 'Học sinh/Sinh viên' },
+    { label: 'Nhân viên/Người lao động', value: 'Nhân viên/Người lao động' },
+    { label: 'Quản lý/Giám đốc', value: 'Quản lý/Giám đốc' },
+    { label: 'Chủ doanh nghiệp', value: 'Chủ doanh nghiệp' },
+    { label: 'Đã nghỉ hưu', value: 'Đã nghỉ hưu' },
+    { label: 'Thất nghiệp', value: 'Thất nghiệp' },
+]

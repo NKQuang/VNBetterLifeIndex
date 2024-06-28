@@ -10,6 +10,21 @@ import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import { getWBI, loginWithAccount, postDistrictsIndicators } from '../../../services/apis';
 import { toast } from 'react-toastify';
+import icHousing from '../../../assets/images/housing.svg';
+import icIncome from '../../../assets/images/income.svg';
+import icJobs from '../../../assets/images/jobs.svg';
+import icCommunity from '../../../assets/images/community.svg';
+import icEducation from '../../../assets/images/education.svg';
+import icEnvironment from '../../../assets/images/environment.svg';
+import icCivicEngagement from '../../../assets/images/civic_engagement.svg';
+import icHearth from '../../../assets/images/hearth.svg';
+import icSatisfaction from '../../../assets/images/satisfaction.svg';
+import icSafety from '../../../assets/images/safety.svg';
+import icWorkLifeBalance from '../../../assets/images/work-life-balance.svg';
+import icAdministration from '../../../assets/images/city-hall.svg';
+
+const IconAllowIndicators = [icIncome, icJobs, icHearth, icEducation, icHousing, icSatisfaction, icEnvironment, icSafety, icWorkLifeBalance, icCommunity, icCivicEngagement, icAdministration]
+
 
 export interface districtItem {
     district_id: string | number;
@@ -291,7 +306,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                         handleSortAllowIndicator(item.id)
                                     }}
                                 >
-                                    <p>{item.label}</p>
+                                    <img src={IconAllowIndicators[index]} /><p>{item.label}</p>
                                 </div>
                             ))}
                             <button onClick={() => {
@@ -317,7 +332,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 if (softBy === 'rank') return;
                                 handleSortData('rank')
                             }}
-                        >Theo giá trị</button>
+                        >Xếp hạng WBI</button>
                     </ul>
 
                 </div>

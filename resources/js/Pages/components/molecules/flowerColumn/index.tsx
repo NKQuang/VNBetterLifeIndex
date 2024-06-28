@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Flower, { colorsPetal } from "../../atoms/flower";
 import "./styles.css";
 import { mapModifiers } from "../../../utils/functions";
-import { districtItem, Indicator } from "../../templates/chart";
+import { Indicator } from "../../templates/chart";
 
 interface FlowerColumnProps {
     columnName: string;
@@ -51,17 +51,17 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
 
             if (top >= 300) {
                 refBoxHover.current.style.top = 'unset';
-                refBoxHover.current.style.bottom = '50%';
+                refBoxHover.current.style.bottom = '20%';
             } else {
                 refBoxHover.current.style.bottom = 'unset'; // Reset lại khi điều kiện không đúng
-                refBoxHover.current.style.top = '80px'; // Reset lại khi điều kiện không đúng
+                refBoxHover.current.style.top = '100px'; // Reset lại khi điều kiện không đúng
             }
 
             if (left >= windowWidth * 5) {
                 refBoxHover.current.style.left = 'unset';
-                refBoxHover.current.style.right = '70%';
+                refBoxHover.current.style.right = '150%';
             } else {
-                refBoxHover.current.style.left = '70%'; // Reset lại khi điều kiện không đúng
+                refBoxHover.current.style.left = '150%'; // Reset lại khi điều kiện không đúng
                 refBoxHover.current.style.right = 'unset';
             }
         }
@@ -78,12 +78,6 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
             }}
             className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal')}
-            onMouseEnter={() => {
-                if (onMouseEnter) onMouseEnter(index);
-            }}
-            onMouseLeave={() => {
-                if (onMouseLeave) onMouseLeave(index);
-            }}
             ref={refColumn}
             onClick={handleClickColumn}
         >
@@ -95,13 +89,23 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>
-                    <Flower data={data} />
+                    <Flower data={data} onMouseEnter={() => {
+                        if (onMouseEnter) onMouseEnter(index);
+                    }}
+                        onMouseLeave={() => {
+                            if (onMouseLeave) onMouseLeave(index);
+                        }} />
                     <div ref={refLine} className="m-column_content_line" />
                 </div>
                 :
                 <div className="m-column_content">
                     <p>{value.toFixed(2)}</p>
-                    <Flower data={data} />
+                    <Flower data={data} onMouseEnter={() => {
+                        if (onMouseEnter) onMouseEnter(index);
+                    }}
+                        onMouseLeave={() => {
+                            if (onMouseLeave) onMouseLeave(index);
+                        }} />
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>

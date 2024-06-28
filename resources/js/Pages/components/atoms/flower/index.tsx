@@ -6,6 +6,8 @@ import { useBetterLife } from '../../templates/provider';
 
 interface FlowerProps {
     data: Indicator[];
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
 }
 
 export const colorsPetal = [
@@ -14,11 +16,18 @@ export const colorsPetal = [
     '#992825', '#04566e'
 ];
 
-const Flower: React.FC<FlowerProps> = ({ data }) => {
+const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => {
     const { sreenWidth
     } = useBetterLife();
     return (
-        <svg id='flower' viewBox="-140 -140 280 280" height={200} style={{ animation: sreenWidth > 1024 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}>
+        <svg
+            id='flower'
+            viewBox="-140 -140 280 280"
+            height={200}
+            style={{ animation: sreenWidth > 1024 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             {data.map((item, i) => (
                 <Petal height={item?.value ?? 0} key={i} angle={i * 30} color={colorsPetal[i]} />
             ))}
