@@ -20,11 +20,10 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@fluentui/react-drawer": "^9.5.2",
         "@inertiajs/inertia": "^0.11.1",
         "@inertiajs/inertia-react": "^0.8.1",
         "@vitejs/plugin-react": "^4.3.1",
-        "framer-motion": "^11.2.10",
-        "js-cookie": "^3.0.5",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-query": "^3.39.3",
@@ -33,7 +32,6 @@
         "react-select": "^5.8.0",
         "react-toastify": "^10.0.5",
         "tsx": "^4.15.6",
-        "typescript": "^5.4.5",
-        "vaul": "^0.9.1"
+        "typescript": "^5.4.5"
     }
 }

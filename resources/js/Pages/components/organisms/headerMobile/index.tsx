@@ -7,16 +7,21 @@ import icMoon from '../../../assets/images/half-moon.svg';
 import icMenuLight from '../../../assets/images/menu-light.svg';
 import icMenuDark from '../../../assets/images/menu-dark.svg';
 import icClose from '../../../assets/images/delete.svg';
+import icImprovementLight from '../../../assets/images/voting.svg';
+
 import { useBetterLife } from '../../templates/provider';
 
 
 interface MobileSreenProps {
+    onClickLogin: () => void;
+    onClickRegister: () => void;
+    onClickVote: () => void;
 }
 
 const HeaderMobile: React.FC<MobileSreenProps> = ({
-
+    onClickLogin, onClickRegister, onClickVote
 }) => {
-    const { theme, handleSetTheme, sreenWidth } = useBetterLife();
+    const { theme, sreenWidth, handleSetTheme, userInfo } = useBetterLife();
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const refMenu = useRef<HTMLUListElement>(null)
 
@@ -41,19 +46,31 @@ const HeaderMobile: React.FC<MobileSreenProps> = ({
     return (
         <>
             <header className='t-mobile_header'>
-                <div className='t-mobile_header_logo'>
+                <div className='t-mobile_header_logo' onClick={() => {
+                    window.location.reload();
+                }}>
                     <img className="t-mobile_header_icon" src={icLogo}></img>
                     <p>WBI</p>
                 </div>
                 <div className='t-mobile_header_action'>
-                    {/* <button>
-                        <img
-                            onClick={() => handleSetTheme(theme === 'dark' ? 'light' : 'dark')}
-                            src={theme === 'dark' ? icSun : icMoon}
-                        />
-                    </button> */}
-                    <button onClick={() => setIsOpenMenu(!isOpenMenu)}>
-                        <img src={isOpenMenu ? icClose : theme === 'dark' ? icMenuDark : icMenuLight} />
+                    <button onClick={onClickVote}>
+                        <img src={icImprovementLight} />
+                        <span>Chia sẻ ngay</span>
+                    </button>
+                    <button style={{ minWidth: userInfo?.name ? 80 : 'unset' }} onClick={() => setIsOpenMenu(!isOpenMenu)}>
+                        {userInfo?.name ?
+                            <span style={{
+                                fontWeight: 700,
+                                color: '#003565fc',
+                                textTransform: 'capitalize',
+                                marginLeft: 10,
+                                minWidth: 80,
+                            }}>
+                                {userInfo?.name}
+                            </span>
+                            :
+                            <img src={isOpenMenu ? icClose : theme === 'dark' ? icMenuDark : icMenuLight} />
+                        }
                     </button>
                 </div>
             </header>
@@ -61,15 +78,29 @@ const HeaderMobile: React.FC<MobileSreenProps> = ({
                 ref={refMenu}
                 className={mapModifiers('t-mobile_menu', isOpenMenu ? 'active' : 'disable')}
             >
-                <li>Đăng nhập</li>
-                <li>Đăng kí</li>
+                {userInfo?.name ?
+                    <button onClick={() => {
+                        localStorage.clear();
+                        window.location.reload();
+                    }}>Đăng xuất</button>
+                    :
+                    <>
+                        <button onClick={() => {
+                            onClickLogin();
+                            setIsOpenMenu(false)
+                        }}>Đăng nhập</button>
+                        <button onClick={() => {
+                            onClickRegister();
+                            setIsOpenMenu(false)
+                        }}>Đăng kí</button>
+                    </>
+                }
             </ul>
         </>
     )
 }
 
 HeaderMobile.defaultProps = {
-    children: undefined,
 };
 
 export default HeaderMobile;

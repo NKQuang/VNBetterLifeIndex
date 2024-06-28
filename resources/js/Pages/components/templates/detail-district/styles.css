@@ -42,6 +42,13 @@
     transform: scale(1.2);
 }
 
+.t-district_chart_main-flower_active .m-column_hover {
+    transform: scale(0.8) !important;
+    transform-origin: right;
+}
+
+
+
 .t-district_chart_main-flower_active .m-column_content_line {
     background-color: rgb(29, 173, 29) !important;
     width: 3px;

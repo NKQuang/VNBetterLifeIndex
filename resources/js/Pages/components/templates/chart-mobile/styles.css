@@ -1,17 +1,8 @@
 .t-chart-mobile {
-    width: 100%;
     height: fit-content;
-    min-height: 600px;
     position: relative;
-    display: grid;
-    grid-template-columns: 20px 1fr 320px;
     padding: 12px 8px 0 4px;
-    border-bottom: 1px solid #999999;
-    background: rgb(245, 246, 246);
     background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
-}
-
-.t-chart-mobile {
     width: 100vw;
     display: grid;
     grid-template-columns: 20px 1fr;

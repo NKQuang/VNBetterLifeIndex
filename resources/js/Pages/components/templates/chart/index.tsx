@@ -8,7 +8,7 @@ import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
-import { getWBI, loginWithAccount, postDistrictsIndicators } from '../../../services/apis';
+import { getWBI, loginWithAccount, postDistrictsIndicators, postRegisterAccount } from '../../../services/apis';
 import { toast } from 'react-toastify';
 import icHousing from '../../../assets/images/housing.svg';
 import icIncome from '../../../assets/images/income.svg';
@@ -97,6 +97,33 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         isOpenFormLogin: false,
         pendding: false,
     })
+
+    const [isSignUp, setIsSignUp] = useState(false);
+
+    const [statesLogin, setStatesLogin] = useState({
+        username: '',
+        password: '',
+        isHidePassword: false,
+        isOpenFormLogin: false,
+        pendding: false,
+    });
+
+    const [statesSignUp, setStatesSignUp] = useState({
+        fullname: '',
+        email: '',
+        phoneNumber: '',
+        password: '',
+        passwordConfirm: '',
+        isHidePassword: false,
+    });
+    const [statesSignUpErr, setStatesSignUpErr] = useState({
+        fullname: '',
+        email: '',
+        phoneNumber: '',
+        password: '',
+        passwordConfirm: '',
+    });
+
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
 
     useEffect(() => {
@@ -137,14 +164,9 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
 
     const submitIndicators = async (body: any) => {
         await postDistrictsIndicators(body)
-            .then((data) => {
-                setIsOpenModal(false);
+            .then(() => {
                 setStateForm({
                     ...stateForm,
-                    district: undefined as unknown as DropdownType,
-                    indicator: undefined as unknown as DropdownType,
-                    questions: undefined as any,
-                    answers: [],
                     loading: false,
                     confirm: false,
                     isValidated: false,
@@ -173,7 +195,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         return true;
     }
 
-    const handleSubmit = (isValidated: boolean = false) => {
+    const handleSubmit = () => {
         if (!handleValidate()) return;
         const body = {
             districts_id: stateForm.district.id,
@@ -197,8 +219,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     }
 
     const handleLogin = async (body: any) => {
-        const response = await loginWithAccount(body);
-        if (response?.authenticated) {
+        await loginWithAccount(body).then((response) => {
             const { api_token, user } = response;
             localStorage.setItem('login_token', api_token);
             localStorage.setItem('account', JSON.stringify(user));
@@ -214,23 +235,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             handleUpdateSignIn(true);
             handleSetInfoUser(user);
             toast.success('Đăng nhập thành công!')
-        } else {
+        }).catch((error) => {
             toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
             setStates({
                 ...states,
                 pendding: false,
             });
-        }
-    }
-
-
-    const handleSubmitLogin = () => {
-        const body = {
-            email: states.username,
-            password: states.password,
-        }
-        handleLogin(body);
-        setStates({ ...states, pendding: true })
+        })
     }
 
     const handleSortAllowIndicator = (id: any) => {
@@ -242,6 +253,78 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         console.table(newList)
         handleSetChartData(newList as any);
         handleSetLoading(true);
+    }
+
+    const handleRegister = async (body: any) => {
+        const response = await postRegisterAccount(body);
+        if (response) {
+            setStatesSignUp({
+                ...statesSignUp,
+                fullname: '',
+                email: '',
+                phoneNumber: '',
+                password: '',
+                passwordConfirm: '',
+                isHidePassword: false,
+            });
+            setStatesLogin({ ...statesLogin, pendding: false, isOpenFormLogin: false })
+            toast.success('Đăng kí thành công. Vui lòng kiểm tra mail để xác thực tài khoản!');
+        } else {
+            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            setStatesLogin({
+                ...statesLogin,
+                pendding: false,
+            });
+        }
+    }
+
+    const handleValidateSignUp = () => {
+        if (
+            !statesSignUp.fullname ||
+            !statesSignUp.email ||
+            !statesSignUp.phoneNumber ||
+            !statesSignUp.password ||
+            statesSignUp.password.length < 8 ||
+            !statesSignUp.passwordConfirm ||
+            statesSignUp.passwordConfirm !== statesSignUp.password
+        ) {
+            setStatesSignUpErr({
+                ...statesSignUpErr,
+                fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
+                email: !statesSignUp.email ? 'Email là bắt buộc' : '',
+                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : '',
+                password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
+
+                passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
+            })
+            return false;
+        }
+        return true
+    }
+
+    const handleSubmitAuthen = () => {
+        if (isSignUp && !handleValidateSignUp()) return;
+        const bodySignIn = {
+            email: statesLogin.username,
+            password: statesLogin.password,
+        }
+
+        const bodySignUp = {
+            name: statesSignUp.fullname,
+            email: statesSignUp.email,
+            phone: statesSignUp.phoneNumber,
+            password: statesSignUp.password,
+            password_confirmation: statesSignUp.passwordConfirm,
+            terms: true,
+        }
+        if (isSignUp) {
+            handleRegister(bodySignUp);
+            setStatesLogin({ ...statesLogin, pendding: true })
+        } else {
+
+            handleLogin(bodySignIn);
+            setStatesLogin({ ...statesLogin, pendding: true })
+        }
     }
 
     return (
@@ -293,29 +376,32 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         </div>
                     </div>
                     <div className='t-chart_soft'>
-                        <div className='t-chart_soft_wrapper'>
-                            <h2>Sắp xếp theo chỉ số</h2>
-                            {indicators?.map((item, index) => (
-                                <div
-                                    key={index}
-                                    style={idIndicatorsActive === item.id ? {
-                                        backgroundColor: '#afcbff',
-                                        borderRadius: 4,
-                                    } : {}}
-                                    onClick={() => {
-                                        handleSortAllowIndicator(item.id)
-                                    }}
-                                >
-                                    <img src={IconAllowIndicators[index]} /><p>{item.label}</p>
+                        {
+                            !indicators ? <Loading /> :
+                                <div className='t-chart_soft_wrapper'>
+                                    <h2>Sắp xếp theo chỉ số</h2>
+                                    {indicators?.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            style={idIndicatorsActive === item.id ? {
+                                                backgroundColor: '#afcbff',
+                                                borderRadius: 4,
+                                            } : {}}
+                                            onClick={() => {
+                                                handleSortAllowIndicator(item.id)
+                                            }}
+                                        >
+                                            <img src={IconAllowIndicators[index]} /><p>{item.label}</p>
+                                        </div>
+                                    ))}
+                                    <button onClick={() => {
+                                        if (idIndicatorsActive === 99) return;
+                                        handleSetChartData(chartDataRoot as any);
+                                        handleSetLoading(true);
+                                        setIdIndicatorsActive(99);
+                                    }}>Reset</button>
                                 </div>
-                            ))}
-                            <button onClick={() => {
-                                if (idIndicatorsActive === 99) return;
-                                handleSetChartData(chartDataRoot as any);
-                                handleSetLoading(true);
-                                setIdIndicatorsActive(99);
-                            }}>Reset</button>
-                        </div>
+                        }
                     </div>
                     <ul className="t-chart_filter_box_sort">
                         <p>Sắp xếp:</p>
@@ -371,6 +457,9 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 zIndex="lv2"
                 className='form-rating'
             >
+                <p style={{ lineHeight: 1.5, fontStyle: 'italic', marginBottom: 4, paddingBottom: 4, borderBottom: '1px solid #dbdbdb' }}>Cảm ơn bạn đã chia sẻ đánh giá của bạn về Hạnh phúc với chúng tôi. <br />
+                    Cuộc khảo sát này sẽ không làm bạn mất quá 2 phút.<br />
+                    Thông tin và đánh giá của bạn sẽ được ẩn danh.</p>
                 {isSignIn ?
                     <div className={mapModifiers('t-chart_form t-chart_form_signin')}>
                         <Dropdown
@@ -563,7 +652,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 <div className='t-chart_form_submit'>
                     <button onClick={() => setIsOpenModal(false)}>Hủy</button>
                     <button onClick={() => {
-                        handleSubmit(false)
+                        handleSubmit()
                     }}>
                         {stateForm.loading ? <Loading />
                             :
@@ -605,54 +694,156 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 onClose={function (): void {
                     setStates({ ...states, isOpenFormLogin: false })
                 }}
-                title={'Đăng nhập ngay'}
+                title={isSignUp ? 'Đăng kí tài khoản' : 'Đăng nhập ngay'}
                 className='form'
             >
-                <div className='t-header_form'>
-                    <div className='t-header_form_item'>
-                        <p>Email</p>
-                        <input
-                            type='text'
-                            autoFocus
-                            value={states.username}
-                            placeholder='Vui lòng nhập email...'
-                            onChange={(event) => setStates({ ...states, username: event.target.value })}
-                        />
+                {isSignUp ?
+                    <div className='t-header_signup'>
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.fullname ? 'error' : '')}>
+                            <p>Họ tên <span>*</span></p>
+                            <input
+                                type='text'
+                                autoFocus
+                                value={statesSignUp.fullname}
+                                placeholder='Nguyễn Văn A...'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, fullname: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, fullname: '' })
+                                }}
+                            />
+                            <span>{statesSignUpErr.fullname}</span>
+                        </div>
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.email ? 'error' : '')}>
+                            <p>Email<span>*</span></p>
+                            <input
+                                type='text'
+                                autoFocus
+                                value={statesSignUp.email}
+                                placeholder='vietnam@gmail.com....'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, email: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, email: '' });
+                                }}
+                            />
+                            <span>{statesSignUpErr.email}</span>
+                        </div>
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.phoneNumber ? 'error' : '')}>
+                            <p>Số điện thoại<span>*</span></p>
+                            <input
+                                type='text'
+                                autoFocus
+                                value={statesSignUp.phoneNumber}
+                                placeholder='096020000.....'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, phoneNumber: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, phoneNumber: '' });
+                                }}
+                            />
+                            <span>{statesSignUpErr.phoneNumber}</span>
+                        </div>
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.password ? 'error' : '')}>
+                            <p>Mật khẩu<span>*</span></p>
+                            <input
+                                type={!statesSignUp.isHidePassword ? 'password' : 'text'}
+                                value={statesSignUp.password}
+                                placeholder='Vui lòng nhập mật khẩu...'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, password: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, password: '' });
+                                }}
+                                onKeyPress={(event) => {
+                                    console.log(event)
+                                    if (event.key === "Enter") {
+                                        handleSubmit();
+                                    }
+                                }}
+                            />
+                            <span>{statesSignUpErr.password}</span>
+                        </div>
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.passwordConfirm ? 'error' : '')}>
+                            <p>Xác nhận mật khẩu<span>*</span></p>
+                            <input
+                                type={!statesSignUp.isHidePassword ? 'password' : 'text'}
+                                value={statesSignUp.passwordConfirm}
+                                placeholder='Vui lòng nhập mật khẩu...'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, passwordConfirm: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, passwordConfirm: '' });
+                                }}
+                                onKeyPress={(event) => {
+                                    console.log(event)
+                                    if (event.key === "Enter") {
+                                        handleSubmit();
+                                    }
+                                }}
+                            />
+                            <span>{statesSignUpErr.passwordConfirm}</span>
+                        </div>
                     </div>
-                    <div className='t-header_form_item'>
-                        <p>Mật khẩu</p>
-                        <input
-                            type={!states.isHidePassword ? 'password' : 'text'}
-                            value={states.password}
-                            placeholder='Vui lòng nhập mật khẩu...'
-                            onChange={(event) => setStates({ ...states, password: event.target.value })}
-                            onKeyPress={(event) => {
-                                console.log(event)
-                                if (event.key === "Enter") {
-                                    handleSubmitLogin();
-                                }
-                            }}
-                        />
-                    </div>
-                    <div className='t-header_form_item'>
-                        <input type="checkbox" value={states.isHidePassword as any} onChange={(event) => {
-                            setStates({ ...states, isHidePassword: event.target.checked })
-                        }} />
-                        <p onClick={() => setStates({ ...states, isHidePassword: !states.isHidePassword })}>Hiện mật khẩu</p>
-                    </div>
+                    :
+                    <>
+                        <div className='t-header_form'>
+                            <div className='t-header_form_item'>
+                                <p>Email</p>
+                                <input
+                                    type='text'
+                                    autoFocus
+                                    value={statesLogin.username}
+                                    placeholder='Vui lòng nhập email...'
+                                    onChange={(event) => setStatesLogin({ ...statesLogin, username: event.target.value })}
+                                />
+                            </div>
+                            <div className='t-header_form_item'>
+                                <p>Mật khẩu</p>
+                                <input
+                                    type={!statesLogin.isHidePassword ? 'password' : 'text'}
+                                    value={statesLogin.password}
+                                    placeholder='Vui lòng nhập mật khẩu...'
+                                    onChange={(event) => setStatesLogin({ ...statesLogin, password: event.target.value })}
+                                    onKeyPress={(event) => {
+                                        console.log(event)
+                                        if (event.key === "Enter") {
+                                            handleSubmit();
+                                        }
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </>
+                }
+                <div className='t-header_form_toogle'>
+                    <input type="checkbox" value={statesLogin.isHidePassword as any} onChange={(event) => {
+                        if (isSignUp) {
+                            setStatesSignUp({ ...statesSignUp, isHidePassword: event.target.checked })
+                            if (statesLogin.isHidePassword) {
+                                setStatesLogin({ ...statesLogin, isHidePassword: false })
+                            }
+                        } else {
+                            setStatesLogin({ ...statesLogin, isHidePassword: event.target.checked });
+                            if (statesSignUp.isHidePassword) {
+                                setStatesSignUp({ ...statesSignUp, isHidePassword: false })
+                            }
+                        }
+                    }} />
+                    <p >Hiện mật khẩu</p>
                 </div>
-                <div className='t-header_form_action'>
-                    <a href='/register'>Tạo mới tài khoản</a>
+                <div className='t-header_form_action' onClick={() => {
+                    setIsSignUp(!isSignUp)
+                }}>
+                    <a >{isSignUp ? 'Bạn đã có tài khoản ?' : 'Tạo mới tài khoản'}</a>
                 </div>
                 <div className='t-header_form_button'>
                     <button onClick={function (): void {
-                        setStates({ ...states, isOpenFormLogin: false })
+                        setStatesLogin({ ...statesLogin, isOpenFormLogin: false })
                     }}>Hủy</button>
-                    <button onClick={handleSubmitLogin}>
-                        {states.pendding ?
+                    <button onClick={handleSubmitAuthen}>
+                        {statesLogin.pendding ?
                             <Loading />
                             :
-                            'Đăng nhập'
+                            isSignUp ?
+                                'Đăng kí'
+                                :
+                                'Đăng nhập'
                         }
                     </button>
                 </div>

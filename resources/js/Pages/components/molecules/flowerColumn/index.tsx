@@ -17,6 +17,7 @@ interface FlowerColumnProps {
     handleClickColumn?: () => void;
     isDetail?: boolean;
     isMobile?: boolean;
+    isActive?: boolean;
 }
 const FlowerColumn: React.FC<FlowerColumnProps> = ({
     columnName,
@@ -31,6 +32,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
     handleClickColumn,
     isDetail = false,
     isMobile = false,
+    isActive = false,
 }) => {
     const refName = useRef<any>(null);
     const refLine = useRef<HTMLDivElement>(null);
@@ -57,7 +59,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 refBoxHover.current.style.top = '100px'; // Reset lại khi điều kiện không đúng
             }
 
-            if (left >= windowWidth * 5) {
+            if (left >= windowWidth * 6) {
                 refBoxHover.current.style.left = 'unset';
                 refBoxHover.current.style.right = '150%';
             } else {
@@ -77,7 +79,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 height: Number(value * unit + 20),
                 animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
             }}
-            className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal')}
+            className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal', isActive && 'flower-active')}
             ref={refColumn}
             onClick={handleClickColumn}
         >

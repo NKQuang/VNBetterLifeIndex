@@ -33,3 +33,7 @@
 .o-modal-lv3 .react-responsive-modal-modal {
     z-index: 300 !important;
 }
+
+.o-modal-top .react-responsive-modal-modal {
+    z-index: 1100 !important;
+}

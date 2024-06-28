@@ -390,7 +390,7 @@
 .o-modal-form-rating .react-responsive-modal-modal {
     min-height: unset;
     height: fit-content;
-    max-height: 80vh;
+    max-height: 86vh;
     overflow-y: scroll;
 }
 

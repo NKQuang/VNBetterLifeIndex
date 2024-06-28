@@ -91,6 +91,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             !statesSignUp.email ||
             !statesSignUp.phoneNumber ||
             !statesSignUp.password ||
+            statesSignUp.password.length < 8 ||
             !statesSignUp.passwordConfirm ||
             statesSignUp.passwordConfirm !== statesSignUp.password
         ) {
@@ -99,7 +100,8 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
                 email: !statesSignUp.email ? 'Email là bắt buộc' : '',
                 phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : '',
-                password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : '',
+                password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
+
                 passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
             })
             return false;
@@ -110,7 +112,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     const handleRegister = async (body: any) => {
         const response = await postRegisterAccount(body);
         if (response) {
-            const { message } = response;
             setStatesSignUp({
                 ...statesSignUp,
                 fullname: '',
@@ -120,6 +121,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 passwordConfirm: '',
                 isHidePassword: false,
             });
+            setStatesLogin({ ...statesLogin, pendding: false, isOpenFormLogin: false })
             toast.success('Đăng kí thành công. Vui lòng kiểm tra mail để xác thực tài khoản!');
         } else {
             toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
@@ -147,6 +149,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         }
         if (isSignUp) {
             handleRegister(bodySignUp);
+            setStatesLogin({ ...statesLogin, pendding: true })
         } else {
 
             handleLogin(bodySignIn);
@@ -172,6 +175,10 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                             <p onClick={() => {
                                 window.location.href = `/user/profile`;
                             }}>Xin chào, {info?.name}</p>
+                            <button style={{ backgroundColor: '#f00', height: 32, padding: '6px 12px' }} onClick={() => {
+                                localStorage.clear();
+                                window.location.reload();
+                            }}>Đăng xuất</button>
                         </>
                         :
                         <>

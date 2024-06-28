@@ -7,7 +7,6 @@ import { checkLogin, getDistrictsIndicators, getWBI } from '../../services/apis'
 import Loading from '../../components/atoms/loading';
 import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
-import Cookies from 'js-cookie';
 import Footer from '../../components/templates/footer';
 import MobileSreen from '../../components/templates/mobile';
 

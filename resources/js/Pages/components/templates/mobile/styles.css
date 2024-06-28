@@ -2,7 +2,9 @@
   width: 100vw;
   height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  z-index: 0;
 }
 
 .t-mobile .t-mobile_menu {
@@ -27,13 +29,16 @@
   color: #393939;
 }
 
-.t-mobile .t-mobile_menu li {
+.t-mobile .t-mobile_menu button {
   list-style: none;
   cursor: pointer;
   padding: 20px 16px;
   border-bottom: 1px solid #dbdbdb;
   font-weight: 600;
   text-transform: capitalize;
+  display: block;
+  width: 100%;
+  text-align: start;
 }
 
 .t-mobile .t-mobile_menu li:last-child {
@@ -43,7 +48,7 @@
 .t-mobile .t-mobile_header {
   height: 70px;
   width: 100vw;
-  position: sticky;
+  position: fixed;
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;
@@ -66,8 +71,9 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 30px;
+  gap: 10px;
   margin-right: 12px;
+  width: 100%;
 }
 
 .t-mobile_header_action button {
@@ -81,10 +87,25 @@
 }
 
 .t-mobile_header_action button:first-child {
-  border-radius: 50%;
+  min-width: 130px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  background-color: #00a53f;
+  padding: 3px 8px;
+  border-radius: 4px;
+  gap: 6px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.t-mobile_header_action button:first-child img {
+  width: 24px;
+}
+
+.t-mobile_header_action button:first-child span {
+  width: max-content;
+  color: #fff;
+  font-weight: 600;
 }
 
 .t-mobile-dark .t-mobile_header_action button:first-child {
@@ -120,4 +141,30 @@
   height: 50px;
   object-fit: cover;
   border-radius: 50%;
+}
+
+.o-modal-form_mobile .react-responsive-modal-modal {
+  height: fit-content;
+  width: fit-content;
+  min-width: 60dvw;
+  margin: 0;
+}
+
+.o-modal-form_mobile .react-responsive-modal-modal .t-header_form {
+  height: fit-content;
+  width: 100%;
+}
+
+.o-modal-form_mobile .t-chart_form {
+  width: 100%;
+  min-width: unset;
+  max-width: unset;
+}
+
+@media screen and (max-width: 500px) {
+  .o-modal-form_mobile .react-responsive-modal-modal {
+    height: fit-content;
+    width: 95dvw;
+    margin: 0;
+  }
 }

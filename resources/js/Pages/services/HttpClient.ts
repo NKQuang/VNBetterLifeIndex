@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
-import Cookies from 'js-cookie';
 import { useBetterLife } from "../components/templates/provider";
 class HttpClient {
   private static _instance: HttpClient;

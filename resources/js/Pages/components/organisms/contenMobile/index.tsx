@@ -3,7 +3,6 @@ import './styles.css'
 import { mapModifiers } from '../../../utils/functions';
 
 import { useBetterLife } from '../../templates/provider';
-import { exampleDataChart } from '../../../assets/data';
 import icHousing from '../../../assets/images/housing.svg';
 import icIncome from '../../../assets/images/income.svg';
 import icJobs from '../../../assets/images/jobs.svg';
@@ -16,29 +15,39 @@ import icSatisfaction from '../../../assets/images/satisfaction.svg';
 import icSafety from '../../../assets/images/safety.svg';
 import icWorkLifeBalance from '../../../assets/images/work-life-balance.svg';
 import icAdministration from '../../../assets/images/city-hall.svg';
+import icImprovementLight from '../../../assets/images/voting.svg';
 
 import FlowerChartMobile, { Indicator } from '../../templates/chart-mobile';
 import { colorsPetal } from '../../atoms/flower';
+import CModal from '../modal';
+import Dropdown, { DropdownType } from '../../atoms/dropdown';
+import Slider from '../../atoms/slider';
+import { gender, RangeOld, relationship } from '../../../assets/data';
+import Loading from '../../atoms/loading';
+import { getWBI, postDistrictsIndicators } from '../../../services/apis';
+import { toast } from 'react-toastify';
 
 const IconAllowIndicators = [icIncome, icJobs, icHearth, icEducation, icHousing, icSatisfaction, icEnvironment, icSafety, icWorkLifeBalance, icCommunity, icCivicEngagement, icAdministration]
 
 interface ContentMobileProps {
+    handleLogin: () => void;
 }
 
 const ContentMobile: React.FC<ContentMobileProps> = ({
-
+    handleLogin
 }) => {
     const {
         theme,
-        handleSetTheme,
+        isSignIn,
+        isShowDetail,
         sreenWidth,
         indicators,
         chartDataRoot,
         handleSetChartData,
-        handleSetLoading
+        handleSetLoading,
+        handleSetIsFilter
     } = useBetterLife();
-    const [indexDistrict, setIndexDistrict] = useState(0);
-    const [open, setOpen] = React.useState(false);
+
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
 
     const handleSortAllowIndicator = (id: any) => {
@@ -57,44 +66,39 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
             <div className="t-mobile_body_flower">
                 <FlowerChartMobile isMobile={sreenWidth < 1024} />
             </div>
-            <div className="t-mobile_body_indicator">
-                99
-            </div>
-            <div className="t-mobile_body_filter">
-                {idIndicatorsActive !== 99 ?
-                    <p>Sắp xếp theo: <strong style={{ marginLeft: 6 }}>{(indicators || [])[idIndicatorsActive - 1]?.label ?? ''}</strong></p>
-                    : <p style={{ height: 24 }} >Chọn một chỉ số bạn muốn sắp xếp</p>
-                }
-                <div className="t-mobile_body_filter_wrapper">
-                    {indicators?.map((item, index) => (
-                        <div
-                            key={index}
-                            style={{ backgroundColor: idIndicatorsActive === item.id ? '#fff' : colorsPetal[index] }}
-                            onClick={() => {
-                                handleSortAllowIndicator(item.id)
-                            }}
-                        >
-                            <img src={[IconAllowIndicators[index]] as any} alt="" />
-                        </div>
-                    ))}
+            {isShowDetail ? null :
+                <div className="t-mobile_body_filter">
+                    {idIndicatorsActive !== 99 ?
+                        <p>Sắp xếp theo: <strong style={{ marginLeft: 6 }}>{(indicators || [])[idIndicatorsActive - 1]?.label ?? ''}</strong></p>
+                        : <p style={{ height: 24 }} >Chọn một chỉ số bạn muốn sắp xếp</p>
+                    }
+                    <div className="t-mobile_body_filter_wrapper">
+                        {indicators?.map((item, index) => (
+                            <div
+                                key={index}
+                                style={{ backgroundColor: idIndicatorsActive === item.id ? '#fff' : colorsPetal[index] }}
+                                onClick={() => {
+                                    handleSortAllowIndicator(item.id)
+                                }}
+                            >
+                                <img src={[IconAllowIndicators[index]] as any} alt="" />
+                            </div>
+                        ))}
+                    </div>
+                    <button onClick={() => {
+                        if (idIndicatorsActive === 99) return;
+                        handleSetChartData(chartDataRoot as any);
+                        handleSetLoading(true);
+                        setIdIndicatorsActive(99);
+                    }}>Reset</button>
                 </div>
-                <button onClick={() => {
-                    if (idIndicatorsActive === 99) return;
-                    handleSetChartData(chartDataRoot as any);
-                    handleSetLoading(true);
-                    setIdIndicatorsActive(99);
-                }}>Reset</button>
-            </div>
-            {/* <div className="t-mobile_body_action">
-                <button><img src={theme === 'dark' ? icImprovementLight : icImprovementDark} /></button>
-                <button><img src={theme === 'dark' ? icInformationDark : icInformationLight} /></button>
-            </div> */}
+            }
+
         </div >
     )
 }
 
 ContentMobile.defaultProps = {
-    children: undefined,
 };
 
 export default ContentMobile;

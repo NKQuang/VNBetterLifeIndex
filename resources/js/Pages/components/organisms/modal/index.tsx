@@ -4,7 +4,7 @@ import 'react-responsive-modal/styles.css';
 import './styles.css';
 import { mapModifiers } from '../../../utils/functions';
 
-type ZIndex = 'lv1' | 'lv2' | 'lv3'
+type ZIndex = 'lv1' | 'lv2' | 'lv3' | 'top'
 
 interface MotionProps {
     children?: React.ReactNode;
