@@ -399,16 +399,13 @@
     display: none;
 }
 
-.o-modal-form-rating .t-chart_info_customer {
+.t-chart_info_customer,
+.t-chart_info_customer .t-chart_info_item,
+.t-chart_info_customer .t-chart_info_item input {
     width: 100%;
 }
 
-.o-modal-form-rating .t-chart_info_customer .t-chart_info_item,
-.o-modal-form-rating .t-chart_info_customer .t-chart_info_item input {
-    width: 100%;
-}
-
-.o-modal-form-rating .t-chart_info_customer .t-chart_info_item input {
+.t-chart_info_customer .t-chart_info_item input {
     height: 38px;
     border-radius: 4px;
     border-color: #dbdbdb;
