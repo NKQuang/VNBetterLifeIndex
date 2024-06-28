@@ -58,7 +58,7 @@ class IndicatorValueController extends Controller
             'full_name' => 'nullable|string|max:255',
             'gender' => 'nullable|integer|in:0,1',
             'phone_number' => 'nullable|string|max:15',
-            'old' => 'nullable|string|in:0-15,15-25,25-35,35-45,45-55,55-65,>65',
+            'old' => 'nullable|string',
             'profession' => 'nullable|string|max:255',
             'relationship' => 'nullable',
         ]);
@@ -109,7 +109,10 @@ class IndicatorValueController extends Controller
             $indicatorValue->full_name = $request->full_name;
             $indicatorValue->gender = $request->gender;
             $indicatorValue->phone_number = $request->phone_number;
-            $indicatorValue->old = $request->old;
+            if ($request->old != null) {
+                $indicatorValue->old = $request->old;
+            }
+
             $indicatorValue->profession = $request->profession;
             $indicatorValue->marital_status = $request->relationship;
             if ($user) {
