@@ -168,8 +168,18 @@ class DatabaseSeeder extends Seeder
             ['code' => 94, 'name' => 'Sóc Trăng', 'full_name' => 'Tỉnh Sóc Trăng', 'full_name_en' => 'Soc Trang Province'],
             ['code' => 95, 'name' => 'Bạc Liêu', 'full_name' => 'Tỉnh Bạc Liêu', 'full_name_en' => 'Bac Lieu Province'],
         ]);
-
         DB::table('districts')->insert([
+            ['name' => 'Vũng Tàu', 'full_name' => 'Thành phố Vũng Tàu', 'full_name_en' => 'Vung Tau City', 'regions_code' => 77],
+            ['name' => 'Bà Rịa', 'full_name' => 'Thành phố Bà Rịa', 'full_name_en' => 'Ba Ria City', 'regions_code' => 77],
+            ['name' => 'Châu Đức', 'full_name' => 'Huyện Châu Đức', 'full_name_en' => 'Chau Duc District', 'regions_code' => 77],
+            ['name' => 'Xuyên Mộc', 'full_name' => 'Huyện Xuyên Mộc', 'full_name_en' => 'Xuyen Moc District', 'regions_code' => 77],
+            ['name' => 'Long Điền', 'full_name' => 'Huyện Long Điền', 'full_name_en' => 'Long Dien District', 'regions_code' => 77],
+            ['name' => 'Đất Đỏ', 'full_name' => 'Huyện Đất Đỏ', 'full_name_en' => 'Dat Do District', 'regions_code' => 77],
+            ['name' => 'Tân Thành', 'full_name' => 'Thị xã Phú Mỹ', 'full_name_en' => 'Phu My Town', 'regions_code' => 77],
+            ['name' => 'Côn Đảo', 'full_name' => 'Huyện Côn Đảo', 'full_name_en' => 'Con Dao District', 'regions_code' => 77],
+        ]);
+
+       /* DB::table('districts')->insert([
             ['name' => 'Ba Đình', 'full_name' => 'Quận Ba Đình', 'full_name_en' => 'Ba Dinh District', 'regions_code' => 1],
             ['name' => 'Hoàn Kiếm', 'full_name' => 'Quận Hoàn Kiếm', 'full_name_en' => 'Hoan Kiem District', 'regions_code' => 1],
             ['name' => 'Tây Hồ', 'full_name' => 'Quận Tây Hồ', 'full_name_en' => 'Tay Ho District', 'regions_code' => 1],
@@ -865,6 +875,6 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Quảng Xương', 'full_name' => 'Huyện Quảng Xương', 'full_name_en' => 'Quang Xuong District', 'regions_code' => 38],
             ['name' => 'Tĩnh Gia', 'full_name' => 'Thị xã Nghi Sơn', 'full_name_en' => 'Nghi Son Town', 'regions_code' => 38],
 
-        ]);
+        ]);*/
     }
 }

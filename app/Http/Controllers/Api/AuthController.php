@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -19,13 +21,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-
+            Auth::loginUsingId($user->id);
             // Hủy tất cả token hiện tại của người dùng
             $user->tokens()->delete();
 
             // Tạo token mới
-            $token = $user->createToken('API Token')->plainTextToken;
+            $token = $user->createToken('auth_token')->plainTextToken;
 
+            Cookie::queue(Cookie::make('login_token',$token, 60));
             return response()->json([
                 'authenticated' => true,
                 'api_token' => $token,
@@ -87,6 +90,7 @@ class AuthController extends Controller
     }
     public function register(Request $request)
     {
+
         // Validate request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -113,6 +117,9 @@ class AuthController extends Controller
             'message' => 'User registered successfully',
             'user' => $user,
         ]);
+    }
+    public function logincheck(Request $request) {
+
     }
 }
 

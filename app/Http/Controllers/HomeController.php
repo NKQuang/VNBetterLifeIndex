@@ -23,6 +23,8 @@ class HomeController extends Controller
         $data["usersCount"] = $usersCount;
         $data["indicators"] = $indicators;
 
+
+
         $data["title"] = "Tổng quan";
         return view('dashboard.dashboard', $data);
     }

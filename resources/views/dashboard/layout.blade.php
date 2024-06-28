@@ -9,7 +9,6 @@
     <script src="{{ asset('assets/js/font-awesome.js') }}" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <script src="{{ asset('assets/js/popper.min.js') }}"></script>
-
     <link rel="stylesheet" href="{{ asset('assets/css/tailwind/tailwind.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/loopple/loopple.css') }}">

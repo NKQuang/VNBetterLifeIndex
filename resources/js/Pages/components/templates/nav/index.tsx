@@ -78,7 +78,25 @@ const Header: React.FC<HeaderProps> = ({ }) => {
         handleLogin(body);
         setStates({ ...states, pendding: true })
     }
+    const handleProfileRedirect = () => {
+        const token = localStorage.getItem('login_token');
+        const xhr = new XMLHttpRequest();
 
+        xhr.open('GET', '/user/profile', true);
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    window.location.href = '/user/profile';
+                } else {
+                    console.error('Failed to redirect');
+                }
+            }
+        };
+
+        xhr.send();
+    };
     return (
         <header className='t-header'>
             <div className="t-header_wrapper">
@@ -94,9 +112,8 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 <div className="t-header_right">
                     {info?.name ?
                         <>
-                            <p onClick={() => {
-                                window.location.href = '/user/profile';
-                            }}>Xin chào, {info?.name}</p>
+                            <p onClick={handleProfileRedirect}
+                            >Xin chào, {info?.name}</p>
                         </>
                         :
                         <>

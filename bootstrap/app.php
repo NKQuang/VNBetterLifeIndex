@@ -25,6 +25,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
             ],
+            'logincookies' =>[
+                \App\Http\Middleware\LoginCookiesMiddleware::class,
+            ]
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
