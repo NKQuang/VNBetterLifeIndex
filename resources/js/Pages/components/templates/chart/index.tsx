@@ -45,7 +45,7 @@ interface FlowerChartProps {
 }
 
 
-type SortType = 'alphabet' | 'rank'
+export type SortType = 'alphabet' | 'rank'
 
 const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     const { isFilter,

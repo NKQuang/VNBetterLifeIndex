@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles.css'
 import { mapModifiers } from '../../../utils/functions';
 
@@ -15,17 +15,11 @@ import icSatisfaction from '../../../assets/images/satisfaction.svg';
 import icSafety from '../../../assets/images/safety.svg';
 import icWorkLifeBalance from '../../../assets/images/work-life-balance.svg';
 import icAdministration from '../../../assets/images/city-hall.svg';
-import icImprovementLight from '../../../assets/images/voting.svg';
 
-import FlowerChartMobile, { Indicator } from '../../templates/chart-mobile';
+import FlowerChartMobile, { districtItem, Indicator } from '../../templates/chart-mobile';
 import { colorsPetal } from '../../atoms/flower';
-import CModal from '../modal';
-import Dropdown, { DropdownType } from '../../atoms/dropdown';
-import Slider from '../../atoms/slider';
-import { gender, RangeOld, relationship } from '../../../assets/data';
-import Loading from '../../atoms/loading';
-import { getWBI, postDistrictsIndicators } from '../../../services/apis';
-import { toast } from 'react-toastify';
+
+import { SortType } from '../../templates/chart';
 
 const IconAllowIndicators = [icIncome, icJobs, icHearth, icEducation, icHousing, icSatisfaction, icEnvironment, icSafety, icWorkLifeBalance, icCommunity, icCivicEngagement, icAdministration]
 
@@ -38,17 +32,21 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
 }) => {
     const {
         theme,
-        isSignIn,
+        handleShowDetail,
         isShowDetail,
         sreenWidth,
         indicators,
         chartDataRoot,
+        chartData,
         handleSetChartData,
         handleSetLoading,
-        handleSetIsFilter
+        handleSetIsFilter,
+        infoDetail,
+        handleSetInfoDetail,
     } = useBetterLife();
 
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
+    const [softBy, setSortBy] = useState<SortType>('alphabet');
 
     const handleSortAllowIndicator = (id: any) => {
         setIdIndicatorsActive(id);
@@ -61,11 +59,47 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
         handleSetLoading(true);
     }
 
+    const handleSortData = (type: 'alphabet' | 'rank') => {
+        setSortBy(type)
+        handleSetIsFilter(true);
+        switch (type) {
+            case 'alphabet':
+                const alphabet = chartData?.sort((a: districtItem, b: districtItem) => a.district.localeCompare(b.district));
+                handleSetLoading(true);
+                handleSetChartData(alphabet as districtItem[])
+                break;
+            case 'rank':
+                const rank = chartData?.sort((a: districtItem, b: districtItem) => a.value - b.value);
+                handleSetLoading(true);
+                handleSetChartData(rank as districtItem[]);
+                break;
+        }
+    }
+
+    useEffect(() => {
+        const getColumnActive = document.querySelector('.m-column-flower-active');
+        if (getColumnActive) {
+            getColumnActive.scrollIntoView({
+                behavior: 'smooth'
+            })
+        }
+    }, [isShowDetail, infoDetail, chartData])
+
     return (
         <div className={mapModifiers('t-mobile_body', theme)}>
             <div className="t-mobile_body_flower">
                 <FlowerChartMobile isMobile={sreenWidth < 1024} />
             </div>
+            {isShowDetail &&
+                <div className='p-district_back' onClick={() => {
+                    handleSetLoading(true);
+                    handleShowDetail(false);
+                    handleSetChartData(chartDataRoot as any);
+                    handleSetInfoDetail(undefined as any);
+                }}>
+                    <i className="fa-solid fa-arrow-left-long" style={{ fontSize: 30, color: '#0141a1' }}></i>
+                </div>
+            }
             {isShowDetail ? null :
                 <div className="t-mobile_body_filter">
                     {idIndicatorsActive !== 99 ?
@@ -85,15 +119,29 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                             </div>
                         ))}
                     </div>
-                    <button onClick={() => {
-                        if (idIndicatorsActive === 99) return;
-                        handleSetChartData(chartDataRoot as any);
-                        handleSetLoading(true);
-                        setIdIndicatorsActive(99);
-                    }}>Reset</button>
+                    <div className="t-mobile_body_filter_wrapper_button">
+                        <button
+                            style={{ backgroundColor: softBy === 'alphabet' ? '#01a101' : '#fff', color: softBy === 'alphabet' ? '#fff' : '#000', border: 'unset' }}
+                            onClick={() => {
+                                if (softBy === 'alphabet') return;
+                                handleSortData('alphabet')
+                            }}>A - Z</button>
+                        <button onClick={() => {
+                            if (idIndicatorsActive === 99) return;
+                            handleSetChartData(chartDataRoot as any);
+                            handleSetLoading(true);
+                            setIdIndicatorsActive(99);
+                        }}><i className="fa-solid fa-rotate-left" style={{ marginRight: 6 }}></i>Reset</button>
+                        <button
+                            style={{ backgroundColor: softBy === 'rank' ? '#0141a1' : '#fff', border: 'unset', color: softBy === 'rank' ? '#fff' : '#000', }}
+                            onClick={() => {
+                                if (softBy === 'rank') return;
+                                handleSortData('rank')
+                            }}>Xếp hàng WBI</button>
+
+                    </div>
                 </div>
             }
-
         </div >
     )
 }

@@ -288,7 +288,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     }
                 }}
             />
-            <div style={{ display: 'block', height: 70 }} />
+            <div style={{ display: 'block', height: 72 }} />
             <ContentMobile handleLogin={() => {
                 setStatesLogin({ ...statesLogin, isOpenFormLogin: true });
                 setIsSignUp(false);

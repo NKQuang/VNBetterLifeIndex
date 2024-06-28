@@ -88,14 +88,27 @@
 .t-mobile_body .t-mobile_body_filter button {
   margin-top: 12px;
   width: fit-content;
-  min-width: 120px;
+  min-width: 100px;
+  min-height: 40px;
   display: flex;
   justify-content: center;
+  align-items: center;
   border: 1px solid #f00;
   background-color: #f00;
   color: #fff;
-  border-radius: 4px;
-  padding: 2px 0;
+  border-radius: 6px;
+  padding: 2px 4px;
+  font-weight: 500;
+}
+
+.t-mobile_body_filter_wrapper_button {
+  gap: 8px;
+  padding: 0 4px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .t-mobile_body .t-mobile_body_filter .t-mobile_body_filter_wrapper {
