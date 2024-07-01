@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
 import './styles.css'
-import { gender, RangeOld, relationship, unit } from '../../../assets/data';
+import { gender, profession, RangeOld, relationship, unit } from '../../../assets/data';
 import { mapModifiers } from '../../../utils/functions';
 import { useBetterLife } from '../provider';
 import Loading from '../../atoms/loading';
@@ -74,6 +74,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     const [valueAUnit, setValueAUnit] = useState(0);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalConfirm, setIsOpenModalConfirm] = useState(false);
+    const [isOpenModalConfirmAfterSubmit, setIsOpenModalConfirmAfterSubmit] = useState(false);
     const [stateForm, setStateForm] = useState({
         district: undefined as unknown as DropdownType,
         indicator: undefined as unknown as DropdownType,
@@ -86,9 +87,22 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         relationship: undefined as unknown as DropdownType,
         phoneNumber: "",
         old: undefined as unknown as DropdownType,
-        profession: '',
+        profession: undefined as unknown as DropdownType,
         gender: undefined as unknown as DropdownType,
     });
+    const [stateFormError, setStateFormError] = useState({
+        district: "",
+        indicator: "",
+        fullName: "",
+        relationship: "",
+        phoneNumber: "",
+        old: "",
+        profession: "",
+        gender: "",
+    });
+
+    console.log("🚀 ~ stateFormError:", stateFormError)
+
     const [updateData, setUpdateData] = useState<any>();
     const [states, setStates] = useState({
         username: '',
@@ -123,7 +137,6 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
         password: '',
         passwordConfirm: '',
     });
-
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
 
     useEffect(() => {
@@ -170,14 +183,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     loading: false,
                     confirm: false,
                     isValidated: false,
-                    fullName: "",
-                    relationship: undefined as unknown as DropdownType,
-                    phoneNumber: "",
-                    old: undefined as unknown as DropdownType,
-                    profession: "",
                 })
                 toast.success('Gửi đánh giá thành công!');
                 getWbi();
+                setIsOpenModalConfirmAfterSubmit(true);
             }).catch((error) => {
                 console.log('error', error)
 
@@ -185,6 +194,29 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     }
 
     const handleValidate = () => {
+        if (
+            !stateForm.district?.value ||
+            !stateForm.indicator?.value ||
+            !stateForm.profession?.value ||
+            !stateForm.relationship?.value ||
+            !stateForm.fullName ||
+            !stateForm.phoneNumber ||
+            !stateForm.old?.value ||
+            !stateForm.gender?.value
+        ) {
+            setStateFormError({
+                ...stateFormError,
+                district: !stateForm.district?.value ? "Huyện là trường bắt buộc" : "",
+                indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
+                fullName: !stateForm.fullName ? "Họ tên là trường bắt buộc" : "",
+                relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
+                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : "",
+                old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
+                profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
+                gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
+            })
+            return false;
+        }
         if (stateForm.answers.some((i) => i === 0)) {
             setStateForm({
                 ...stateForm,
@@ -207,7 +239,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             relationship: stateForm.relationship?.label,
             phone_number: stateForm.phoneNumber ?? userInfo?.phone,
             old: stateForm.old?.value,
-            profession: stateForm.profession,
+            profession: stateForm.profession?.value,
             user_id: userInfo?.id ?? null,
             gender: stateForm.gender?.value
         };
@@ -452,8 +484,20 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             {/* Form Đánh giá */}
             <CModal
                 open={isOpenModal}
-                title='Mẫu đánh giá'
-                onClose={() => setIsOpenModal(false)}
+                title='Bảng đánh giá'
+                onClose={() => {
+                    setIsOpenModal(false);
+                    setStateFormError({
+                        district: "",
+                        indicator: "",
+                        fullName: "",
+                        relationship: "",
+                        phoneNumber: "",
+                        old: "",
+                        profession: "",
+                        gender: "",
+                    });
+                }}
                 zIndex="lv2"
                 className='form-rating'
             >
@@ -515,85 +559,134 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     </div>
                     : <>
                         <div className='t-chart_info_customer'>
-                            <div className='t-chart_info_item'>
-                                <p>Họ tên</p>
+                            <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
+                                <p>Họ tên <span>*</span></p>
                                 <input
                                     type='text'
                                     autoFocus
-                                    placeholder=''
+                                    placeholder='Nguyễn Văn A....'
                                     value={stateForm.fullName}
                                     onChange={(event) => {
                                         setStateForm({
                                             ...stateForm,
                                             fullName: event.target.value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            fullName: ''
                                         })
                                     }}
                                 />
+                                <span>{stateFormError.fullName}</span>
                             </div>
-                            <div className='t-chart_info_item'>
-                                <p>Số điện thoại</p>
+                            <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
+                                <p>Số điện thoại<span>*</span></p>
                                 <input
                                     type='text'
                                     autoFocus
-                                    placeholder=''
+                                    placeholder='0973xxxx....'
+                                    pattern="\d*"
                                     value={stateForm.phoneNumber}
                                     onChange={(event) => {
+                                        const phone = event.target.value.replace(/\D/g, '');
                                         setStateForm({
                                             ...stateForm,
-                                            phoneNumber: event.target.value,
+                                            phoneNumber: phone,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            phoneNumber: ''
                                         })
                                     }}
                                 />
+                                <span>{stateFormError.phoneNumber}</span>
                             </div>
-                            <Dropdown
-                                options={gender}
-                                title='Giới tính'
-                                placeholder='Chọn giới tính ...'
-                                value={stateForm.gender}
-                                handleOnChange={(value) => {
-                                    setStateForm({
-                                        ...stateForm,
-                                        gender: value,
-                                    })
-                                }}
-                            />
-                            <Dropdown
-                                options={RangeOld}
-                                title='Độ tuổi'
-                                placeholder='Chọn độ tuổi của bạn'
-                                value={stateForm.old}
-                                handleOnChange={(value) => {
-                                    setStateForm({
-                                        ...stateForm,
-                                        old: value,
-                                    })
-                                }}
-                            />
-                            <div className='t-chart_info_item'>
-                                <p>Nghề nghiệp</p>
-                                <input
-                                    type='text'
-                                    autoFocus
-                                    placeholder=''
-                                    onChange={(event) => {
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                gap: 12,
+                            }}>
+                                <Dropdown
+                                    isRequired
+                                    options={gender}
+                                    title='Giới tính'
+                                    placeholder='Chọn giới tính ...'
+                                    value={stateForm.gender}
+                                    handleOnChange={(value) => {
                                         setStateForm({
                                             ...stateForm,
-                                            profession: event.target.value,
-                                        })
+                                            gender: value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            gender: ''
+                                        });
                                     }}
+                                    error={stateFormError.gender}
+                                />
+                                <Dropdown
+                                    isRequired
+                                    options={RangeOld}
+                                    title='Độ tuổi'
+                                    placeholder='Chọn độ tuổi của bạn'
+                                    value={stateForm.old}
+                                    handleOnChange={(value) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            old: value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            old: ''
+                                        });
+                                    }}
+                                    error={stateFormError.old}
                                 />
                             </div>
-                            <Dropdown
-                                options={relationship}
-                                title='Tình trạng hôn nhân'
-                                placeholder='Chọn tình trạng hôn nhân của bạn'
-                                handleOnChange={(value) => {
-                                    setStateForm({
-                                        ...stateForm,
-                                        relationship: value,
-                                    })
-                                }}
-                            />
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                gap: 12,
+                            }}>
+                                <Dropdown
+                                    isRequired
+                                    options={profession}
+                                    title='Nghề nghiệp'
+                                    placeholder='Chọn nghề nghiệp của bạn'
+                                    handleOnChange={(value) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            profession: value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            profession: ''
+                                        });
+                                    }}
+                                    error={stateFormError.profession}
+                                />
+                                <Dropdown
+                                    isRequired
+                                    options={relationship}
+                                    title='Tình trạng hôn nhân'
+                                    placeholder='Chọn mối quan hệ hiện tại'
+                                    handleOnChange={(value) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            relationship: value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            relationship: ''
+                                        })
+                                    }}
+                                    error={stateFormError.relationship}
+                                />
+                            </div>
                         </div>
                         <div className='t-chart_form'>
                             <Dropdown
@@ -606,8 +699,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     setStateForm({
                                         ...stateForm,
                                         district: value,
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        district: ''
                                     })
                                 }}
+                                error={stateFormError.district}
                             />
                             <Dropdown
                                 isRequired
@@ -623,9 +721,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                         questions: listQuestion,
                                         answers: listQuestion?.map((i, idx) => 0) as any,
                                     });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        indicator: ''
+                                    })
                                 }}
+                                error={stateFormError.indicator}
                             />
-
                             {stateForm.indicator && stateForm.district?.id &&
                                 <>
                                     <h2>Bộ câu hỏi</h2>
@@ -650,7 +752,34 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     </>
                 }
                 <div className='t-chart_form_submit'>
-                    <button onClick={() => setIsOpenModal(false)}>Hủy</button>
+                    <button onClick={() => {
+                        setIsOpenModal(false);
+                        setStateForm({
+                            district: undefined as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                            fullName: "",
+                            relationship: undefined as unknown as DropdownType,
+                            phoneNumber: "",
+                            old: undefined as unknown as DropdownType,
+                            profession: undefined as unknown as DropdownType,
+                            gender: undefined as unknown as DropdownType,
+                        });
+                        setStateFormError({
+                            district: "",
+                            indicator: "",
+                            fullName: "",
+                            relationship: "",
+                            phoneNumber: "",
+                            old: "",
+                            profession: "",
+                            gender: "",
+                        });
+                    }}>Hủy đánh giá</button>
                     <button onClick={() => {
                         handleSubmit()
                     }}>
@@ -688,118 +817,124 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     </button>
                 </div>
             </CModal>
-            {/* Form đăng nhập */}
+            {/* Form hiển thị chia sẻ thành công*/}
             <CModal
-                open={states.isOpenFormLogin}
-                onClose={function (): void {
-                    setStates({ ...states, isOpenFormLogin: false })
+                open={isOpenModalConfirmAfterSubmit}
+                title='Xác nhận'
+                onClose={() => {
+                    setIsOpenModalConfirmAfterSubmit(false);
                 }}
+                zIndex="lv3"
+                className='comfirm'
+            >
+                <div className="t-chart_choose" style={{ marginTop: 20, fontSize: 16, textAlign: 'center' }}>
+                    Cảm ơn bạn đã chia sẻ đánh giá của bạn về Chỉ số Hạnh phúc với chúng tôi.
+                </div>
+                <div className='t-chart_form_submit' style={{ marginTop: 20 }}>
+                    <button onClick={() => {
+                        setStateForm({
+                            district: undefined as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                            fullName: "",
+                            relationship: undefined as unknown as DropdownType,
+                            phoneNumber: "",
+                            old: undefined as unknown as DropdownType,
+                            profession: undefined as unknown as DropdownType,
+                            gender: undefined as unknown as DropdownType,
+                        });
+                        setIsOpenModalConfirmAfterSubmit(false);
+                        setIsOpenModal(false);
+                    }}>
+                        Kết thúc Đánh giá
+                    </button>
+                    <button onClick={() => {
+                        setIsOpenModalConfirmAfterSubmit(false);
+                        setStateForm((prve) => ({
+                            ...prve,
+                            district: undefined as any,
+                            indicator: undefined as any,
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                        }))
+                    }} >
+                        Đánh giá tiếp chỉ số khác
+                    </button>
+                </div>
+            </CModal >
+            {/* Form đăng nhập */}
+            < CModal
+                open={states.isOpenFormLogin}
+                onClose={
+                    function (): void {
+                        setStates({ ...states, isOpenFormLogin: false })
+                    }
+                }
                 title={isSignUp ? 'Đăng kí tài khoản' : 'Đăng nhập ngay'}
                 className='form'
             >
-                {isSignUp ?
-                    <div className='t-header_signup'>
-                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.fullname ? 'error' : '')}>
-                            <p>Họ tên <span>*</span></p>
-                            <input
-                                type='text'
-                                autoFocus
-                                value={statesSignUp.fullname}
-                                placeholder='Nguyễn Văn A...'
-                                onChange={(event) => {
-                                    setStatesSignUp({ ...statesSignUp, fullname: event.target.value });
-                                    setStatesSignUpErr({ ...statesSignUpErr, fullname: '' })
-                                }}
-                            />
-                            <span>{statesSignUpErr.fullname}</span>
-                        </div>
-                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.email ? 'error' : '')}>
-                            <p>Email<span>*</span></p>
-                            <input
-                                type='text'
-                                autoFocus
-                                value={statesSignUp.email}
-                                placeholder='vietnam@gmail.com....'
-                                onChange={(event) => {
-                                    setStatesSignUp({ ...statesSignUp, email: event.target.value });
-                                    setStatesSignUpErr({ ...statesSignUpErr, email: '' });
-                                }}
-                            />
-                            <span>{statesSignUpErr.email}</span>
-                        </div>
-                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.phoneNumber ? 'error' : '')}>
-                            <p>Số điện thoại<span>*</span></p>
-                            <input
-                                type='text'
-                                autoFocus
-                                value={statesSignUp.phoneNumber}
-                                placeholder='096020000.....'
-                                onChange={(event) => {
-                                    setStatesSignUp({ ...statesSignUp, phoneNumber: event.target.value });
-                                    setStatesSignUpErr({ ...statesSignUpErr, phoneNumber: '' });
-                                }}
-                            />
-                            <span>{statesSignUpErr.phoneNumber}</span>
-                        </div>
-                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.password ? 'error' : '')}>
-                            <p>Mật khẩu<span>*</span></p>
-                            <input
-                                type={!statesSignUp.isHidePassword ? 'password' : 'text'}
-                                value={statesSignUp.password}
-                                placeholder='Vui lòng nhập mật khẩu...'
-                                onChange={(event) => {
-                                    setStatesSignUp({ ...statesSignUp, password: event.target.value });
-                                    setStatesSignUpErr({ ...statesSignUpErr, password: '' });
-                                }}
-                                onKeyPress={(event) => {
-                                    console.log(event)
-                                    if (event.key === "Enter") {
-                                        handleSubmit();
-                                    }
-                                }}
-                            />
-                            <span>{statesSignUpErr.password}</span>
-                        </div>
-                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.passwordConfirm ? 'error' : '')}>
-                            <p>Xác nhận mật khẩu<span>*</span></p>
-                            <input
-                                type={!statesSignUp.isHidePassword ? 'password' : 'text'}
-                                value={statesSignUp.passwordConfirm}
-                                placeholder='Vui lòng nhập mật khẩu...'
-                                onChange={(event) => {
-                                    setStatesSignUp({ ...statesSignUp, passwordConfirm: event.target.value });
-                                    setStatesSignUpErr({ ...statesSignUpErr, passwordConfirm: '' });
-                                }}
-                                onKeyPress={(event) => {
-                                    console.log(event)
-                                    if (event.key === "Enter") {
-                                        handleSubmit();
-                                    }
-                                }}
-                            />
-                            <span>{statesSignUpErr.passwordConfirm}</span>
-                        </div>
-                    </div>
-                    :
-                    <>
-                        <div className='t-header_form'>
-                            <div className='t-header_form_item'>
-                                <p>Email</p>
+                {
+                    isSignUp ?
+                        <div className='t-header_signup'>
+                            < div className={mapModifiers('t-header_signup_item', statesSignUpErr.fullname ? 'error' : '')} >
+                                <p>Họ tên <span>*</span></p>
                                 <input
                                     type='text'
                                     autoFocus
-                                    value={statesLogin.username}
-                                    placeholder='Vui lòng nhập email...'
-                                    onChange={(event) => setStatesLogin({ ...statesLogin, username: event.target.value })}
+                                    value={statesSignUp.fullname}
+                                    placeholder='Nguyễn Văn A...'
+                                    onChange={(event) => {
+                                        setStatesSignUp({ ...statesSignUp, fullname: event.target.value });
+                                        setStatesSignUpErr({ ...statesSignUpErr, fullname: '' })
+                                    }}
                                 />
-                            </div>
-                            <div className='t-header_form_item'>
-                                <p>Mật khẩu</p>
+                                <span>{statesSignUpErr.fullname}</span>
+                            </div >
+                            <div className={mapModifiers('t-header_signup_item', statesSignUpErr.email ? 'error' : '')}>
+                                <p>Email<span>*</span></p>
                                 <input
-                                    type={!statesLogin.isHidePassword ? 'password' : 'text'}
-                                    value={statesLogin.password}
+                                    type='text'
+                                    autoFocus
+                                    value={statesSignUp.email}
+                                    placeholder='vietnam@gmail.com....'
+                                    onChange={(event) => {
+                                        setStatesSignUp({ ...statesSignUp, email: event.target.value });
+                                        setStatesSignUpErr({ ...statesSignUpErr, email: '' });
+                                    }}
+                                />
+                                <span>{statesSignUpErr.email}</span>
+                            </div>
+                            <div className={mapModifiers('t-header_signup_item', statesSignUpErr.phoneNumber ? 'error' : '')}>
+                                <p>Số điện thoại<span>*</span></p>
+                                <input
+                                    type='text'
+                                    autoFocus
+                                    value={statesSignUp.phoneNumber}
+                                    placeholder='096020000.....'
+                                    onChange={(event) => {
+                                        setStatesSignUp({ ...statesSignUp, phoneNumber: event.target.value });
+                                        setStatesSignUpErr({ ...statesSignUpErr, phoneNumber: '' });
+                                    }}
+                                />
+                                <span>{statesSignUpErr.phoneNumber}</span>
+                            </div>
+                            <div className={mapModifiers('t-header_signup_item', statesSignUpErr.password ? 'error' : '')}>
+                                <p>Mật khẩu<span>*</span></p>
+                                <input
+                                    type={!statesSignUp.isHidePassword ? 'password' : 'text'}
+                                    value={statesSignUp.password}
                                     placeholder='Vui lòng nhập mật khẩu...'
-                                    onChange={(event) => setStatesLogin({ ...statesLogin, password: event.target.value })}
+                                    onChange={(event) => {
+                                        setStatesSignUp({ ...statesSignUp, password: event.target.value });
+                                        setStatesSignUpErr({ ...statesSignUpErr, password: '' });
+                                    }}
                                     onKeyPress={(event) => {
                                         console.log(event)
                                         if (event.key === "Enter") {
@@ -807,9 +942,58 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                         }
                                     }}
                                 />
+                                <span>{statesSignUpErr.password}</span>
                             </div>
-                        </div>
-                    </>
+                            <div className={mapModifiers('t-header_signup_item', statesSignUpErr.passwordConfirm ? 'error' : '')}>
+                                <p>Xác nhận mật khẩu<span>*</span></p>
+                                <input
+                                    type={!statesSignUp.isHidePassword ? 'password' : 'text'}
+                                    value={statesSignUp.passwordConfirm}
+                                    placeholder='Vui lòng nhập mật khẩu...'
+                                    onChange={(event) => {
+                                        setStatesSignUp({ ...statesSignUp, passwordConfirm: event.target.value });
+                                        setStatesSignUpErr({ ...statesSignUpErr, passwordConfirm: '' });
+                                    }}
+                                    onKeyPress={(event) => {
+                                        console.log(event)
+                                        if (event.key === "Enter") {
+                                            handleSubmit();
+                                        }
+                                    }}
+                                />
+                                <span>{statesSignUpErr.passwordConfirm}</span>
+                            </div>
+                        </div >
+                        :
+                        <>
+                            <div className='t-header_form'>
+                                <div className='t-header_form_item'>
+                                    <p>Email</p>
+                                    <input
+                                        type='text'
+                                        autoFocus
+                                        value={statesLogin.username}
+                                        placeholder='Vui lòng nhập email...'
+                                        onChange={(event) => setStatesLogin({ ...statesLogin, username: event.target.value })}
+                                    />
+                                </div>
+                                <div className='t-header_form_item'>
+                                    <p>Mật khẩu</p>
+                                    <input
+                                        type={!statesLogin.isHidePassword ? 'password' : 'text'}
+                                        value={statesLogin.password}
+                                        placeholder='Vui lòng nhập mật khẩu...'
+                                        onChange={(event) => setStatesLogin({ ...statesLogin, password: event.target.value })}
+                                        onKeyPress={(event) => {
+                                            console.log(event)
+                                            if (event.key === "Enter") {
+                                                handleSubmit();
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        </>
                 }
                 <div className='t-header_form_toogle'>
                     <input type="checkbox" value={statesLogin.isHidePassword as any} onChange={(event) => {
@@ -847,7 +1031,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                         }
                     </button>
                 </div>
-            </CModal>
+            </ CModal>
         </>
     )
 };

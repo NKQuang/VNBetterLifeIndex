@@ -405,12 +405,39 @@
     width: 100%;
 }
 
+.t-chart_info_customer .t-chart_info_item p span {
+    color: #f00;
+}
+
 .t-chart_info_customer .t-chart_info_item input {
     height: 38px;
     border-radius: 4px;
     border-color: #dbdbdb;
     margin-bottom: 12px;
 }
+
+.t-chart_info_item-error {
+    margin-bottom: 4px;
+}
+
+.t-chart_info_item-error p,
+.t-chart_info_item-error span {
+    color: #f00;
+}
+
+.t-chart_info_item p {
+    font-weight: 600;
+}
+
+.t-chart_info_item-error span {
+    font-size: 13px;
+}
+
+.t-chart_info_item-error input {
+    border-color: #f00 !important;
+    margin-bottom: 0 !important;
+}
+
 
 @keyframes animateShowerUnit {
     0% {

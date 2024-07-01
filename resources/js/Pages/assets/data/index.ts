@@ -171,8 +171,8 @@ export const relationship = [
 ]
 
 export const gender = [
-    { label: 'Nam', value: 0 },
-    { label: 'Nữ', value: 1 },
+    { label: 'Nam', value: '0' },
+    { label: 'Nữ', value: '1' },
 ]
 
 export const profession = [

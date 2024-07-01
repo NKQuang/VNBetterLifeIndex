@@ -1,5 +1,6 @@
 .a-dropdown {
     margin-bottom: 16px;
+    width: 100%;
 }
 
 .a-dropdown_header {
@@ -8,4 +9,26 @@
 
 .a-dropdown_header span {
     color: #f00;
+}
+
+.a-dropdown .a-dropdown-error span,
+.a-dropdown .a-dropdown-error .a-dropdown_header {
+    color: #f00;
+}
+
+.a-dropdown .a-dropdown_header {
+    font-weight: 600;
+}
+
+.a-dropdown-error span,
+.a-dropdown-error .a-dropdown_header {
+    color: #f00;
+}
+
+.a-dropdown-error .a-dropdown_input .css-13cymwt-control {
+    border-color: #f00;
+}
+
+.a-dropdown-error .a-dropdown-error span {
+    font-size: 13px;
 }

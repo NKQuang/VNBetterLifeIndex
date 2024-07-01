@@ -190,9 +190,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 <div className="t-header_left">
                     <img className="t-mobile_header_icon" src={icLogo}></img>
                     <a href="/" className="site-header__logo js-site-header__logo">
-                        <p>Chỉ số </p>
-                        <p>phồn vinh</p>
-                        <p>hạnh phúc</p>
+                        <p>phồn vinh - hạnh phúc</p>
                     </a>
                     <div>(WBI)</div>
                 </div>

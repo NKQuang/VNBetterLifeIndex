@@ -76,7 +76,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
         <div
             key={value}
             style={{
-                height: Number(value * unit + 20),
+                height: Number(value * unit + 17),
                 animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
             }}
             className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal', isActive && 'flower-active')}

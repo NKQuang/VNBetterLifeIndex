@@ -11,7 +11,7 @@ import CDrawer from '../../molecules/drawer';
 import Loading from '../../atoms/loading';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import Slider from '../../atoms/slider';
-import { gender, RangeOld, relationship } from '../../../assets/data';
+import { gender, profession, RangeOld, relationship } from '../../../assets/data';
 import Footer from '../footer';
 
 interface MobileSreenProps {
@@ -619,20 +619,17 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     })
                                 }}
                             />
-                            <div className='t-chart_info_item'>
-                                <p>Nghề nghiệp</p>
-                                <input
-                                    type='text'
-                                    autoFocus
-                                    placeholder=''
-                                    onChange={(event) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            profession: event.target.value,
-                                        })
-                                    }}
-                                />
-                            </div>
+                            <Dropdown
+                                options={profession}
+                                title='Nghề nghiệp'
+                                placeholder='Chọn nghề nghiệp của bạn'
+                                handleOnChange={(value) => {
+                                    setStateForm({
+                                        ...stateForm,
+                                        profession: value,
+                                    })
+                                }}
+                            />
                             <Dropdown
                                 options={relationship}
                                 title='Tình trạng hôn nhân'
@@ -700,7 +697,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     </>
                 }
                 <div className='t-chart_form_submit'>
-                    <button onClick={() => setIsOpenModal(false)}>Hủy</button>
+                    <button onClick={() => setIsOpenModal(false)}>Hủy đánh giá</button>
                     <button onClick={() => {
                         handleSubmit()
                     }}>
