@@ -395,6 +395,12 @@
     overflow-y: scroll;
 }
 
+.o-modal-confirm_vote .react-responsive-modal-modal {
+    min-height: unset;
+    height: fit-content;
+    max-height: unset;
+}
+
 .o-modal-form-rating .react-responsive-modal-modal::-webkit-scrollbar {
     display: none;
 }
