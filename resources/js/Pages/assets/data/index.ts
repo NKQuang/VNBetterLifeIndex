@@ -182,4 +182,5 @@ export const profession = [
     { label: 'Chủ doanh nghiệp', value: 'Chủ doanh nghiệp' },
     { label: 'Đã nghỉ hưu', value: 'Đã nghỉ hưu' },
     { label: 'Thất nghiệp', value: 'Thất nghiệp' },
+    { label: 'Khác', value: 'Khác' },
 ]
