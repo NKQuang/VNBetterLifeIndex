@@ -179,9 +179,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     }
 
     const handleSubmit = () => {
-        console.log("🚀 ~ handleSubmit ~ !isSignUp && !handleValidateSignIn():", !isSignUp && !handleValidateSignIn())
-        console.log("🚀 ~ handleSubmit ~ isSignUp && !handleValidateSignUp():", isSignUp && !handleValidateSignUp())
-
         if (isSignUp && !handleValidateSignUp()) return;
         if (!isSignUp && !handleValidateSignIn()) return;
         const bodySignIn = {

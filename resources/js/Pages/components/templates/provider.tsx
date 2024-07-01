@@ -7,7 +7,7 @@ import React, {
     useState,
 } from "react";
 import { districtItem } from "./chart";
-import { District, Question, ResponseGetdistricts, User } from "../../services/apis/types";
+import { District, Question, renderChartIndicator, ResponseGetdistricts, User } from "../../services/apis/types";
 import { DropdownType } from "../atoms/dropdown";
 
 type ThemeType = 'light' | 'dark';
@@ -40,6 +40,7 @@ interface ChartContextData {
     theme: ThemeType;
     userInfo: User | undefined;
     handleSetInfoUser: (newTheme: User) => void;
+    allIndicators: renderChartIndicator[] | undefined
 }
 
 interface ChartProviderProps {
@@ -65,6 +66,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [sreenWidth, setSreenWidth] = useState(window.innerWidth);
     const [theme, setTheme] = useState<ThemeType>('light');
     const [userInfo, setUserInfo] = useState<User>();
+    const [allIndicators, setAllIndicators] = useState<renderChartIndicator[]>();
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -116,7 +118,13 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             id: item.district_id,
             label: item.district,
             value: item.district,
-        }))
+        }));
+        const flatIndicator = data.flatMap((item, index) => item.indicators.map((ytem) => ({
+            ...ytem,
+            district_id: item.district_id,
+            district: item.district,
+        })))
+        setAllIndicators([...flatIndicator] as any);
         setDistricts(listDistrict);
         setIndicators(defineIndicators);
         setTimeout(() => {
@@ -161,7 +169,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             theme,
             handleSetTheme,
             userInfo,
-            handleSetInfoUser
+            handleSetInfoUser,
+            allIndicators
         }),
         [chartData,
             loading,
@@ -178,7 +187,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             token,
             sreenWidth,
             theme,
-            userInfo
+            userInfo,
+            allIndicators
         ]
     );
 
