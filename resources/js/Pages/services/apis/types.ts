@@ -53,3 +53,20 @@ export interface User {
     updated_at: Date;
     profile_photo_url: string;
 }
+
+
+
+
+export interface IndicatorChart {
+    district_id: string | number;
+    district: string;
+    indicator_id: string;
+    indicator: string;
+    value: number;
+    weightedValue: number;
+}
+
+export interface renderChartIndicator extends IndicatorChart {
+    district_id: string | number;
+    district: string;
+}

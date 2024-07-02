@@ -20,6 +20,8 @@ import FlowerChartMobile, { districtItem, Indicator } from '../../templates/char
 import { colorsPetal } from '../../atoms/flower';
 
 import { SortType } from '../../templates/chart';
+import CTooltip from '../../atoms/tooltip';
+import Loading from '../../atoms/loading';
 
 const IconAllowIndicators = [icIncome, icJobs, icHearth, icEducation, icHousing, icSatisfaction, icEnvironment, icSafety, icWorkLifeBalance, icCommunity, icCivicEngagement, icAdministration]
 
@@ -43,6 +45,7 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
         handleSetIsFilter,
         infoDetail,
         handleSetInfoDetail,
+        loading,
     } = useBetterLife();
 
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
@@ -88,7 +91,7 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
     return (
         <div className={mapModifiers('t-mobile_body', theme)}>
             <div className="t-mobile_body_flower">
-                <FlowerChartMobile isMobile={sreenWidth < 1024} />
+                <FlowerChartMobile isMobile={sreenWidth < 1025} />
             </div>
             {isShowDetail &&
                 <div className='p-district_back' onClick={() => {
@@ -100,6 +103,24 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                     <i className="fa-solid fa-arrow-left-long" style={{ fontSize: 30, color: '#0141a1' }}></i>
                 </div>
             }
+            {isShowDetail ?
+                <ul>
+                    {
+                        loading ?
+                            <Loading />
+                            :
+
+                            infoDetail?.indicators?.map((indicator, index) => (
+                                <li key={indicator.indicator_id} style={{
+                                }}>
+                                    <span style={{
+                                        backgroundColor: colorsPetal[index],
+                                        fontSize: 12,
+                                    }}>{indicator.indicator}:  {indicator.value}</span>
+                                </li>
+                            ))}
+                </ul>
+                : null}
             {isShowDetail ? null :
                 <div className="t-mobile_body_filter">
                     {idIndicatorsActive !== 99 ?

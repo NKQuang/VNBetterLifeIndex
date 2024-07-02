@@ -9,6 +9,7 @@ import { mapModifiers } from '../../utils/functions';
 import ChartDetailDistrict from '../../components/templates/detail-district';
 import Footer from '../../components/templates/footer';
 import MobileSreen from '../../components/templates/mobile';
+import CTooltip from '../../components/atoms/tooltip';
 
 export const ChartContext = createContext({} as any);
 
@@ -22,7 +23,8 @@ const HomePage: React.FC = () => {
     isShowDetail,
     loading,
     districtIndicators,
-    isSignIn,
+    indicators,
+    allIndicators,
     handleUpdateSignIn,
     districtActive,
     sreenWidth,
@@ -81,6 +83,36 @@ const HomePage: React.FC = () => {
     handleUpdateDistrictIndicators(districts ?? {} as any);
   }
 
+  const renderChart = () => {
+    return (
+      <div className='p-home_content_indicators'>
+        {indicators?.map((item, index) => {
+          const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label)
+
+          return (
+            <div className='p-home_content_indicators_item'>
+              <h2>{item.label}</h2>
+              <div className='p-home_content_indicators_item_wrapper' style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: 4,
+              }}>
+                {aIndicator?.map((i, idx) => <CTooltip content={`${i.district}: ${i.value}`}>
+                  <div style={{
+                    backgroundColor: districtActive?.id === i.district_id ? '#f00' : '#333',
+                    height: i.value * 10,
+                    width: '16px',
+                  }} />
+                </CTooltip>)}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
   const renderContenDistrictActive = () => {
     return (
       <div className='p-home_content p-home_desc'>
@@ -90,13 +122,14 @@ const HomePage: React.FC = () => {
             {districtActive?.content}
           </p>
         </div>
+        {renderChart()}
       </div>
     )
   }
 
   const handleRender = () => {
     return (
-      sreenWidth > 1024 ?
+      sreenWidth > 1025 ?
         (
           <div className='p-home'>
             <Header />

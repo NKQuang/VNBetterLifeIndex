@@ -24,7 +24,7 @@ const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => 
             id='flower'
             viewBox="-140 -140 280 280"
             height={200}
-            style={{ animation: sreenWidth > 1024 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}
+            style={{ animation: sreenWidth > 1025 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

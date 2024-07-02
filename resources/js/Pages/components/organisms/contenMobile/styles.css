@@ -137,6 +137,33 @@
   width: 24px;
 }
 
+.t-mobile_body ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px 8px 0;
+}
+
+.t-mobile_body ul .a-loading {
+  background-color: transparent;
+}
+
+.t-mobile_body ul li {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.t-mobile_body ul li span {
+  padding: 4px 8px;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: (1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+  border-radius: 4px;
+}
+
 @media screen and (max-width: 660px) {
   .t-mobile_body .t-mobile_body_filter .t-mobile_body_filter_wrapper {
     grid-template-columns: repeat(6, 1fr);
