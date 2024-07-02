@@ -96,6 +96,11 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email', // Email is required
             'phone' => 'required|string|max:15|unique:users,phone', // Phone is required
+            'gender' => 'nullable|integer|in:0,1',
+            'old' => 'nullable|string',
+            'profession' => 'nullable|string|max:255',
+            'relationship' => 'nullable',
+            'address' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed', // Ensure password confirmation
             'terms' => 'required|accepted', // Ensure terms are accepted
         ]);
@@ -109,6 +114,11 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'gender' => $request->gender,
+            'old' => $request->old,
+            'profession' => $request->profession,
+            'marital_status' => $request->relationship,
+            'address' => $request->address,
             'password' => Hash::make($request->password),
         ]);
 
@@ -117,9 +127,6 @@ class AuthController extends Controller
             'message' => 'User registered successfully',
             'user' => $user,
         ]);
-    }
-    public function logincheck(Request $request) {
-
     }
 }
 

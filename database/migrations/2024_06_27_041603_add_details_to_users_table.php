@@ -12,16 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('gender')->default(0);
-            $table->integer('old')->nullable();
+            $table->tinyInteger('gender')->nullable(); // 0: Nam, 1: Nữ
+            $table->enum('old', ['0-15', '15-25', '25-35', '35-45', '45-55', '55-65', '>65']);
             $table->string('profession')->nullable();
-            $table->unsignedBigInteger('district_id')->nullable();
-            $table->unsignedBigInteger('region_id')->nullable();
-
-            // Thiết lập khóa ngoại
-            $table->foreign('district_id')->references('id')->on('districts')->onDelete('set null');
-            $table->foreign('region_id')->references('id')->on('regions')->onDelete('set null');
+            $table->string('marital_status')->nullable();
         });
+
     }
 
     /**
@@ -30,15 +26,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['district_id']);
-            $table->dropForeign(['region_id']);
+
             $table->dropColumn('gender');
-            $table->dropColumn('age_group');
-            $table->dropColumn('education');
-            $table->dropColumn('occupation');
-            $table->dropColumn('family_status');
-            $table->dropColumn('district_id');
-            $table->dropColumn('region_id');
+            $table->dropColumn('old');
+            $table->dropColumn('profession');
+            $table->dropColumn('marital_status');
         });
     }
 };

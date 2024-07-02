@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/tailwind/tailwind.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/loopple/loopple.css') }}">
+    @livewireStyles
 </head>
 
 <body>
@@ -25,6 +26,7 @@
         <x-alert />
         @yield('content')
     </div>
+    @livewireScripts
     <script src="{{ asset('assets/js/chartjs.min.js') }}"></script>
     <script src="{{ asset('assets/js/soft-ui-dashboard-tailwind.js') }}" async></script>
     <script>
