@@ -37,7 +37,10 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/indicators', [App\Http\Controllers\DashboardController::class, 'getAllIndicators'])->name('dashboard.indicators');
 
     Route::get('/indicator-values', [App\Http\Controllers\DashboardController::class, 'getAllIndicatorsValue'])->name('dashboard.indicator-values');
+
     Route::post('/import/excel', [App\Http\Controllers\DashboardController::class, 'inportExcel'])->name('import.excel');
+    Route::post('/users/export', [App\Http\Controllers\DashboardController::class, 'export']);
+
     Route::get('/user/{id}/edit', [App\Http\Controllers\UserController::class, 'editUser'])->name('user.edit');
     Route::get('/user/{id}/blockUser', [App\Http\Controllers\UserController::class, 'blockUser'])->name('user.blockUser');
     Route::put('/user/{id}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('user.update');
@@ -55,11 +58,6 @@ Route::group(['middleware' => 'admin'], function () {
     // Route để cập nhật
     Route::put('/dashboard/indicator-values/{id}', [IndicatorValueController::class, 'update'])->name('dashboard.indicator-values.update');
 
-    Route::delete('/populations/{id}', [PopulationController::class, 'destroy'])->name('populations.destroy');
-    Route::get('/populations/{id}/edit', [PopulationController::class, 'edit'])->name('populations.edit');
-    Route::put('/populations/{id}', [PopulationController::class, 'update'])->name('populations.update');
-    Route::get('/populations/create', [PopulationController::class, 'create'])->name('populations.create');
-    Route::post('/populations/store', [PopulationController::class, 'store'])->name('populations.store');
 
     Route::delete('/weights/{id}', [WeightController::class, 'destroy'])->name('weights.destroy');
     Route::get('/weights/edit', [WeightController::class, 'edit'])->name('weights.edit');

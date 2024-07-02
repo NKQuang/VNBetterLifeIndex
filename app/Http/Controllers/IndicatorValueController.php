@@ -73,6 +73,19 @@ class IndicatorValueController extends Controller
             if (!$user) {
                 return response()->json(['error' => 'Invalid user_id'], 422);
             }
+        } else{
+            $user = User::create([
+                'name' => $request->full_name,
+                'gender' => $request->gender,
+                'phone' => $request->phone_number,
+                'old' => $request->old,
+                'profession' => $request->profession,
+                'marital_status' => $request->relationship,
+                'status' => 99,
+                'email' => null,
+                'password' => null,
+                'role' => 'anonymous'
+            ]);
         }
 
         $questionsId = $request->input('questions_id');
@@ -105,16 +118,6 @@ class IndicatorValueController extends Controller
             $indicatorValue->question_code = $questionCode;
             $indicatorValue->value = $value;
             $indicatorValue->name = $name;
-
-            $indicatorValue->full_name = $request->full_name;
-            $indicatorValue->gender = $request->gender;
-            $indicatorValue->phone_number = $request->phone_number;
-            if ($request->old != null) {
-                $indicatorValue->old = $request->old;
-            }
-
-            $indicatorValue->profession = $request->profession;
-            $indicatorValue->marital_status = $request->relationship;
             if ($user) {
                 $indicatorValue->user_id = $user->id;
             }

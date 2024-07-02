@@ -45,7 +45,7 @@
                             <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                 <p class="mb-0 font-semibold leading-tight text-xs"><i class="fa-solid fa-bullseye"></i> {{ $row->value }}</p>
                             </td>
-                            <td class="p-2 text-center align-middle bg-transparent border-b shadow-transparent  break-words whitespace-normal ">
+                            <td class="p-2 text-left align-middle bg-transparent border-b shadow-transparent  break-words whitespace-normal max-w-xs">
                                 <span class="font-semibold leading-tight text-xs text-slate-400 "> {{ $row->question->title ?? 'N/A' }}</span>
                             </td>
 
@@ -65,10 +65,16 @@
                     </tbody>
                 </table>
                  <!-- Pagination Links -->
-                 <div class="mt-4 p-2">
-                    {{ $indicators_value->appends(request()->input())->links('vendor.pagination.tailwind') }}
-                </div>
 
+                <nav class="mx-2 my-2 text-center">
+                    <div>
+                        Trang {{ $indicators_value->currentPage() }} / {{ $indicators_value->lastPage() }} -
+                        Đang hiển thị {{ $indicators_value->firstItem() }} tới {{ $indicators_value->lastItem() }} trong {{ $indicators_value->total() }} kết quả
+                    </div>
+                    <ul class="inline-flex -space-x-px text-base h-10">
+                        {!! $indicators_value->links('vendor.pagination.pagination-custom') !!}
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

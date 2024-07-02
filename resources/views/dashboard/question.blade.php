@@ -52,9 +52,15 @@
                     </tbody>
                 </table>
                 <!-- Pagination Links -->
-                <div class="mt-4 p-2">
-                    {{ $questions->links('vendor.pagination.tailwind') }}
-                </div>
+                <nav class="mx-2 my-2 text-center">
+                    <div>
+                        Trang {{ $questions->currentPage() }} / {{ $questions->lastPage() }} -
+                        Đang hiển thị {{ $questions->firstItem() }} tới {{ $questions->lastItem() }} trong {{ $questions->total() }} kết quả
+                    </div>
+                    <ul class="inline-flex -space-x-px text-base h-10">
+                        {!! $questions->links('vendor.pagination.pagination-custom') !!}
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>

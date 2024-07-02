@@ -33,8 +33,9 @@ class User extends Authenticatable
         'gender',
         'old',
         'profession',
-        'district_id',
-        'region_id',
+        'marital_status',
+        'status',
+        'role'
     ];
 
     /**
@@ -70,14 +71,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-     // Định nghĩa quan hệ với bảng districts và regions
-     public function district()
-     {
-         return $this->belongsTo(Districts::class);
-     }
 
-     public function region()
-     {
-         return $this->belongsTo(Regions::class);
-     }
 }
