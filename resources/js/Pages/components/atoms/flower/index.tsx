@@ -35,7 +35,4 @@ const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => 
     );
 }
 
-Flower.defaultProps = {
-};
-
 export default Flower;

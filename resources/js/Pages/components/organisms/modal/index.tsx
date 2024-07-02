@@ -15,7 +15,7 @@ interface MotionProps {
     className?: string;
 }
 
-const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex, className }) => {
+const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex = 'lv1', className }) => {
     return (
         <div className={mapModifiers('o-modal', zIndex, className)}>
             <Modal
@@ -39,9 +39,5 @@ const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex,
     )
 
 }
-
-CModal.defaultProps = {
-    zIndex: 'lv1'
-};
 
 export default CModal;

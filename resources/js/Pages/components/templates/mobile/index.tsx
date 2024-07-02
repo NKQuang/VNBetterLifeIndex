@@ -13,6 +13,9 @@ import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import Slider from '../../atoms/slider';
 import { gender, profession, RangeOld, relationship } from '../../../assets/data';
 import Footer from '../footer';
+import CTooltip from '../../atoms/tooltip';
+import CSkeleton from '../../atoms/skeleton';
+import icImprovementLight from '../../../assets/images/voting.svg';
 
 interface MobileSreenProps {
 }
@@ -28,7 +31,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         isSignIn,
         loading,
         districtActive,
-        districts, indicators, questions, handleSetInfoUser, isShowDetail
+        districts, indicators, questions, handleSetInfoUser, isShowDetail, allIndicators
     } = useBetterLife();
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const refMenu = useRef<HTMLUListElement>(null)
@@ -289,6 +292,16 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 }}
             />
             <div style={{ display: 'block', height: 72 }} />
+            <button className='t-mobile_button_rating' onClick={() => {
+                if (isSignIn) {
+                    setIsOpenModal(true)
+                } else {
+                    setIsOpenModalConfirm(true)
+                }
+            }}>
+                <img src={icImprovementLight} />
+                <span>Chia sẻ ngay</span>
+            </button>
             <ContentMobile handleLogin={() => {
                 setStatesLogin({ ...statesLogin, isOpenFormLogin: true });
                 setIsSignUp(false);
@@ -296,8 +309,9 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             <div style={{ marginTop: 12, padding: '4px 8px' }}>
                 {
                     loading ?
-                        <div style={{ height: 200, width: '98vw' }}>
-                            <Loading />
+                        <div style={{ height: 'fit-content', width: '95vw' }}>
+                            <CSkeleton style={{ marginBottom: 8 }} height={48} />
+                            <CSkeleton count={3} height={20} />
                         </div>
                         :
                         isShowDetail ? <div className='p-home_content p-home_desc'>
@@ -314,6 +328,40 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     <p style={{ color: '#000' }}>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
                                 </div>
                             </div>
+                }
+            </div>
+            <div className={mapModifiers('t-mobile_body_indicator')}>
+                {
+                    isShowDetail ?
+                        loading ?
+                            <div style={{ height: 'fit-content', width: '90vw' }}>
+                                <CSkeleton count={1} height={30} />
+                                <CSkeleton count={1} height={10} width={30} />
+                                <CSkeleton count={1} height={120} />
+                            </div>
+                            :
+                            indicators?.map((item, index) => {
+                                const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label).sort((a, b) => a.value - b.value)
+                                return (
+                                    <div className='t-mobile_body_indicator_item' key={index}>
+                                        <div className='t-mobile_body_indicator_item_title'>
+                                            <h2>{item.label}</h2>
+                                            <p>{aIndicator?.find((i) => i.district_id === districtActive?.id)?.value?.toFixed(2)}</p>
+                                        </div>
+                                        <div className='t-mobile_body_indicator_item_wrapper'>
+                                            {aIndicator?.map((i, idx) => <CTooltip key={idx} content={`${i.district}: ${i.value.toFixed(2)}`}>
+                                                <div
+                                                    className={mapModifiers('t-mobile_body_indicator_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
+                                                    style={{
+                                                        height: i.value * 12,
+                                                        width: '20px',
+                                                    }} />
+                                            </CTooltip>)}
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        : null
                 }
             </div>
             <Footer />
@@ -547,7 +595,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                 <h2>Bộ câu hỏi</h2>
                                 <ul className='t-chart_form_list'>
                                     {stateForm?.questions?.map((record, index) => (
-                                        <li key={record.value}>
+                                        <li key={index}>
                                             <p>{record.label}</p>
                                             <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
                                                 const newSliderValues = [...stateForm.answers] as any;
@@ -678,7 +726,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     <h2>Bộ câu hỏi</h2>
                                     <ul className='t-chart_form_list'>
                                         {stateForm?.questions?.map((record, index) => (
-                                            <li key={record.value}>
+                                            <li key={index}>
                                                 <p>{record.label}</p>
                                                 <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
                                                     const newSliderValues = [...stateForm.answers] as any;
@@ -739,9 +787,5 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         </div>
     )
 }
-
-MobileSreen.defaultProps = {
-    children: undefined,
-};
 
 export default MobileSreen;

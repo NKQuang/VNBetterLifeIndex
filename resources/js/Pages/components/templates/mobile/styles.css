@@ -7,6 +7,37 @@
   z-index: 0;
 }
 
+.t-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.t-mobile .t-mobile_button_rating {
+  position: fixed;
+  top: 80px;
+  height: 36px;
+  right: 10px;
+  z-index: 10;
+  min-width: 130px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #00a53f;
+  padding: 3px 8px;
+  border-radius: 4px;
+  gap: 6px;
+  box-shadow: 2px 2px 5px 0px rgba(172, 172, 172, 0.3);
+}
+
+.t-mobile .t-mobile_button_rating img {
+  width: 24px;
+}
+
+.t-mobile .t-mobile_button_rating span {
+  width: max-content;
+  color: #fff;
+  font-weight: 600;
+}
+
 .t-mobile .t-mobile_menu {
   position: absolute;
   height: fit-content;
@@ -15,8 +46,8 @@
   margin: 0;
   padding: 0;
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.3);
-  transition: top 1s ease-in-out, box-shadow 1s ease-in;
-  z-index: 1;
+  transition: top .5s ease-in-out, box-shadow 1s ease-in;
+  z-index: 100;
 }
 
 .t-mobile-light .t-mobile_menu {
@@ -53,7 +84,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100;
+  z-index: 101;
   overflow: hidden;
 }
 
@@ -67,81 +98,6 @@
   box-shadow: 0px 0px 7px 0px rgba(255, 255, 255, 0.774);
 }
 
-.t-mobile_header_action {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 10px;
-  margin-right: 12px;
-  width: 100%;
-}
-
-.t-mobile_header_action button {
-  border: unset;
-  background-color: unset;
-  cursor: pointer;
-}
-
-.t-mobile_header_action button:focus {
-  background-color: unset;
-}
-
-.t-mobile_header_action button:first-child {
-  min-width: 130px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #00a53f;
-  padding: 3px 8px;
-  border-radius: 4px;
-  gap: 6px;
-  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.3);
-}
-
-.t-mobile_header_action button:first-child img {
-  width: 24px;
-}
-
-.t-mobile_header_action button:first-child span {
-  width: max-content;
-  color: #fff;
-  font-weight: 600;
-}
-
-.t-mobile-dark .t-mobile_header_action button:first-child {
-  background-color: #fff;
-  transition: background-color .1s ease;
-}
-
-.t-mobile_header_action button img {
-  height: 30px;
-  width: 47px;
-}
-
-.t-mobile_header_logo {
-  height: 100%;
-  width: 100%;
-  margin-left: 12px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-}
-
-.t-mobile_header_logo p {
-  font-size: 32px;
-  font-weight: 800;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-transform: uppercase;
-  color: #00a53f;
-}
-
-.t-mobile_header_icon {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;
-}
 
 .o-modal-form_mobile .react-responsive-modal-modal {
   height: fit-content;

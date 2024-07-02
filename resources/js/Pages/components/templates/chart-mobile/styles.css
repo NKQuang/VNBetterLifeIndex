@@ -1,7 +1,7 @@
 .t-chart-mobile {
     height: fit-content;
     position: relative;
-    padding: 12px 8px 0 4px;
+    padding: 30px 8px 0 4px;
     background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
     width: 100vw;
     display: grid;
@@ -18,26 +18,12 @@
 
 
 .t-chart-mobile .t-chart_main .m-column-flower-active {
-    margin: 0 90px;
+    margin: 0 50px;
 }
 
 .t-chart-mobile .t-chart_main .m-column-flower-active svg {
     filter: drop-shadow(3px 2px 1px #494949)
 }
-
-/* 
-.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile svg {
-    filter: drop-shadow(1px 5px 1px #7c4119)
-}
-
-.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile .m-column_content_line {
-    width: 4px;
-    background-color: rgb(0, 184, 40);
-}
-
-.t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile .m-column_content_name {
-    color: rgb(0, 92, 20);
-} */
 
 .t-chart-mobile .t-chart_form {
     min-height: 60vh;

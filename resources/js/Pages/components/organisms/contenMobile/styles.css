@@ -140,6 +140,7 @@
 .t-mobile_body ul {
   display: flex;
   flex-wrap: wrap;
+  flex-flow: wrap;
   gap: 6px;
   padding: 12px 8px 0;
 }
@@ -162,6 +163,71 @@
   text-overflow: ellipsis;
   color: #fff;
   border-radius: 4px;
+}
+
+.t-mobile_body_indicator {
+  gap: 4px;
+  min-height: 100px;
+  padding: 4px 20px;
+  margin-top: 20px;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item {
+  margin: 0 16px 12px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 1px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.t-mobile_body_indicator_item_wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item:last-child {
+  border-bottom: 1px solid #dbdbdb;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item:first-child {
+  border-top: unset;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item_title h2 {
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: capitalize;
+  color: #002b64;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item_title p {
+  font-weight: 400;
+  font-size: 18px;
+  color: #8da0b6;
+}
+
+.t-mobile_body_indicator .t-mobile_body_indicator_item_wrapper>div>div {
+  border-radius: 8px 8px 0 0;
+}
+
+.t-mobile_body_indicator_item_wrapper_colum-active {
+  background-color: rgb(255, 81, 0);
+}
+
+.t-mobile_body_indicator_item_wrapper_colum-normal {
+  background-color: #0066db;
+}
+
+.t-mobile_body_indicator_item_wrapper_colum-active:hover {
+  background-color: rgb(0, 100, 30);
+}
+
+.t-mobile_body_indicator_item_wrapper_colum-normal:hover {
+  background-color: #333;
 }
 
 @media screen and (max-width: 660px) {

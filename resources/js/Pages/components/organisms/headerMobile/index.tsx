@@ -7,7 +7,6 @@ import icMoon from '../../../assets/images/half-moon.svg';
 import icMenuLight from '../../../assets/images/menu-light.svg';
 import icMenuDark from '../../../assets/images/menu-dark.svg';
 import icClose from '../../../assets/images/delete.svg';
-import icImprovementLight from '../../../assets/images/voting.svg';
 
 import { useBetterLife } from '../../templates/provider';
 
@@ -53,10 +52,6 @@ const HeaderMobile: React.FC<MobileSreenProps> = ({
                     <p>WBI</p>
                 </div>
                 <div className='t-mobile_header_action'>
-                    <button onClick={onClickVote}>
-                        <img src={icImprovementLight} />
-                        <span>Chia sẻ ngay</span>
-                    </button>
                     <button style={{ minWidth: userInfo?.name ? 80 : 'unset' }} onClick={() => setIsOpenMenu(!isOpenMenu)}>
                         {userInfo?.name ?
                             <span style={{
@@ -99,8 +94,5 @@ const HeaderMobile: React.FC<MobileSreenProps> = ({
         </>
     )
 }
-
-HeaderMobile.defaultProps = {
-};
 
 export default HeaderMobile;

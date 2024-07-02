@@ -15,8 +15,4 @@ const Footer: React.FC<FooterProps> = ({ }) => {
     )
 }
 
-Footer.defaultProps = {
-    children: undefined,
-};
-
 export default Footer;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import FlowerColumn from '../../molecules/flowerColumn';
 import './styles.css'
 import { unit } from '../../../assets/data';
@@ -33,7 +33,7 @@ interface FlowerChartProps {
 
 type SortType = 'alphabet' | 'rank'
 
-const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail, isMobile }) => {
+const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail = false, isMobile }) => {
     const { isFilter,
         loading,
         chartData,
@@ -59,6 +59,15 @@ const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail, isMobile }) =
     }
 
     const handleOnMouseLeaveColumn = () => { setIdColumnHover(0); }
+
+    useEffect(() => {
+        const elment = document.querySelector('.m-column-flower-active');
+        elment?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+        })
+    }, [infoDetail, loading])
 
     return (
         <>
@@ -95,11 +104,6 @@ const FlowerChartMobile: React.FC<FlowerChartProps> = ({ isDetail, isMobile }) =
             </div>
         </>
     )
-};
-
-FlowerChartMobile.defaultProps = {
-    isDetail: false
-
 };
 
 export default FlowerChartMobile;

@@ -21,7 +21,7 @@ interface TooltipProps {
     content?: string;
 }
 
-const CTooltip: React.FC<TooltipProps> = ({ children, className, place, content }) => (
+const CTooltip: React.FC<TooltipProps> = ({ children, className, place = 'bottom', content }) => (
     <div className='a-tooltip'>
         <Tippy
             content={content}
@@ -32,11 +32,5 @@ const CTooltip: React.FC<TooltipProps> = ({ children, className, place, content 
         </Tippy>
     </div>
 );
-
-CTooltip.defaultProps = {
-    children: undefined,
-    place: 'bottom',
-    variant: 'light',
-};
 
 export default CTooltip;

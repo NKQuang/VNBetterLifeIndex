@@ -1,0 +1,54 @@
+.t-mobile_header_action {
+    display: flex;
+    justify-content: flex-end;
+    align-items: end;
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-right: 12px;
+    width: 100%;
+}
+
+.t-mobile_header_action button {
+    border: unset;
+    background-color: unset;
+    cursor: pointer;
+}
+
+.t-mobile_header_action button:focus {
+    background-color: unset;
+}
+
+.t-mobile-dark .t-mobile_header_action button:first-child {
+    background-color: #fff;
+    transition: background-color .1s ease;
+}
+
+.t-mobile_header_action button img {
+    height: 30px;
+    width: 47px;
+}
+
+.t-mobile_header_logo {
+    height: 100%;
+    width: 100%;
+    margin-left: 12px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+
+.t-mobile_header_logo p {
+    font-size: 32px;
+    font-weight: 800;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-transform: uppercase;
+    color: #00a53f;
+}
+
+.t-mobile_header_icon {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+}

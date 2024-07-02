@@ -10,6 +10,7 @@ import ChartDetailDistrict from '../../components/templates/detail-district';
 import Footer from '../../components/templates/footer';
 import MobileSreen from '../../components/templates/mobile';
 import CTooltip from '../../components/atoms/tooltip';
+import CSkeleton from '../../components/atoms/skeleton';
 
 export const ChartContext = createContext({} as any);
 
@@ -86,29 +87,34 @@ const HomePage: React.FC = () => {
   const renderChart = () => {
     return (
       <div className='p-home_content_indicators'>
-        {indicators?.map((item, index) => {
-          const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label)
-
-          return (
-            <div className='p-home_content_indicators_item'>
-              <h2>{item.label}</h2>
-              <div className='p-home_content_indicators_item_wrapper' style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'flex-end',
-                gap: 4,
-              }}>
-                {aIndicator?.map((i, idx) => <CTooltip content={`${i.district}: ${i.value}`}>
-                  <div style={{
-                    backgroundColor: districtActive?.id === i.district_id ? '#f00' : '#333',
-                    height: i.value * 10,
-                    width: '16px',
-                  }} />
-                </CTooltip>)}
+        {loading ?
+          <div style={{ height: 'fit-content', width: '300px' }}>
+            <CSkeleton count={1} height={27} />
+            <CSkeleton count={1} height={27} width={30} />
+            <CSkeleton count={1} height={100} />
+          </div>
+          :
+          indicators?.map((item, index) => {
+            const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label).sort((a, b) => a.value - b.value)
+            return (
+              <div className='p-home_content_indicators_item'>
+                <div className='p-home_content_indicators_item_title'>
+                  <h2>{item.label}</h2>
+                  <p>{aIndicator?.find((i) => i.district_id === districtActive?.id)?.value?.toFixed(2)}</p>
+                </div>
+                <div className='p-home_content_indicators_item_wrapper'>
+                  {aIndicator?.map((i, idx) => <CTooltip key={idx} content={`${i.district}: ${i.value.toFixed(2)}`}>
+                    <div
+                      className={mapModifiers('p-home_content_indicators_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
+                      style={{
+                        height: i.value * 12,
+                        width: '20px',
+                      }} />
+                  </CTooltip>)}
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
       </div>
     )
   }
@@ -116,13 +122,15 @@ const HomePage: React.FC = () => {
   const renderContenDistrictActive = () => {
     return (
       <div className='p-home_content p-home_desc'>
-        <div className='p-home_content_wrapper'>
-          <h2>{districtActive?.full_name}</h2>
-          <p>
-            {districtActive?.content}
-          </p>
+        <div className='p-home_desc_wrapper'>
+          <div className='p-home_content_wrapper'>
+            <h2>{districtActive?.full_name}</h2>
+            <p>
+              {districtActive?.content}
+            </p>
+          </div>
+          {renderChart()}
         </div>
-        {renderChart()}
       </div>
     )
   }

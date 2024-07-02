@@ -76,7 +76,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
         <div
             key={value}
             style={{
-                height: Number(value * unit + 17),
+                height: isMobile ? Number(value * unit + 44) : Number(value * unit + 17),
                 animation: isFilter ? 'animateShowerFilter 1s ease forwards' : ''
             }}
             className={mapModifiers("m-column", isHover && "hover", isMobile ? 'mobile' : 'normal', isActive && 'flower-active')}
@@ -144,9 +144,5 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
         </div>
     );
 };
-
-FlowerColumn.defaultProps = {
-    isMobile: false
-}
 
 export default FlowerColumn;

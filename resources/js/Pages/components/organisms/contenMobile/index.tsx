@@ -22,6 +22,7 @@ import { colorsPetal } from '../../atoms/flower';
 import { SortType } from '../../templates/chart';
 import CTooltip from '../../atoms/tooltip';
 import Loading from '../../atoms/loading';
+import CSkeleton from '../../atoms/skeleton';
 
 const IconAllowIndicators = [icIncome, icJobs, icHearth, icEducation, icHousing, icSatisfaction, icEnvironment, icSafety, icWorkLifeBalance, icCommunity, icCivicEngagement, icAdministration]
 
@@ -46,6 +47,8 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
         infoDetail,
         handleSetInfoDetail,
         loading,
+        allIndicators,
+        districtActive
     } = useBetterLife();
 
     const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
@@ -57,7 +60,6 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
             ...item,
             value: item.indicators.find((i: Indicator) => i.indicator_id === id)?.value
         }))?.sort((a: any, b: any) => a.value - b.value);
-        console.table(newList)
         handleSetChartData(newList as any);
         handleSetLoading(true);
     }
@@ -104,19 +106,20 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                 </div>
             }
             {isShowDetail ?
-                <ul>
+                <ul className="t-mobile_body_detail-indicators">
                     {
                         loading ?
-                            <Loading />
+                            <div style={{ height: 'fit-content', width: '98vw' }}>
+                                <CSkeleton count={3} height={20} />
+                            </div>
                             :
-
                             infoDetail?.indicators?.map((indicator, index) => (
                                 <li key={indicator.indicator_id} style={{
                                 }}>
                                     <span style={{
                                         backgroundColor: colorsPetal[index],
                                         fontSize: 12,
-                                    }}>{indicator.indicator}:  {indicator.value}</span>
+                                    }}>{indicator.indicator}:  {indicator.value.toFixed(2)}</span>
                                 </li>
                             ))}
                 </ul>
@@ -130,7 +133,7 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                     <div className="t-mobile_body_filter_wrapper">
                         {indicators?.map((item, index) => (
                             <div
-                                key={index}
+                                key={item.value}
                                 style={{ backgroundColor: idIndicatorsActive === item.id ? '#fff' : colorsPetal[index] }}
                                 onClick={() => {
                                     handleSortAllowIndicator(item.id)
@@ -148,7 +151,6 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                                 handleSortData('alphabet')
                             }}>A - Z</button>
                         <button onClick={() => {
-                            if (idIndicatorsActive === 99) return;
                             handleSetChartData(chartDataRoot as any);
                             handleSetLoading(true);
                             setIdIndicatorsActive(99);
@@ -163,11 +165,10 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                     </div>
                 </div>
             }
+
         </div >
     )
 }
 
-ContentMobile.defaultProps = {
-};
 
 export default ContentMobile;

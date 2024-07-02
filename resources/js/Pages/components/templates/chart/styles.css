@@ -12,12 +12,12 @@
     background: linear-gradient(270deg, #e4edffea 0%, #fffceee7 100%);
 }
 
-.t-chart-mobile {
+/* .t-chart-mobile {
     width: 100vw;
     display: grid;
     grid-template-columns: 20px 1fr;
     min-height: 40vh;
-}
+} */
 
 .t-chart_form {
     width: max-content;
@@ -105,7 +105,7 @@
     padding: 8px;
     overflow-y: hidden;
     overflow-x: scroll;
-    padding: 0 40px;
+    padding: 0 160px 0 40px;
 }
 
 .t-chart .t-chart_main::-webkit-scrollbar {
