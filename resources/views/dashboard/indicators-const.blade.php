@@ -89,7 +89,7 @@
                                 <p class="mb-0 font-semibold leading-tight text-xs"> {{ $row->district_name }}</p>
                             </td>
                             <td class="p-2 text-center align-middle bg-transparent border-b shadow-transparent break-words whitespace-normal max-w-xs">
-                                <span class="font-semibold leading-tight text-xs text-slate-400">{{ $row->average_value }}</span>
+                                <span class="font-semibold leading-tight text-xs text-slate-400">{{ $row->average_value ??'Không có dữ liệu' }}</span>
                             </td>
                             <td class="p-2 text-center align-middle bg-transparent border-b shadow-transparent break-words whitespace-normal max-w-xs">
                                 <a href="{{ route('indicators.details.district', ['id' => $row->indicator_id,'district_id'=> $row->districts_id]) }}" class="px-2 py-2 text-blue-500 rounded-lg font-bold">Chi tiết</a>

@@ -4,11 +4,21 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
+                {{-- <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="text-xl font-bold text-gray-700 hover:text-indigo-500">
-                        {{ __('VN BETTER LIFE') }}
+                        {{ __('PHỒN VINH - HẠNH PHÚC (WBI)') }}
                     </a>
+                </div> --}}
+                <div class="p-6 pb-0 mb-0 rounded-t-2xl">
+                    <div class="flex items-center mb-4">
+                        <a href="{{ route('dashboard') }}" class="text-xl font-bold text-yellow-700 hover:text-indigo-500">
+                            <span class="text-yellow-700 font-mono">{{ __('PHỒN VINH - HẠNH PHÚC') }}</span>
+                            <span class="text-green-700">{{ __('(WBI)') }}</span>
+                        </a>
+                    </div>
+
                 </div>
+
 
 
                <!-- Navigation Links -->
@@ -19,6 +29,12 @@
                             {{ __('Dashboard') }}
                         </x-nav-link>
                     @endif
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
+                        <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Lịch sử đánh giá') }}
+                        </x-nav-link>
                 </div>
 
             </div>

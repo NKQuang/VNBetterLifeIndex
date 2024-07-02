@@ -5,17 +5,17 @@
     <div class="relative flex flex-col w-full min-w-0 break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border mb-4">
         <div class="p-6 pb-0 mb-0 bg-slate-400 rounded-t-2xl">
             <h6 class="text-lg font-semibold text-white">Bảng thống kê chỉ số của người dùng đánh giá</h6>
-            <form action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data" class="flex items-center">
-                @csrf
+            {{-- <form action="{{ route('dashboard.indicator-values') }}" method="GET" enctype="multipart/form-data" class="flex items-center">
+                @csrf --}}
                 <div class="flex items-center p-2">
-                    <button type="submit" class=" text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">
+                    <a href="#" onclick="togglePopup()" value="1" class=" text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">
                         Xuất Excel
-                    </button>
+                    </a>
                     <a onclick="openModal()" class="ml-4 text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">
                         Xóa dữ liệu
                     </a>
                 </div>
-            </form>
+            {{-- </form> --}}
         </div>
 
         <div class="p-6 pb-0 mb-0 bg-slate-200 rounded-t-2xl flex flex-col lg:flex-row justify-between items-center">
@@ -116,7 +116,7 @@
                         Đang hiển thị {{ $indicators_value->firstItem() }} tới {{ $indicators_value->lastItem() }} trong {{ $indicators_value->total() }} kết quả
                     </div>
                     <ul class="inline-flex -space-x-px text-base h-10">
-                        {!! $indicators_value->appends(['per_page' => request('per_page'), 'name' => request('name'), 'date' => request('date'), 'question_code' => request('question_code')])->links('vendor.pagination.pagination-custom') !!}
+                        {!! $indicators_value->appends(['per_page' => request('per_page'), 'name' => request('name'), 'date' => request('date'),'indicators' =>request('indicators'), 'districts' => request('districts')])->links('vendor.pagination.pagination-custom') !!}
                     </ul>
                 </nav>
             </div>
@@ -140,7 +140,58 @@
         </div>
     </div>
 </div>
+<div id="popup" class="fixed inset-0 flex items-center justify-center border-spacing-3 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h2 class="text-xl font-semibold mb-4 text-center">Hãy chọn kiểu dữ liệu bạn muốn xuất</h2>
+        <div class="flex justify-center" id="popup-buttons">
+            <button onclick="togglePopup()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 mr-2">Hủy</button>
+            <button onclick="showForm()" class="text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 mr-2">Tùy chọn xuất Excel</button>
+            <form id="exportForm" action="{{ route('dashboard.indicator-values') }}" method="GET" class="inline">
+                @csrf
+                <button type="submit" id="exportButton" name="export" value="1" class="text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">
+                    Xuất toàn bộ Excel
+                </button>
+            </form>
+        </div>
+        <div id="export-form" class="hidden mt-4">
+            <form action="{{ route('dashboard.indicator-values') }}" method="GET" class="space-y-4">
+                @csrf
+                <div class=" items-center w-full lg:w-auto mb-2 lg:mb-0 mr-2">
+                    <label for="districts" class="ml-0 lg:ml-4 mr-2 text-sm font-medium text-slate-700">Huyện:</label>
+                    <select name="districts" id="districts" class="form-select px-2 py-2 rounded-lg border border-gray-300 text-sm w-full lg:w-auto">
+                        <option value="">Tất cả</option>
+                        @foreach ($districts as $district)
+                            <option value="{{ $district->id }}" {{ request('districts') == $district->id ? 'selected' : '' }}>
+                                {{ $district->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class=" items-center w-full lg:w-auto mb-2 lg:mb-0 mr-2">
+                    <label for="indicators" class="ml-0 lg:ml-4 mr-2 text-sm font-medium text-slate-700">Loại chỉ số:</label>
+                    <select name="indicatorsex" id="indicatorsex" class="form-select px-2 py-2 rounded-lg border border-gray-300 text-sm w-full lg:w-auto">
+                        <option value="">Tất cả</option>
+                        @foreach ($indicators as $indicator)
+                            <option value="{{ $indicator->id }}" {{ request('indicators') == $indicator->id ? 'selected' : '' }}>
+                                {{ $indicator->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="hideForm()" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">Quay lại</button>
+                    <button type="submit" name="export" class="px-4 py-2 bg-gray-300 text-blue-600 rounded hover:bg-gray-400">Xuất dữ liệu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
+    document.getElementById('exportButton').addEventListener('click', function() {
+        if (confirm('Dữ liệu lớn có thể sẽ có nguy cơ không thành công và mất thời gian. Bạn có chắc chắn muốn tiếp tục?')) {
+            document.getElementById('exportForm').submit();
+        }
+    });
      function openModal() {
         document.getElementById('confirmationModal').classList.remove('hidden');
     }
@@ -148,5 +199,22 @@
     function closeModal() {
         document.getElementById('confirmationModal').classList.add('hidden');
     }
+    function togglePopup() {
+        var popup = document.getElementById('popup');
+        popup.classList.toggle('hidden');
+    }
+
+    function showForm() {
+        var buttons = document.getElementById('popup-buttons');
+        var form = document.getElementById('export-form');
+        buttons.classList.add('hidden');
+        form.classList.remove('hidden');
+    }
+    function hideForm() {
+            var buttons = document.getElementById('popup-buttons');
+            var form = document.getElementById('export-form');
+            form.classList.add('hidden');
+            buttons.classList.remove('hidden');
+        }
 </script>
 @endsection
