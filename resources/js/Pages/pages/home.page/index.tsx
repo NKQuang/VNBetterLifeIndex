@@ -29,7 +29,11 @@ const HomePage: React.FC = () => {
     handleUpdateSignIn,
     districtActive,
     sreenWidth,
-    handleSetInfoUser
+    handleSetInfoUser,
+    handleSetInfoDetail,
+    chartData,
+    handleShowDetail,
+    handleSetDistrictActive
   } = useBetterLife();
 
   const localStoreToken = localStorage.getItem('login_token');
@@ -109,7 +113,17 @@ const HomePage: React.FC = () => {
                       style={{
                         height: i.value * 12,
                         width: '20px',
-                      }} />
+                        cursor: 'pointer'
+                      }}
+                      onClick={() => {
+                        const districtItem = chartData?.find((y) => y.district_id === i.district_id);
+                        handleSetLoading(true);
+                        handleSetInfoDetail(districtItem as any);
+                        handleShowDetail(true);
+                        const districtActive = districtIndicators?.districts.filter((y) => y.id === i.district_id);
+                        handleSetDistrictActive((districtActive || [])[0]);
+                      }}
+                    />
                   </CTooltip>)}
                 </div>
               </div>

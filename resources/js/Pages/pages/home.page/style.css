@@ -15,7 +15,7 @@
     height: 100%;
     background: rgb(245, 246, 246);
     background: linear-gradient(180deg, #e3e8f2 0%, #e4e2d5 100%);
-    min-height: 600px;
+    min-height: 620px;
     height: fit-content;
 }
 

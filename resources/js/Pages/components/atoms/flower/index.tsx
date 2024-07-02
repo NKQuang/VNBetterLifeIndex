@@ -28,7 +28,7 @@ const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => 
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            {data.map((item, i) => (
+            {data?.map((item, i) => (
                 <Petal height={item?.value ?? 0} key={i} angle={i * 30} color={colorsPetal[i]} />
             ))}
         </svg>

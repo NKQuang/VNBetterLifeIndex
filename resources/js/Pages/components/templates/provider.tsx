@@ -98,7 +98,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
         setIsShowDetail(type);
         setTimeout(() => {
             setLoading(false)
-        }, 1000)
+        }, 2000)
     };
     const handleSetInfoDetail = (type: districtItem) => {
         setInfoDetail(type);

@@ -87,7 +87,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 <div
                     className={mapModifiers("m-column_content", isMobile ? 'mobile' : 'normal')}
                 >
-                    <p>{value.toFixed(2)}</p>
+                    <p>{value?.toFixed(2) ?? ''}</p>
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>
@@ -101,7 +101,7 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                 </div>
                 :
                 <div className="m-column_content">
-                    <p>{value.toFixed(2)}</p>
+                    <p>{value?.toFixed(2) ?? ''}</p>
                     <Flower data={data} onMouseEnter={() => {
                         if (onMouseEnter) onMouseEnter(index);
                     }}
