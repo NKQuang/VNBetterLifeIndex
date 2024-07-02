@@ -37,6 +37,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/indicators', [App\Http\Controllers\DashboardController::class, 'getAllIndicators'])->name('dashboard.indicators');
 
     Route::get('/indicator-values', [App\Http\Controllers\DashboardController::class, 'getAllIndicatorsValue'])->name('dashboard.indicator-values');
+    Route::get('/indicator-value-admin', [App\Http\Controllers\DashboardController::class, 'IndicatorsConst'])->name('dashboard.indicator-value-admin');
+    Route::get('/indicators-value-admin/details/{id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDetail'])->name('indicators.details');
+    Route::get('/indicators-detail/{id}/{district_id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDitrictDetail'])->name('indicators.details.district');
+    Route::get('/delete/indicator-values/{type}',[App\Http\Controllers\IndicatorValueController::class,'deleteIndicatorsForType'])->name('delete.indicators');
+
 
     Route::post('/import/excel', [App\Http\Controllers\DashboardController::class, 'inportExcel'])->name('import.excel');
     Route::post('/users/export', [App\Http\Controllers\DashboardController::class, 'export']);

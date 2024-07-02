@@ -7,7 +7,19 @@
             <h6 class="text-lg font-semibold text-white">{{ $title }}</h6>
             <a href="{{ route('questions.create') }}" class="font-semibold leading-tight text-xs text-white bg-green-500 px-3 py-2 rounded">Tạo mới</a>
         </div>
-
+        <div class="p-6 pb-0 mb-0 bg-slate-200 rounded-t-2xl flex flex-col lg:flex-row justify-between items-center">
+            <form action="{{ route('questions.index') }}" method="GET" class="flex flex-col lg:flex-row items-center w-full">
+                <div class="flex flex-col lg:flex-row items-center lg:w-auto mb-2 lg:mb-0 mr-2">
+                    <label for="per_page" class="mr-2 text-sm font-medium text-slate-700">Số dòng hiển thị:</label>
+                    <select name="per_page" id="per_page" class="form-select px-2 py-2 rounded-lg border border-gray-300 text-sm w-full lg:w-auto" onchange="this.form.submit()">
+                        <option value="5" {{ request('per_page') == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('per_page') == 10 ? 'selected' : '' }}>10</option>
+                        <option value="15" {{ request('per_page') == 15 ? 'selected' : '' }}>15</option>
+                        <option value="20" {{ request('per_page') == 20 ? 'selected' : '' }}>20</option>
+                    </select>
+                </div>
+            </form>
+        </div>
         <div class="flex-auto px-0 pt-0 pb-2">
             <div class="p-0 overflow-x-auto">
                 <table class="items-center w-full mb-0 align-top border-gray-200 text-slate-500">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Districts;
 use App\Models\Indicators;
 use App\Models\IndicatorsValue;
 use App\Models\Question;
@@ -73,7 +74,7 @@ class IndicatorValueController extends Controller
             if (!$user) {
                 return response()->json(['error' => 'Invalid user_id'], 422);
             }
-        } else{
+        } else {
             $user = User::create([
                 'name' => $request->full_name,
                 'gender' => $request->gender,
@@ -129,5 +130,57 @@ class IndicatorValueController extends Controller
         return response()->json([
             'message' => 'Indicator values submitted successfully'
         ]);
+    }
+    function IndicatorsConstDetail(Request $request, $id)
+    {
+
+        $perPage = $request->input('per_page', 5);
+
+        $districtFilter = $request->input('districts');
+
+        $indicator = Indicators::findOrFail($id);
+
+        $indicatorValuesQuery = IndicatorsValue::whereHas('question', function ($query) use ($id) {
+            $query->where('indicator_id', $id);
+        });
+        // Lấy danh sách các huyện và câu hỏi liên quan
+        $districts = Districts::whereIn('id', $indicatorValuesQuery->pluck('districts_id'))->get();
+        $questions = Question::where('indicator_id', $id)->get();
+        if ($districtFilter) {
+            $indicatorValuesQuery->where('districts_id', $districtFilter);
+        }
+
+        $indicatorValues = $indicatorValuesQuery->where('type',1)->paginate($perPage);
+
+
+
+        $data['title'] = "Dữ liệu chi tiết chỉ số";
+        return view('dashboard.indicator-detail', compact('indicatorValues', 'districts', 'indicator', 'questions'), $data);
+    }
+    function IndicatorsConstDitrictDetail(Request $request, $id,$district_id)
+    {
+
+        $perPage = $request->input('per_page', 5);
+        $indicator = Indicators::findOrFail($id);
+
+        $indicatorValuesQuery = IndicatorsValue::whereHas('question', function ($query) use ($id) {
+            $query->where('indicator_id', $id);
+        });
+        // Lấy danh sách các huyện và câu hỏi liên quan
+
+        $districts = Districts::where('id', $district_id)->get();
+        $questions = Question::where('indicator_id', $id)->get();
+        if ($district_id) {
+            $indicatorValuesQuery->where('districts_id', $district_id);
+        }
+
+        $indicatorValues = $indicatorValuesQuery->where('type',1)->paginate($perPage);
+
+        $data['title'] = "Dữ liệu chi tiết chỉ số ". $districts[0]->full_name;
+        return view('dashboard.indicator-detail-district', compact('indicatorValues','districts' ,'indicator', 'questions'), $data);
+    }
+    function deleteIndicatorsForType($type = 0) {
+        IndicatorsValue::where('type', $type)->delete();
+        return redirect()->route('dashboard.indicator-values')->with('success', 'Đã xóa thành công.');
     }
 }
