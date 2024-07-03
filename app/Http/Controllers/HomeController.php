@@ -18,7 +18,7 @@ class HomeController extends Controller
     {
         $usersCount = User::all()->count();
         $indicators = Indicators::all()->count();
-        $indicatorValue = IndicatorsValue::all()->count();
+        $indicatorValue = IndicatorsValue::where('type',0)->count();
         $data["indicatorValue"] = $indicatorValue;
         $data["usersCount"] = $usersCount;
         $data["indicators"] = $indicators;

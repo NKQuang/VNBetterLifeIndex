@@ -70,7 +70,7 @@
                         Đang hiển thị {{ $questions->firstItem() }} tới {{ $questions->lastItem() }} trong {{ $questions->total() }} kết quả
                     </div>
                     <ul class="inline-flex -space-x-px text-base h-10">
-                        {!! $questions->links('vendor.pagination.pagination-custom') !!}
+                        {!! $questions->appends(['per_page' => request('per_page')])->links('vendor.pagination.pagination-custom') !!}
                     </ul>
                 </nav>
             </div>
