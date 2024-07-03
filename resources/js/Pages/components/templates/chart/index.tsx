@@ -201,13 +201,10 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     loading: false,
                     confirm: false,
                     isValidated: false,
-                    district: null as any,
-                    indicator: null as any,
                 })
                 toast.success('Gửi đánh giá thành công!');
                 getWbi();
                 setIsOpenModalConfirmAfterSubmit(true);
-
             }).catch((error) => {
                 console.log('error', error)
 
@@ -884,6 +881,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 }}
                 zIndex="lv3"
                 className='comfirm'
+                showCloseIcon={false}
+                closeOnOverlayClick={false}
             >
                 <div className="t-chart_choose" style={{ marginTop: 20, fontSize: 16, textAlign: 'center' }}>
                     Cảm ơn bạn đã chia sẻ đánh giá của bạn về Chỉ số Hạnh phúc với chúng tôi.
@@ -918,7 +917,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                             loading: false,
                             confirm: false,
                             isValidated: false,
-                            district: undefined as unknown as DropdownType,
+                            district: prve.district as unknown as DropdownType,
                             indicator: undefined as unknown as DropdownType,
                             fullName: prve.fullName,
                             phoneNumber: prve.phoneNumber,

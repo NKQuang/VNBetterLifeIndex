@@ -52,6 +52,11 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         password: '',
         passwordConfirm: '',
         isHidePassword: false,
+        relationship: undefined as unknown as DropdownType,
+        old: undefined as unknown as DropdownType,
+        profession: undefined as unknown as DropdownType,
+        gender: undefined as unknown as DropdownType,
+        address: '',
     });
     const [statesSignUpErr, setStatesSignUpErr] = useState({
         fullname: '',
@@ -59,12 +64,19 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         phoneNumber: '',
         password: '',
         passwordConfirm: '',
+        relationship: '',
+        old: '',
+        profession: '',
+        gender: '',
+        address: '',
     });
 
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [updateData, setUpdateData] = useState<any>();
 
     const [isOpenModalConfirm, setIsOpenModalConfirm] = useState(false);
+    const [isOpenModalConfirmAfterSubmit, setIsOpenModalConfirmAfterSubmit] = useState(false);
+
     const [stateForm, setStateForm] = useState({
         district: undefined as unknown as DropdownType,
         indicator: undefined as unknown as DropdownType,
@@ -77,16 +89,25 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         relationship: undefined as unknown as DropdownType,
         phoneNumber: "",
         old: undefined as unknown as DropdownType,
-        profession: '',
+        profession: undefined as unknown as DropdownType,
         gender: undefined as unknown as DropdownType,
     });
-    const [states, setStates] = useState({
+
+    const [statesSignInErr, setStatesSignInErr] = useState({
         username: '',
         password: '',
-        isHidePassword: false,
-        isOpenFormLogin: false,
-        pendding: false,
-    })
+    });
+
+    const [stateFormError, setStateFormError] = useState({
+        district: "",
+        indicator: "",
+        fullName: "",
+        relationship: "",
+        phoneNumber: "",
+        old: "",
+        profession: "",
+        gender: "",
+    });
 
     useEffect(() => {
         if (refMenu?.current) {
@@ -124,12 +145,33 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             handleUpdateSignIn(true);
             toast.success('Đăng nhập thành công!')
         } else {
-            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            toast.error('Tài khoản hoặc mật khẩu không chính xác.');
             setStatesLogin({
                 ...statesLogin,
                 pendding: false,
             });
+            setStatesSignInErr({
+                ...statesSignInErr,
+                username: "Thông tin đắng nhập không chính xác",
+                password: "Thông tin đắng nhập không chính xác"
+            })
+
         }
+    }
+
+    const handleValidateSignIn = () => {
+        if (
+            !statesLogin.username ||
+            !statesLogin.password
+        ) {
+            setStatesSignInErr({
+                ...statesSignInErr,
+                username: !statesLogin.username ? "Tài khoản là trường bắt buộc" : "",
+                password: !statesLogin.password ? "Mật khẩu là trường bắt buộc" : ""
+            })
+            return false;
+        }
+        return true
     }
 
     const handleValidateSignUp = () => {
@@ -140,16 +182,24 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             !statesSignUp.password ||
             statesSignUp.password.length < 8 ||
             !statesSignUp.passwordConfirm ||
-            statesSignUp.passwordConfirm !== statesSignUp.password
+            statesSignUp.passwordConfirm !== statesSignUp.password ||
+            !statesSignUp.gender?.value ||
+            !statesSignUp.old?.value ||
+            !statesSignUp.profession?.value ||
+            !statesSignUp.relationship?.value ||
+            !statesSignUp.address?.trim()
         ) {
             setStatesSignUpErr({
-                ...statesSignUpErr,
                 fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
                 email: !statesSignUp.email ? 'Email là bắt buộc' : '',
                 phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : '',
                 password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
-
                 passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
+                gender: !statesSignUp.gender?.value ? 'Giới tính là trường bắt buộc' : '',
+                old: !statesSignUp.old?.value ? 'Độ tuổi là trường bắt buộc' : '',
+                profession: !statesSignUp.profession?.value ? 'Nghề nghiệp là trường bắt buộc' : '',
+                relationship: !statesSignUp.relationship?.value ? 'Mối quan hệ là trường bắt buộc' : '',
+                address: !statesSignUp.address?.trim() ? 'Địa chỉ là trường bắt buộc' : '',
             })
             return false;
         }
@@ -158,7 +208,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
 
     const handleRegister = async (body: any) => {
         const response = await postRegisterAccount(body);
-        if (response) {
+        if (response.status === 200) {
             setStatesSignUp({
                 ...statesSignUp,
                 fullname: '',
@@ -171,16 +221,24 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             setStatesLogin({ ...statesLogin, pendding: false, isOpenFormLogin: false })
             toast.success('Đăng kí thành công. Vui lòng kiểm tra mail để xác thực tài khoản!');
         } else {
-            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            const { errors } = response
+            toast.error('Đã có lỗi xảy ra trong quá trình đăng kí');
             setStatesLogin({
                 ...statesLogin,
                 pendding: false,
             });
+            setStatesSignUpErr({
+                ...statesSignUpErr,
+                email: (errors.email || [])[0] ? (errors.email || [])[0] : '',
+                phoneNumber: (errors.phone || [])[0] ? (errors.phone || [])[0] : '',
+            })
+
         }
     }
 
     const handleSubmitLogin = () => {
         if (isSignUp && !handleValidateSignUp()) return;
+        if (!isSignUp && !handleValidateSignIn()) return;
         const bodySignIn = {
             email: statesLogin.username,
             password: statesLogin.password,
@@ -221,22 +279,41 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     loading: false,
                     confirm: false,
                     isValidated: false,
-                    fullName: "",
-                    relationship: undefined as unknown as DropdownType,
-                    phoneNumber: "",
-                    old: undefined as unknown as DropdownType,
-                    profession: "",
-                })
+                });
                 toast.success('Gửi đánh giá thành công!');
                 getWbi();
+                setIsOpenModalConfirmAfterSubmit(true);
             }).catch((error) => {
                 console.log('error', error)
 
             })
     }
 
-    const handleValidate = () => {
-        if (stateForm.answers.some((i) => i === 0)) {
+    const handleValidate = (isContinue?: boolean) => {
+        if (
+            !isSignIn && !stateForm.district?.value ||
+            !isSignIn && !stateForm.indicator?.value ||
+            !isSignIn && !stateForm.profession?.value ||
+            !isSignIn && !stateForm.relationship?.value ||
+            !isSignIn && !stateForm.fullName ||
+            !isSignIn && !stateForm.phoneNumber ||
+            !isSignIn && !stateForm.old?.value ||
+            !isSignIn && !stateForm.gender?.value
+        ) {
+            setStateFormError({
+                ...stateFormError,
+                district: !stateForm.district?.value ? "Huyện là trường bắt buộc" : "",
+                indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
+                fullName: !stateForm.fullName ? "Họ tên là trường bắt buộc" : "",
+                relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
+                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : "",
+                old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
+                profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
+                gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
+            })
+            return false;
+        }
+        if (!isContinue && stateForm.answers.some((i) => i === 0)) {
             setStateForm({
                 ...stateForm,
                 confirm: true,
@@ -246,8 +323,8 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         return true;
     }
 
-    const handleSubmit = () => {
-        if (!handleValidate()) return;
+    const handleSubmit = (isContinue?: boolean) => {
+        if (!handleValidate(isContinue)) return;
         const body = {
             districts_id: stateForm.district.id,
             questions_id: stateForm.questions.map((i) => i.id),
@@ -258,7 +335,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             relationship: stateForm.relationship?.label,
             phone_number: stateForm.phoneNumber ?? userInfo?.phone,
             old: stateForm.old?.value,
-            profession: stateForm.profession,
+            profession: stateForm.profession.value,
             user_id: userInfo?.id ?? null,
             gender: stateForm.gender?.value
         };
@@ -391,6 +468,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                             />
                             <span>{statesSignUpErr.fullname}</span>
                         </div>
+
                         <div className={mapModifiers('t-header_signup_item', statesSignUpErr.email ? 'error' : '')}>
                             <p>Email<span>*</span></p>
                             <input
@@ -418,6 +496,70 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                 }}
                             />
                             <span>{statesSignUpErr.phoneNumber}</span>
+                        </div>
+
+                        <Dropdown
+                            isRequired
+                            options={gender}
+                            title='Giới tính'
+                            placeholder='Chọn giới tính ...'
+                            value={statesSignUp.gender}
+                            handleOnChange={(value) => {
+                                setStatesSignUp({ ...statesSignUp, gender: value });
+                                setStatesSignUpErr({ ...statesSignUpErr, gender: '' });
+                            }}
+                            error={statesSignUpErr.gender}
+                        />
+                        <Dropdown
+                            isRequired
+                            options={RangeOld}
+                            title='Độ tuổi'
+                            placeholder='Chọn độ tuổi của bạn'
+                            value={statesSignUp.old}
+                            handleOnChange={(value) => {
+                                setStatesSignUp({ ...statesSignUp, old: value });
+                                setStatesSignUpErr({ ...statesSignUpErr, old: '' });
+                            }}
+                            error={statesSignUpErr.old}
+                        />
+
+                        <Dropdown
+                            isRequired
+                            options={profession}
+                            title='Nghề nghiệp'
+                            value={statesSignUp.profession}
+                            placeholder='Chọn nghề nghiệp của bạn'
+                            handleOnChange={(value) => {
+                                setStatesSignUp({ ...statesSignUp, profession: value });
+                                setStatesSignUpErr({ ...statesSignUpErr, profession: '' });
+                            }}
+                            error={statesSignUpErr.profession}
+                        />
+                        <Dropdown
+                            isRequired
+                            options={relationship}
+                            title='Tình trạng hôn nhân'
+                            placeholder='Chọn mối quan hệ hiện tại'
+                            value={statesSignUp.relationship}
+                            handleOnChange={(value) => {
+                                setStatesSignUp({ ...statesSignUp, relationship: value });
+                                setStatesSignUpErr({ ...statesSignUpErr, relationship: '' });
+                            }}
+                            error={statesSignUpErr.relationship}
+                        />
+                        <div className={mapModifiers('t-header_signup_item', statesSignUpErr.address ? 'error' : '')}>
+                            <p>Địa chỉ<span>*</span></p>
+                            <input
+                                type='text'
+                                autoFocus
+                                value={statesSignUp.address}
+                                placeholder='123 Võ Nguyên Giáp, Tp.Hồ Chí Minh'
+                                onChange={(event) => {
+                                    setStatesSignUp({ ...statesSignUp, address: event.target.value });
+                                    setStatesSignUpErr({ ...statesSignUpErr, address: '' });
+                                }}
+                            />
+                            <span>{statesSignUpErr.address}</span>
                         </div>
                         <div className={mapModifiers('t-header_signup_item', statesSignUpErr.password ? 'error' : '')}>
                             <p>Mật khẩu<span>*</span></p>
@@ -456,7 +598,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     :
                     <>
                         <div className='t-header_form'>
-                            <div className='t-header_form_item'>
+                            <div className={mapModifiers('t-header_form_item', statesSignInErr.username ? 'error' : '')}>
                                 <p>Email</p>
                                 <input
                                     type='text'
@@ -465,8 +607,9 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     placeholder='Vui lòng nhập email...'
                                     onChange={(event) => setStatesLogin({ ...statesLogin, username: event.target.value })}
                                 />
+                                <span>{statesSignInErr.username}</span>
                             </div>
-                            <div className='t-header_form_item'>
+                            <div className={mapModifiers('t-header_form_item', statesSignInErr.password ? 'error' : '')}>
                                 <p>Mật khẩu</p>
                                 <input
                                     type={!statesLogin.isHidePassword ? 'password' : 'text'}
@@ -480,6 +623,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                         }
                                     }}
                                 />
+                                <span>{statesSignInErr.username}</span>
                             </div>
                         </div>
                     </>
@@ -521,7 +665,6 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     </button>
                 </div>
             </CModal>
-
             <CModal
                 open={isOpenModalConfirm}
                 title='Xác nhận'
@@ -595,7 +738,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                 <h2>Bộ câu hỏi</h2>
                                 <ul className='t-chart_form_list'>
                                     {stateForm?.questions?.map((record, index) => (
-                                        <li key={index}>
+                                        <li key={record.value}>
                                             <p>{record.label}</p>
                                             <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
                                                 const newSliderValues = [...stateForm.answers] as any;
@@ -613,37 +756,51 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     </div>
                     : <>
                         <div className='t-chart_info_customer'>
-                            <div className='t-chart_info_item'>
-                                <p>Họ tên</p>
+                            <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
+                                <p>Họ tên <span>*</span></p>
                                 <input
                                     type='text'
                                     autoFocus
-                                    placeholder=''
+                                    placeholder='Nguyễn Văn A....'
                                     value={stateForm.fullName}
                                     onChange={(event) => {
                                         setStateForm({
                                             ...stateForm,
                                             fullName: event.target.value,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            fullName: ''
                                         })
                                     }}
                                 />
+                                <span>{stateFormError.fullName}</span>
                             </div>
-                            <div className='t-chart_info_item'>
-                                <p>Số điện thoại</p>
+                            <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
+                                <p>Số điện thoại<span>*</span></p>
                                 <input
                                     type='text'
                                     autoFocus
-                                    placeholder=''
+                                    placeholder='0973xxxx....'
+                                    pattern="\d*"
                                     value={stateForm.phoneNumber}
                                     onChange={(event) => {
+                                        const phone = event.target.value.replace(/\D/g, '');
                                         setStateForm({
                                             ...stateForm,
-                                            phoneNumber: event.target.value,
+                                            phoneNumber: phone,
+                                        });
+                                        setStateFormError({
+                                            ...stateFormError,
+                                            phoneNumber: ''
                                         })
                                     }}
                                 />
+                                <span>{stateFormError.phoneNumber}</span>
                             </div>
+
                             <Dropdown
+                                isRequired
                                 options={gender}
                                 title='Giới tính'
                                 placeholder='Chọn giới tính ...'
@@ -652,10 +809,16 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     setStateForm({
                                         ...stateForm,
                                         gender: value,
-                                    })
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        gender: ''
+                                    });
                                 }}
+                                error={stateFormError.gender}
                             />
                             <Dropdown
+                                isRequired
                                 options={RangeOld}
                                 title='Độ tuổi'
                                 placeholder='Chọn độ tuổi của bạn'
@@ -664,10 +827,16 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     setStateForm({
                                         ...stateForm,
                                         old: value,
-                                    })
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        old: ''
+                                    });
                                 }}
+                                error={stateFormError.old}
                             />
                             <Dropdown
+                                isRequired
                                 options={profession}
                                 title='Nghề nghiệp'
                                 placeholder='Chọn nghề nghiệp của bạn'
@@ -675,19 +844,32 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     setStateForm({
                                         ...stateForm,
                                         profession: value,
-                                    })
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        profession: ''
+                                    });
                                 }}
+                                value={stateForm.profession}
+                                error={stateFormError.profession}
                             />
                             <Dropdown
+                                isRequired
                                 options={relationship}
                                 title='Tình trạng hôn nhân'
-                                placeholder='Chọn tình trạng hôn nhân của bạn'
+                                placeholder='Chọn mối quan hệ hiện tại'
+                                value={stateForm.relationship}
                                 handleOnChange={(value) => {
                                     setStateForm({
                                         ...stateForm,
                                         relationship: value,
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        relationship: ''
                                     })
                                 }}
+                                error={stateFormError.relationship}
                             />
                         </div>
                         <div className='t-chart_form'>
@@ -701,8 +883,13 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     setStateForm({
                                         ...stateForm,
                                         district: value,
+                                    });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        district: ''
                                     })
                                 }}
+                                error={stateFormError.district}
                             />
                             <Dropdown
                                 isRequired
@@ -718,15 +905,19 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                         questions: listQuestion,
                                         answers: listQuestion?.map((i, idx) => 0) as any,
                                     });
+                                    setStateFormError({
+                                        ...stateFormError,
+                                        indicator: ''
+                                    })
                                 }}
+                                error={stateFormError.indicator}
                             />
-
                             {stateForm.indicator && stateForm.district?.id &&
                                 <>
                                     <h2>Bộ câu hỏi</h2>
                                     <ul className='t-chart_form_list'>
                                         {stateForm?.questions?.map((record, index) => (
-                                            <li key={index}>
+                                            <li key={record.value}>
                                                 <p>{record.label}</p>
                                                 <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
                                                     const newSliderValues = [...stateForm.answers] as any;
@@ -745,7 +936,34 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     </>
                 }
                 <div className='t-chart_form_submit'>
-                    <button onClick={() => setIsOpenModal(false)}>Hủy đánh giá</button>
+                    <button onClick={() => {
+                        setIsOpenModal(false);
+                        setStateForm({
+                            district: undefined as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                            fullName: "",
+                            relationship: undefined as unknown as DropdownType,
+                            phoneNumber: "",
+                            old: undefined as unknown as DropdownType,
+                            profession: undefined as unknown as DropdownType,
+                            gender: undefined as unknown as DropdownType,
+                        });
+                        setStateFormError({
+                            district: "",
+                            indicator: "",
+                            fullName: "",
+                            relationship: "",
+                            phoneNumber: "",
+                            old: "",
+                            profession: "",
+                            gender: "",
+                        });
+                    }}>Hủy đánh giá</button>
                     <button onClick={() => {
                         handleSubmit()
                     }}>
@@ -778,12 +996,71 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                         })
                     }}>Hủy</button>
                     <button onClick={() => {
-                        handleSubmit();
+                        handleSubmit(true);
                     }}>
                         Tiếp tục
                     </button>
                 </div>
             </CModal>
+            {/* Form hiển thị chia sẻ thành công*/}
+            <CModal
+                open={isOpenModalConfirmAfterSubmit}
+                title='Xác nhận'
+                onClose={() => {
+                    setIsOpenModalConfirmAfterSubmit(false);
+                }}
+                zIndex="lv3"
+                className='comfirm'
+                showCloseIcon={false}
+                closeOnOverlayClick={false}
+            >
+                <div className="t-chart_choose" style={{ marginTop: 20, fontSize: 16, textAlign: 'center' }}>
+                    Cảm ơn bạn đã chia sẻ đánh giá của bạn về Chỉ số Hạnh phúc với chúng tôi.
+                </div>
+                <div className='t-chart_form_submit' style={{ marginTop: 20 }}>
+                    <button onClick={() => {
+                        setStateForm({
+                            district: undefined as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                            fullName: "",
+                            relationship: undefined as unknown as DropdownType,
+                            phoneNumber: "",
+                            old: undefined as unknown as DropdownType,
+                            profession: undefined as unknown as DropdownType,
+                            gender: undefined as unknown as DropdownType,
+                        });
+                        setIsOpenModalConfirmAfterSubmit(false);
+                        setIsOpenModal(false);
+                    }}>
+                        Kết thúc Đánh giá
+                    </button>
+                    <button onClick={() => {
+                        setIsOpenModalConfirmAfterSubmit(false);
+                        setStateForm((prve) => ({
+                            questions: undefined as any,
+                            answers: [],
+                            loading: false,
+                            confirm: false,
+                            isValidated: false,
+                            district: prve.district as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            fullName: prve.fullName,
+                            phoneNumber: prve.phoneNumber,
+                            relationship: prve.relationship as unknown as DropdownType,
+                            old: prve.old as unknown as DropdownType,
+                            profession: prve.profession as unknown as DropdownType,
+                            gender: prve.gender as unknown as DropdownType,
+                        }))
+                    }} >
+                        Đánh giá tiếp chỉ số khác
+                    </button>
+                </div>
+            </CModal >
         </div>
     )
 }

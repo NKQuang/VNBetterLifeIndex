@@ -95,11 +95,16 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             handleUpdateSignIn(true);
             toast.success('Đăng nhập thành công!')
         } else {
-            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            toast.error('Tài khoản hoặc mật khẩu không chính xác.');
             setStatesLogin({
                 ...statesLogin,
                 pendding: false,
             });
+            setStatesSignInErr({
+                ...statesSignInErr,
+                username: "Thông tin đắng nhập không chính xác",
+                password: "Thông tin đắng nhập không chính xác"
+            })
         }
     }
 

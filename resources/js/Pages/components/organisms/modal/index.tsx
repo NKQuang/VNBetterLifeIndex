@@ -13,16 +13,19 @@ interface MotionProps {
     title?: string;
     zIndex?: ZIndex;
     className?: string;
+    showCloseIcon?: boolean;
+    closeOnOverlayClick?: boolean;
 }
 
-const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex = 'lv1', className }) => {
+const CModal: React.FC<MotionProps> = ({ open, onClose, children, title, zIndex = 'lv1', className, showCloseIcon, closeOnOverlayClick }) => {
     return (
         <div className={mapModifiers('o-modal', zIndex, className)}>
             <Modal
                 open={open}
                 onClose={onClose}
                 center
-                showCloseIcon
+                showCloseIcon={showCloseIcon}
+                closeOnOverlayClick={closeOnOverlayClick}
                 closeOnEsc
                 classNames={{
                     root: mapModifiers('o-modal', zIndex, className)

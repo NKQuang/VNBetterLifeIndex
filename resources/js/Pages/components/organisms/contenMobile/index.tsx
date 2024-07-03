@@ -145,7 +145,7 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                     </div>
                     <div className="t-mobile_body_filter_wrapper_button">
                         <button
-                            style={{ backgroundColor: softBy === 'alphabet' ? '#01a101' : '#fff', color: softBy === 'alphabet' ? '#fff' : '#000', border: 'unset' }}
+                            style={{ backgroundColor: softBy === 'alphabet' ? '#01a101' : '#cbcbcb', color: softBy === 'alphabet' ? '#fff' : '#000', border: 'unset' }}
                             onClick={() => {
                                 if (softBy === 'alphabet') return;
                                 handleSortData('alphabet')
@@ -156,7 +156,7 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                             setIdIndicatorsActive(99);
                         }}><i className="fa-solid fa-rotate-left" style={{ marginRight: 6 }}></i>Reset</button>
                         <button
-                            style={{ backgroundColor: softBy === 'rank' ? '#0141a1' : '#fff', border: 'unset', color: softBy === 'rank' ? '#fff' : '#000', }}
+                            style={{ backgroundColor: softBy === 'rank' ? '#01a101' : '#cbcbcb', border: 'unset', color: softBy === 'rank' ? '#fff' : '#000', }}
                             onClick={() => {
                                 if (softBy === 'rank') return;
                                 handleSortData('rank')

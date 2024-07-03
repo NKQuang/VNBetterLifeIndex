@@ -476,3 +476,9 @@
         transform: translateY(0%);
     }
 }
+
+@media screen and (max-width: 500px) {
+    .t-chart_form_submit button {
+        font-size: 15px;
+    }
+}
