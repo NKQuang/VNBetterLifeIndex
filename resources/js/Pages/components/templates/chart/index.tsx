@@ -201,6 +201,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     loading: false,
                     confirm: false,
                     isValidated: false,
+                    district: null as any,
+                    indicator: null as any,
                 })
                 toast.success('Gửi đánh giá thành công!');
                 getWbi();
@@ -720,6 +722,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                             profession: ''
                                         });
                                     }}
+                                    value={stateForm.profession}
                                     error={stateFormError.profession}
                                 />
                                 <Dropdown
@@ -727,6 +730,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     options={relationship}
                                     title='Tình trạng hôn nhân'
                                     placeholder='Chọn mối quan hệ hiện tại'
+                                    value={stateForm.relationship}
                                     handleOnChange={(value) => {
                                         setStateForm({
                                             ...stateForm,
@@ -909,14 +913,19 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                     <button onClick={() => {
                         setIsOpenModalConfirmAfterSubmit(false);
                         setStateForm((prve) => ({
-                            ...prve,
-                            district: undefined as any,
-                            indicator: undefined as any,
                             questions: undefined as any,
                             answers: [],
                             loading: false,
                             confirm: false,
                             isValidated: false,
+                            district: undefined as unknown as DropdownType,
+                            indicator: undefined as unknown as DropdownType,
+                            fullName: prve.fullName,
+                            phoneNumber: prve.phoneNumber,
+                            relationship: prve.relationship as unknown as DropdownType,
+                            old: prve.old as unknown as DropdownType,
+                            profession: prve.profession as unknown as DropdownType,
+                            gender: prve.gender as unknown as DropdownType,
                         }))
                     }} >
                         Đánh giá tiếp chỉ số khác
@@ -1031,6 +1040,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 options={profession}
                                 title='Nghề nghiệp'
                                 placeholder='Chọn nghề nghiệp của bạn'
+                                value={statesSignUp.profession}
                                 handleOnChange={(value) => {
                                     setStatesSignUp({ ...statesSignUp, profession: value });
                                     setStatesSignUpErr({ ...statesSignUpErr, profession: '' });
@@ -1040,6 +1050,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                             <Dropdown
                                 isRequired
                                 options={relationship}
+                                value={statesSignUp.relationship}
                                 title='Tình trạng hôn nhân'
                                 placeholder='Chọn mối quan hệ hiện tại'
                                 handleOnChange={(value) => {

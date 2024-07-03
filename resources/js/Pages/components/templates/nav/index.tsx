@@ -372,6 +372,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 isRequired
                                 options={profession}
                                 title='Nghề nghiệp'
+                                value={statesSignUp.profession}
                                 placeholder='Chọn nghề nghiệp của bạn'
                                 handleOnChange={(value) => {
                                     setStatesSignUp({ ...statesSignUp, profession: value });
@@ -384,6 +385,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 options={relationship}
                                 title='Tình trạng hôn nhân'
                                 placeholder='Chọn mối quan hệ hiện tại'
+                                value={statesSignUp.relationship}
                                 handleOnChange={(value) => {
                                     setStatesSignUp({ ...statesSignUp, relationship: value });
                                     setStatesSignUpErr({ ...statesSignUpErr, relationship: '' });
@@ -424,7 +426,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                         setStatesSignUpErr({ ...statesSignUpErr, password: '' });
                                     }}
                                     onKeyPress={(event) => {
-                                        console.log(event)
                                         if (event.key === "Enter") {
                                             handleSubmit();
                                         }
@@ -443,7 +444,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                         setStatesSignUpErr({ ...statesSignUpErr, passwordConfirm: '' });
                                     }}
                                     onKeyPress={(event) => {
-                                        console.log(event)
                                         if (event.key === "Enter") {
                                             handleSubmit();
                                         }

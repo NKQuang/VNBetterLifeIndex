@@ -31,7 +31,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     <div className={mapModifiers('a-dropdown', !!error ? 'error' : '')}>
         <p className='a-dropdown_header'>{title}: {isRequired && <span>*</span>}</p>
         <Select
-            value={value ?? undefined}
+            value={value ? value : null}
             options={options}
             placeholder={placeholder}
             onChange={handleOnChange}
