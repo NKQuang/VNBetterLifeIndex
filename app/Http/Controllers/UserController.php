@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Districts;
 use App\Models\IndicatorsValue;
 use App\Models\User;
+use DragonCode\Contracts\Cashier\Auth\Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -98,5 +99,10 @@ class UserController extends Controller
 
         // Return the data as a JSON response
         return response()->json($dataTable);
+    }
+    function historyProfile() {
+        $ratelist = IndicatorsValue::with('question')->where('user_id',auth()->user()->id)->get();
+        $data['ratelist'] = $ratelist;
+        return view('profile.history-rate',$data);
     }
 }

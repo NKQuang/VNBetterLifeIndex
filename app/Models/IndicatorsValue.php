@@ -17,7 +17,6 @@ class IndicatorsValue extends Model
         'districts_id',
         'question_code',
         'user_id',
-        'marital_status',
         'created_at',
         'updated_at'
     ];
@@ -94,8 +93,7 @@ class IndicatorsValue extends Model
     }
 
     public function user()
-{
-    return $this->belongsTo(User::class);
-}
-
+    {
+        return $this->belongsTo(User::class);
+    }
 }

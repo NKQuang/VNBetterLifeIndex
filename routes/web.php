@@ -6,6 +6,7 @@ use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\IndicatorValueController;
 use App\Http\Controllers\PopulationController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WeightController;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/historyProfile',[UserController::class,'historyProfile'])->name('history.profile');
+    Route::put('/reviews/{id}', [IndicatorValueController::class, 'updateOfUser'])->name('reviews.update');
 });
 //Route::middleware('logincookies')->get('/user/profile');
 Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
@@ -91,3 +94,4 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('/questions/store', [QuestionController::class, 'store'])->name('questions.store');
 
 });
+

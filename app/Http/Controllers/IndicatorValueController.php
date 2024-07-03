@@ -183,4 +183,17 @@ class IndicatorValueController extends Controller
         IndicatorsValue::where('type', $type)->delete();
         return redirect()->route('dashboard.indicator-values')->with('success', 'Đã xóa thành công.');
     }
+
+    public function updateOfUser(Request $request, $id)
+    {
+        $indicatorValue = IndicatorsValue::findOrFail($id);
+
+        $request->validate([
+            'value' => 'required|numeric',
+        ]);
+
+        $indicatorValue->update($request->all());
+
+        return redirect()->back()->with('success', 'Cập nhật thành công.');
+    }
 }
