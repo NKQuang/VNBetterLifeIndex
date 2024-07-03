@@ -49,17 +49,17 @@ export type SortType = 'alphabet' | 'rank'
 
 const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
     const { isFilter,
-        handleSetIsFilter,
         loading,
         chartData,
+        handleSetIsFilter,
         handleSetChartData,
         handleSetLoading,
         districts,
         indicators,
+        isSignIn,
+        questions,
         handleSetInfoDetail,
         handleShowDetail,
-        questions,
-        isSignIn,
         districtIndicators,
         handleSetDistrictActive,
         chartDataRoot,
@@ -483,7 +483,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                         handleSetChartData(chartDataRoot as any);
                                         handleSetLoading(true);
                                         setIdIndicatorsActive(99);
-                                    }}>Reset</button>
+                                    }}>Bỏ chọn chỉ số</button>
                                 </div>
                         }
                     </div>

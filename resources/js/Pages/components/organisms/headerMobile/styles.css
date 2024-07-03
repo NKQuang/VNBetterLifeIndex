@@ -5,7 +5,7 @@
     flex-direction: column-reverse;
     gap: 10px;
     margin-right: 12px;
-    width: 100%;
+    width: fit-content;
 }
 
 .t-mobile_header_action button {
@@ -39,7 +39,7 @@
 }
 
 .t-mobile_header_logo p {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 800;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-transform: uppercase;
