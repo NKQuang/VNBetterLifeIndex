@@ -30,4 +30,8 @@ class Question extends Model
         return $this->hasMany(User::class);
     }
 
+    public function indicatorsValues()
+    {
+        return $this->hasMany(IndicatorsValue::class, 'question_code', 'question_code');
+    }
 }

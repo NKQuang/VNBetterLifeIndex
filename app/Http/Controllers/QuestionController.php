@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $questions = Question::paginate(7);
+        $perPage = $request->input('per_page', 5);
+
+        $query = Question::query();
+        $questions = $query->paginate($perPage);
         $data['title'] = "Quản lý Câu hỏi";
         return view('dashboard.question', compact('questions'),$data);
     }

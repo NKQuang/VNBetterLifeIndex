@@ -6,6 +6,7 @@ use App\Http\Controllers\IndicatorController;
 use App\Http\Controllers\IndicatorValueController;
 use App\Http\Controllers\PopulationController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WeightController;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::get('/historyProfile',[UserController::class,'historyProfile'])->name('history.profile');
+    Route::put('/reviews/{id}', [IndicatorValueController::class, 'updateOfUser'])->name('reviews.update');
 });
 //Route::middleware('logincookies')->get('/user/profile');
 Route::get('/user/profile', [UserProfileController::class, 'show'])->name('profile.show');
@@ -37,6 +40,11 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/indicators', [App\Http\Controllers\DashboardController::class, 'getAllIndicators'])->name('dashboard.indicators');
 
     Route::get('/indicator-values', [App\Http\Controllers\DashboardController::class, 'getAllIndicatorsValue'])->name('dashboard.indicator-values');
+    Route::get('/indicator-value-admin', [App\Http\Controllers\DashboardController::class, 'IndicatorsConst'])->name('dashboard.indicator-value-admin');
+    Route::get('/indicators-value-admin/details/{id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDetail'])->name('indicators.details');
+    Route::get('/indicators-detail/{id}/{district_id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDitrictDetail'])->name('indicators.details.district');
+    Route::get('/delete/indicator-values/{type}',[App\Http\Controllers\IndicatorValueController::class,'deleteIndicatorsForType'])->name('delete.indicators');
+
 
     Route::post('/import/excel', [App\Http\Controllers\DashboardController::class, 'inportExcel'])->name('import.excel');
     Route::post('/users/export', [App\Http\Controllers\DashboardController::class, 'export']);
@@ -86,3 +94,4 @@ Route::group(['middleware' => 'admin'], function () {
     Route::post('/questions/store', [QuestionController::class, 'store'])->name('questions.store');
 
 });
+

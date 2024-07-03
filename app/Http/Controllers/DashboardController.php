@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\IndicatorsExport;
 use App\Exports\UsersExport;
 use App\Imports\IndicatorsImport;
 use App\Models\Districts;
@@ -13,7 +14,10 @@ use App\Models\User;
 use App\Models\Weight;
 use App\Models\Weights;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Maatwebsite\Excel\Facades\Excel;
+
+use Illuminate\Support\Collection;
 
 class DashboardController extends Controller
 {
@@ -25,19 +29,112 @@ class DashboardController extends Controller
         return view('dashboard.users', $data);
     }
     public function getAllIndicatorsValue(Request $request)
-    {
-        $query = IndicatorsValue::paginate(7);
+{
+    $perPage = $request->input('per_page', 5);
+    $dateFilter = $request->input('date');
 
-        foreach ($query as $indicatorValue) {
-            $indicatorValue->question = Question::where('question_code', $indicatorValue->question_code)->first();
+    $indicator = $request->input('indicators');
+    $district = $request->input('districts');
+    // dd($indicator);
+    $query = IndicatorsValue::query();
+
+    if ($district) {
+        $query->where('districts_id', $district);
+    }
+    if ($dateFilter) {
+        $query->whereDate('created_at', $dateFilter);
+    }
+
+    if ($indicator) {
+        $question = Question::find($indicator);
+        if ($question) {
+            $query->where('question_code', $question->question_code);
         }
+    }
 
-        $data['indicators_value'] = $query;
-        $data["title"] = "Quản lý giá trị chỉ số";
-        return view('dashboard.indicator-values', $data);
+    if ($request->has('export')) {
+        try {
+            return Excel::download(new IndicatorsExport($request), 'indicators.xlsx');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error','Có lỗi xảy ra vui lòng thử lại');
+        }
     }
 
 
+
+    foreach ($query as $indicatorValue) {
+        $indicatorValue->question = Question::where('question_code', $indicatorValue->question_code)->first();
+    }
+
+    $query = $query->where('type', 0)->paginate($perPage);
+
+    $districts = Districts::all();
+    $indicators = Indicators::all();
+
+    $data['indicators'] = $indicators;
+    $data['indicators_value'] = $query;
+    $data['districts'] = $districts;
+    $data["title"] = "Quản lý giá trị chỉ số người dùng đánh giá";
+
+    return view('dashboard.indicator-values', $data);
+}
+
+    public function IndicatorsConst(Request $request)
+    {
+        $perPage = $request->input('per_page', 5);
+        $indicatorFilter = $request->input('indicators');
+        $districtFilter = $request->input('districts');
+
+        $indicators = Indicators::all();
+        $districts = Districts::all();
+        $results = new Collection();
+
+        foreach ($districts as $district) {
+            if ($districtFilter && $district->id != $districtFilter) {
+                continue;
+            }
+
+            foreach ($indicators as $indicator) {
+                if ($indicatorFilter && $indicator->id != $indicatorFilter) {
+                    continue;
+                }
+
+                $valuesType1 = IndicatorsValue::where('districts_id', $district->id)
+                    ->where('type', 1)
+                    ->whereHas('question', function ($query) use ($indicator) {
+                        $query->where('indicator_id', $indicator->id);
+                    })
+                    ->pluck('value');
+
+                $averageType1 = $valuesType1->average();
+
+
+                $results->push((object) [
+                    'districts_id' => $district->id,
+                    'indicator_id' => $indicator->id,
+                    'indicator_name' => $indicator->name,
+                    'district_name' => $district->name,
+                    'average_value' => $averageType1
+                ]);
+            }
+        }
+        // Tạo collection và phân trang kết quả
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $items = $results->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $paginatedResults = new LengthAwarePaginator($items, $results->count(), $perPage, $currentPage, [
+            'path' => LengthAwarePaginator::resolveCurrentPath(),
+            'query' => $request->query(),
+        ]);
+
+        $data['districts'] = $districts;
+        $data['indicators'] = $indicators;
+        $data['results'] = $paginatedResults;
+
+
+        $data['title'] = "Quản lý chỉ số mặc định";
+
+        return view('dashboard.indicators-const', $data);
+    }
 
     public function getAllIndicators()
     {
@@ -87,7 +184,7 @@ class DashboardController extends Controller
         $profession = $request->profession;
         $old = $request->old;
 
-        return Excel::download(new UsersExport($gender,$user_type,$marital_status,$profession,$old), 'users.xlsx');
+        return Excel::download(new UsersExport($gender, $user_type, $marital_status, $profession, $old), 'users.xlsx');
     }
 
     function getAllDistricts()

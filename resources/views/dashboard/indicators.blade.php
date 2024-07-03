@@ -41,7 +41,10 @@
                                     @method('DELETE')
                                     <button type="submit" class="font-semibold leading-tight text-xs text-red-400"> Xóa </button>
                                 </form>
+                                |
                                 <a href="{{ route('indicators.edit', $row->id) }}" class="font-semibold leading-tight text-xs text-green-400"> Cập nhật </a>
+                                  |  <a href="{{ route('indicators.details', ['id' => $row->id]) }}" class="font-semibold leading-tight text-xs text-blue-400">Chi tiết</a>
+
                             </td>
                         </tr>
                         @endforeach
