@@ -29,6 +29,7 @@ function Home() {
             </React.StrictMode>
             <ToastContainer
                 position="top-right"
+                className={'toast-component-customize'}
                 autoClose={5000}
                 hideProgressBar={false}
                 newestOnTop={false}
@@ -37,7 +38,7 @@ function Home() {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="light"
+                theme="colored"
             />
         </div>
     )

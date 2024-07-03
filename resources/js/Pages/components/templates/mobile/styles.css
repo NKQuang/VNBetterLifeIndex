@@ -129,3 +129,10 @@
     margin: 0;
   }
 }
+
+@media screen and (max-width: 1300px) {
+  .o-modal-form-authen .react-responsive-modal-modal {
+    min-width: 55dvw;
+    margin: 0;
+  }
+}

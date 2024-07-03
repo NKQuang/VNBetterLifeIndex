@@ -49,7 +49,10 @@ export async function postDistrictsIndicators(body: any) {
 export async function postRegisterAccount(body: any) {
     try {
         const response = await HttpClient.postMethod("register", body);
-        return response?.data;
+        return {
+            ...response?.data,
+            status: response?.status
+        };
     } catch (error) {
         console.error("Error:", error);
     }
@@ -58,7 +61,10 @@ export async function postRegisterAccount(body: any) {
 export async function postLogout() {
     try {
         const response = await HttpClient.postMethod("logout");
-        return response?.data;
+        return {
+            ...response?.data,
+            status: response?.status
+        };
     } catch (error) {
         console.error("Error:", error);
     }

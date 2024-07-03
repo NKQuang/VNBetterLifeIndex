@@ -152,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
 
     const handleRegister = async (body: any) => {
         const response = await postRegisterAccount(body);
-        if (response) {
+        if (response.status === 200) {
             setStatesSignUp({
                 ...statesSignUp,
                 fullname: '',
@@ -170,11 +170,17 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             setStatesLogin({ ...statesLogin, pendding: false, isOpenFormLogin: false })
             toast.success('Đăng kí thành công. Vui lòng kiểm tra mail để xác thực tài khoản!');
         } else {
-            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
+            const { errors } = response
+            toast.error('Đã có lỗi xảy ra trong quá trình đăng kí');
             setStatesLogin({
                 ...statesLogin,
                 pendding: false,
             });
+            setStatesSignUpErr({
+                ...statesSignUpErr,
+                email: (errors.email || [])[0] ? (errors.email || [])[0] : '',
+                phoneNumber: (errors.phone || [])[0] ? (errors.phone || [])[0] : '',
+            })
         }
     }
 
@@ -240,7 +246,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 <div className="t-header_left">
                     <img className="t-mobile_header_icon" src={icLogo}></img>
                     <a href="/" className="site-header__logo js-site-header__logo">
-                        <p>phồn vinh - hạnh phúc</p>
+                        <p>CHỈ SỐ PHỒN VINH – HẠNH PHÚC</p>
                     </a>
                     <div>(WBI)</div>
                 </div>
@@ -372,6 +378,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 isRequired
                                 options={profession}
                                 title='Nghề nghiệp'
+                                value={statesSignUp.profession}
                                 placeholder='Chọn nghề nghiệp của bạn'
                                 handleOnChange={(value) => {
                                     setStatesSignUp({ ...statesSignUp, profession: value });
@@ -384,6 +391,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 options={relationship}
                                 title='Tình trạng hôn nhân'
                                 placeholder='Chọn mối quan hệ hiện tại'
+                                value={statesSignUp.relationship}
                                 handleOnChange={(value) => {
                                     setStatesSignUp({ ...statesSignUp, relationship: value });
                                     setStatesSignUpErr({ ...statesSignUpErr, relationship: '' });
@@ -424,7 +432,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                         setStatesSignUpErr({ ...statesSignUpErr, password: '' });
                                     }}
                                     onKeyPress={(event) => {
-                                        console.log(event)
                                         if (event.key === "Enter") {
                                             handleSubmit();
                                         }
@@ -443,7 +450,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                         setStatesSignUpErr({ ...statesSignUpErr, passwordConfirm: '' });
                                     }}
                                     onKeyPress={(event) => {
-                                        console.log(event)
                                         if (event.key === "Enter") {
                                             handleSubmit();
                                         }
