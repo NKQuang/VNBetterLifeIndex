@@ -29,55 +29,55 @@ class DashboardController extends Controller
         return view('dashboard.users', $data);
     }
     public function getAllIndicatorsValue(Request $request)
-{
-    $perPage = $request->input('per_page', 5);
-    $dateFilter = $request->input('date');
+    {
+        $perPage = $request->input('per_page', 5);
+        $dateFilter = $request->input('date');
 
-    $indicator = $request->input('indicators');
-    $district = $request->input('districts');
-    // dd($indicator);
-    $query = IndicatorsValue::query();
+        $indicator = $request->input('indicators');
+        $district = $request->input('districts');
+        // dd($indicator);
+        $query = IndicatorsValue::query();
 
-    if ($district) {
-        $query->where('districts_id', $district);
-    }
-    if ($dateFilter) {
-        $query->whereDate('created_at', $dateFilter);
-    }
-
-    if ($indicator) {
-        $question = Question::find($indicator);
-        if ($question) {
-            $query->where('question_code', $question->question_code);
+        if ($district) {
+            $query->where('districts_id', $district);
         }
-    }
-
-    if ($request->has('export')) {
-        try {
-            return Excel::download(new IndicatorsExport($request), 'indicators.xlsx');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error','Có lỗi xảy ra vui lòng thử lại');
+        if ($dateFilter) {
+            $query->whereDate('created_at', $dateFilter);
         }
+
+        if ($indicator) {
+            $question = Question::find($indicator);
+            if ($question) {
+                $query->where('question_code', $question->question_code);
+            }
+        }
+
+        if ($request->has('export')) {
+            try {
+                return Excel::download(new IndicatorsExport($request), 'indicators.xlsx');
+            } catch (\Throwable $th) {
+                return redirect()->back()->with('error', 'Có lỗi xảy ra vui lòng thử lại hoặc xuất file theo tùy chọn để ít dữ liệu hơn');
+            }
+        }
+
+
+
+        foreach ($query as $indicatorValue) {
+            $indicatorValue->question = Question::where('question_code', $indicatorValue->question_code)->first();
+        }
+
+        $query = $query->where('type', 0)->paginate($perPage);
+
+        $districts = Districts::all();
+        $indicators = Indicators::all();
+
+        $data['indicators'] = $indicators;
+        $data['indicators_value'] = $query;
+        $data['districts'] = $districts;
+        $data["title"] = "Quản lý giá trị chỉ số người dùng đánh giá";
+
+        return view('dashboard.indicator-values', $data);
     }
-
-
-
-    foreach ($query as $indicatorValue) {
-        $indicatorValue->question = Question::where('question_code', $indicatorValue->question_code)->first();
-    }
-
-    $query = $query->where('type', 0)->paginate($perPage);
-
-    $districts = Districts::all();
-    $indicators = Indicators::all();
-
-    $data['indicators'] = $indicators;
-    $data['indicators_value'] = $query;
-    $data['districts'] = $districts;
-    $data["title"] = "Quản lý giá trị chỉ số người dùng đánh giá";
-
-    return view('dashboard.indicator-values', $data);
-}
 
     public function IndicatorsConst(Request $request)
     {
@@ -183,8 +183,11 @@ class DashboardController extends Controller
         $marital_status = $request->marital_status;
         $profession = $request->profession;
         $old = $request->old;
-
-        return Excel::download(new UsersExport($gender, $user_type, $marital_status, $profession, $old), 'users.xlsx');
+        try {
+            return Excel::download(new UsersExport($gender, $user_type, $marital_status, $profession, $old), 'users.xlsx');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra vui lòng thử lại hoặc xuất file theo tùy chọn để ít dữ liệu hơn');
+        }
     }
 
     function getAllDistricts()
