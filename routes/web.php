@@ -3,11 +3,13 @@
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\IndicatorController;
+use App\Http\Controllers\IndicatorsValueController;
 use App\Http\Controllers\IndicatorValueController;
 use App\Http\Controllers\PopulationController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WeightController;
+use App\Models\IndicatorsValue;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,7 +43,7 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('/indicator-values', [App\Http\Controllers\DashboardController::class, 'getAllIndicatorsValue'])->name('dashboard.indicator-values');
     Route::get('/indicator-value-admin', [App\Http\Controllers\DashboardController::class, 'IndicatorsConst'])->name('dashboard.indicator-value-admin');
-    Route::get('/indicators-value-admin/details/{id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDetail'])->name('indicators.details');
+   /// Route::get('/indicators-value-admin/details/{id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDetail'])->name('indicators.details');
     Route::get('/indicators-detail/{id}/{district_id}', [App\Http\Controllers\IndicatorValueController::class, 'IndicatorsConstDitrictDetail'])->name('indicators.details.district');
     Route::get('/delete/indicator-values/{type}',[App\Http\Controllers\IndicatorValueController::class,'deleteIndicatorsForType'])->name('delete.indicators');
 
@@ -95,6 +97,9 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
     Route::post('/questions/store', [QuestionController::class, 'store'])->name('questions.store');
+
+    Route::delete('/indicator-value-admin/{id}',[IndicatorValueController::class,'delete'])->name('indicators.value.destroy');
+    Route::get('/indicator-value-admin/{id}/edit', [IndicatorValueController::class, 'edit'])->name('indicators.value.edit');
 
 });
 

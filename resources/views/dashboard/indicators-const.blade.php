@@ -103,23 +103,29 @@
                                         class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
                                         <div class="flex px-2 py-1">
                                             <div class="flex flex-col justify-center">
-                                                <h6 class="mb-0 leading-normal text-sm">{{ $row->indicator_name }}</h6>
+                                                <h6 class="mb-0 leading-normal text-sm">{{ optional($row->indicators)->name }}</h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td
                                         class="p-2 text-center align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                        <p class="mb-0 font-semibold leading-tight text-xs"> {{ $row->district_name }}</p>
+                                        <p class="mb-0 font-semibold leading-tight text-xs"> {{ optional($row->district)->full_name }}</p>
                                     </td>
                                     <td
                                         class="p-2 text-center align-middle bg-transparent border-b shadow-transparent break-words whitespace-normal max-w-xs">
                                         <span
-                                            class="font-semibold leading-tight text-xs text-slate-400">{{ $row->average_value ?? 'Không có dữ liệu' }}</span>
+                                            class="font-semibold leading-tight text-xs text-slate-400">{{ $row->value ?? 'Không có dữ liệu' }}</span>
                                     </td>
-                                    <td
+                                     <td
                                         class="p-2 text-center align-middle bg-transparent border-b shadow-transparent break-words whitespace-normal max-w-xs">
-                                        <a href="{{ route('indicators.details.district', ['id' => $row->indicator_id, 'district_id' => $row->districts_id]) }}"
-                                            class="px-2 py-2 text-blue-500 rounded-lg font-bold">Chi tiết</a>
+                                        <a href="{{ route('indicators.value.edit', $row->id) }}"
+                                            class="px-2 py-2 text-blue-500 rounded-lg text-xs font-bold">Chỉnh sữa</a>
+                                            |
+                                            <form action="{{ route('indicators.value.destroy', $row->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-2 py-2 text-red-500 rounded-lg text-xs font-bold">Xóa</button>
+                                            </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -137,8 +143,8 @@
                             {!! $results->appends([
                                     'per_page' => request('per_page'),
                                     'name' => request('name'),
-                                    'date' => request('date'),
-                                    'question_code' => request('question_code'),
+                                    'indicators' => request('indicators'),
+                                    'districts' => request('districts'),
                                 ])->links('vendor.pagination.pagination-custom') !!}
                         </ul>
                     </nav>

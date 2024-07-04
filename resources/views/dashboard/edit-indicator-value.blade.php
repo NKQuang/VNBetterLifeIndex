@@ -12,11 +12,27 @@
                         class="flex flex-col space-y-4">
                         @csrf
                         @method('PUT')
-                        <div class="flex flex-col">
-                            <label for="name" class="text-sm font-medium text-gray-700">Tên:</label>
-                            <input type="text" name="name" id="name"
-                                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                value="{{ old('name', $indicatorValue->name) }}" required>
+                        <div class="flex flex-col mb-3">
+                            <label for="districts_id" class="text-sm font-medium text-gray-700">Quận:</label>
+                            <select name="districts_id" id="districts_id"
+                                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" required>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}" {{ old('districts_id', $indicatorValue->district_id) == $district->id ? 'selected' : '' }}>
+                                        {{ $district->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex flex-col mb-3">
+                            <label for="indicators_id" class="text-sm font-medium text-gray-700">Loại:</label>
+                            <select name="indicators_id" id="indicators_id"
+                                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" required>
+                                @foreach($indicator as $indicator)
+                                    <option value="{{ $indicator->id }}" {{ old('indicators_id', $indicatorValue->indicators_id) == $indicator->id ? 'selected' : '' }}>
+                                        {{ $indicator->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="flex flex-col">
                             <label for="value" class="text-sm font-medium text-gray-700">Điểm đánh giá:</label>
@@ -27,24 +43,14 @@
                         </div>
 
 
-                        <div class="flex flex-col">
-                            <label for="question" class="text-sm font-medium text-gray-700">Câu hỏi:</label>
-                            <textarea type="text" name="question" id="question"
-                                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                value="{{ old('type', $indicatorValue->question) }}"></textarea>
-                        </div>
-                        <div class="flex flex-col">
-                            <label for="created_at" class="text-sm font-medium text-gray-700">Ngày đánh giá:</label>
-                            <input type="date" name="created_at" id="created_at"
-                                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                value="{{ old('created_at', $indicatorValue->created_at->format('Y-m-d')) }}" required>
-                        </div>
+
+
                         <div class="flex items-end justify-between">
                             <button type="submit"
                                 class=" text-blue-500 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
                                 Cập nhật
                             </button>
-                            <a href="{{ route('dashboard.indicator-values') }}"
+                            <a href="{{ route('dashboard.indicator-value-admin') }}"
                                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
                                 Hủy bỏ
                             </a>

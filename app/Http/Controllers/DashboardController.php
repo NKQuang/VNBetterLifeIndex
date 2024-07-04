@@ -87,48 +87,23 @@ class DashboardController extends Controller
 
         $indicators = Indicators::all();
         $districts = Districts::all();
-        $results = new Collection();
+        $query = IndicatorsValue::select('indicators_values.*')
+        ->join('districts', 'districts.id', '=', 'indicators_values.districts_id')
+        ->where('districts.hidden', 0)
+        ->where('indicators_values.type',1);
 
-        foreach ($districts as $district) {
-            if ($districtFilter && $district->id != $districtFilter) {
-                continue;
-            }
-
-            foreach ($indicators as $indicator) {
-                if ($indicatorFilter && $indicator->id != $indicatorFilter) {
-                    continue;
-                }
-
-                $valuesType1 = IndicatorsValue::where('districts_id', $district->id)
-                    ->where('type', 1)
-                    ->whereHas('question', function ($query) use ($indicator) {
-                        $query->where('indicator_id', $indicator->id);
-                    })
-                    ->pluck('value');
-
-                $averageType1 = $valuesType1->average();
-
-
-                $results->push((object) [
-                    'districts_id' => $district->id,
-                    'indicator_id' => $indicator->id,
-                    'indicator_name' => $indicator->name,
-                    'district_name' => $district->name,
-                    'average_value' => $averageType1
-                ]);
-            }
+        if (!empty($districtFilter)) {
+            $query->where('indicators_values.districts_id', $districtFilter);
         }
-        // Tạo collection và phân trang kết quả
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $items = $results->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $paginatedResults = new LengthAwarePaginator($items, $results->count(), $perPage, $currentPage, [
-            'path' => LengthAwarePaginator::resolveCurrentPath(),
-            'query' => $request->query(),
-        ]);
+
+        if (!empty($indicatorFilter)) {
+            $query->where('indicators_values.indicators_id', $indicatorFilter);
+        }
+       // dd($results);
 
         $data['districts'] = $districts;
         $data['indicators'] = $indicators;
-        $data['results'] = $paginatedResults;
+        $data['results'] = $query->paginate($perPage);
 
 
         $data['title'] = "Quản lý chỉ số mặc định";
@@ -173,7 +148,7 @@ class DashboardController extends Controller
         Excel::import(new IndicatorsImport, $excelFile);
 
         // Redirect back or to another page with a success message
-        return back()->with('success', 'Dữ liệu đã được tải lên thành công.');
+        return back()->with('success', 'Dữ liệu mặc định đã được tải lên thành công.');
     }
 
     public function export(Request $request)

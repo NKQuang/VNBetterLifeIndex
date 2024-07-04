@@ -5,8 +5,8 @@
             class="relative flex flex-col w-full min-w-0  break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border mb-4">
             <div class="p-6 pb-0 mb-0 bg-slate-400 rounded-t-2xl flex justify-between items-center">
                 <h6 class="text-lg font-semibold text-white">Bảng thống kê chỉ số</h6>
-                <a href="{{ route('indicators.create') }}"
-                    class="font-semibold leading-tight text-xs text-white bg-green-500 px-3 py-2 rounded">Thêm chỉ số mới</a>
+                {{-- <a href="{{ route('indicators.create') }}"
+                    class="font-semibold leading-tight text-xs text-white bg-green-500 px-3 py-2 rounded">Thêm chỉ số mới</a> --}}
                 <!-- Import Excel Form -->
             </div>
             <div class="flex-auto px-0 pt-0 pb-2">
@@ -52,18 +52,15 @@
 
                                     <td
                                         class="p-2 align-middle bg-transparent border-b whitespace-nowrap shadow-transparent">
-                                        <form action="{{ route('indicators.destroy', $row->id) }}" method="POST"
+                                        {{-- <form action="{{ route('indicators.destroy', $row->id) }}" method="POST"
                                             style="display:inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="font-semibold leading-tight text-xs text-red-400">
                                                 Xóa </button>
-                                        </form>
-                                        |
+                                        </form> --}}
                                         <a href="{{ route('indicators.edit', $row->id) }}"
                                             class="font-semibold leading-tight text-xs text-green-400"> Cập nhật </a>
-                                        | <a href="{{ route('indicators.details', ['id' => $row->id]) }}"
-                                            class="font-semibold leading-tight text-xs text-blue-400">Chi tiết</a>
 
                                     </td>
                                 </tr>

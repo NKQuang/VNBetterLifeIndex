@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('full_name');
             $table->string('full_name_en');
+            $table->tinyInteger('hidden')->default(0);
             $table->text('content')->nullable();
             $table->integer('regions_code')->unsigned();
             $table->foreign('regions_code')->references('code')->on('regions');

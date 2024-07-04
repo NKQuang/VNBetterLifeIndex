@@ -17,14 +17,16 @@ class IndicatorValueController extends Controller
         $indicatorValue = IndicatorsValue::findOrFail($id);
         $indicatorValue->delete();
 
-        return redirect()->route('dashboard.indicator-values')->with('success', 'Đã xóa thành công.');
+        return redirect()->back()->with('success', 'Đã xóa thành công.');
     }
 
     public function edit($id)
     {
         $indicatorValue = IndicatorsValue::findOrFail($id);
+        $districts = Districts::all();
+        $indicator = Indicators::all();
         $data['title'] = "Chỉnh sữa giá trị chỉ số";
-        return view('dashboard.edit-indicator-value', compact('indicatorValue'), $data);
+        return view('dashboard.edit-indicator-value', compact('indicatorValue','districts','indicator'), $data);
     }
 
     public function update(Request $request, $id)
@@ -32,15 +34,12 @@ class IndicatorValueController extends Controller
         $indicatorValue = IndicatorsValue::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
             'value' => 'required|numeric',
-            'question' => 'nullable|string',
-            'created_at' => 'required|date',
         ]);
 
         $indicatorValue->update($request->all());
 
-        return redirect()->route('dashboard.indicator-values')->with('success', 'Cập nhật thành công.');
+        return redirect()->route('dashboard.indicator-value-admin')->with('success', 'Cập nhật thành công.');
     }
     public function store(Request $request)
     {

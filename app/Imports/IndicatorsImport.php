@@ -17,13 +17,14 @@ class IndicatorsImport implements ToModel,WithHeadingRow
     {
         if (is_null($row['name'])) {
             return null;
+
         }
         return new IndicatorsValue([
             'name' => $row['name'],
             'districts_id' =>  $row['districts_id'],
             'value' =>  $row['value'],
-            'type' => 1,
-            'question_code' => $row['question_code'],
+            'indicators_id' =>  $row['indicators_id'],
+            'type' => 1
         ]);
     }
 }

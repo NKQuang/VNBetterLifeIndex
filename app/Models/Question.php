@@ -18,6 +18,10 @@ class Question extends Model
         'indicator_id',
     ];
 
+    public function indicatorsValues()
+    {
+        return $this->hasMany(IndicatorsValue::class, 'indicator_id', 'indicators_id');
+    }
     // Quan hệ với Indicator
     public function indicator()
     {
@@ -28,10 +32,5 @@ class Question extends Model
     public function users()
     {
         return $this->hasMany(User::class);
-    }
-
-    public function indicatorsValues()
-    {
-        return $this->hasMany(IndicatorsValue::class, 'question_code', 'question_code');
     }
 }

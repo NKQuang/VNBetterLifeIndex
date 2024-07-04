@@ -66,19 +66,19 @@ class DistrictController extends Controller
         $thirtyDaysAgo = Carbon::now()->subDays(30);
 
         $districts = Districts::where('regions_code', 77)
-    ->with(['indicatorValues' => function($query) use ($thirtyDaysAgo) {
-        $query->where('created_at', '>=', $thirtyDaysAgo);
-    }])->get();
+            ->with(['indicatorValues' => function ($query) use ($thirtyDaysAgo) {
+                $query->where('created_at', '>=', $thirtyDaysAgo);
+            }])->get();
 
         $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
             $questions = Question::with('indicator:name,id')->get();
 
 
-            $questions = $questions->map(function ($question) use ( $thirtyDaysAgo, $district) {
+            $questions = $questions->map(function ($question) use ($thirtyDaysAgo, $district) {
                 $indicatorValue = IndicatorsValue::where('districts_id', $district->id)
-                                                ->where('question_code', $question->question_code)
-                                                ->where('created_at', '>=', $thirtyDaysAgo)
-                                                ->first();
+                    ->where('question_code', $question->question_code)
+                    ->where('created_at', '>=', $thirtyDaysAgo)
+                    ->first();
                 $question->evaluated = $indicatorValue ? true : false;
                 $question->value = $indicatorValue ? $indicatorValue->value : null;
                 return $question;
@@ -92,17 +92,25 @@ class DistrictController extends Controller
             'districts' => $result,
         ]);
     }
+    public function getAllQuestions()
+    {
+        // Lấy tất cả các câu hỏi từ bảng questions
+        $questions = Question::all();
+
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json($questions);
+    }
     public function destroy($id)
     {
         $district = Districts::find($id);
         if ($district) {
             try {
-                $district->delete();
-            return redirect()->route('dashboard.districts')->with('success', 'Xóa quận/huyện thành công');
+                $district->hidden = 1;
+                $district->update();
+                return redirect()->route('dashboard.districts')->with('success', 'Xóa quận/huyện thành công');
             } catch (\Throwable $th) {
                 return redirect()->route('dashboard.districts')->with('error', 'Không thể xóa quận/huyện đang chưa dữ liệu');
             }
-
         }
         return redirect()->route('dashboard.districts')->with('error', 'Không thể tìm thấy quận/huyện');
     }

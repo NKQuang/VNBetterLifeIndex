@@ -17,13 +17,17 @@ return new class extends Migration
             $table->double('value');
             $table->boolean('type');
             $table->unsignedBigInteger('districts_id');
-            $table->string('question_code');
+            $table->unsignedBigInteger('indicators_id')->nullable();
+
+           // $table->string('question_code')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('districts_id')->references('id')->on('districts');
+            $table->foreign('indicators_id')->references('id')->on('indicators');
+
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->foreign('question_code')->references('question_code')->on('questions');
+           // $table->foreign('question_code')->references('question_code')->on('questions');
             $table->timestamps();
         });
     }

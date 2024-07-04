@@ -56,8 +56,8 @@ class WeightController extends Controller
         }
 
         // Check if total value exceeds 100%
-        if ($totalValue > 100) {
-            return redirect()->back()->withErrors(['value' => 'Tổng giá trị không được vượt quá 100%'])->withInput();
+        if ($totalValue != 100) {
+            return redirect()->back()->withErrors(['value' => 'Tổng giá trị không được khác 100%'])->withInput();
         }
 
         // Update weights

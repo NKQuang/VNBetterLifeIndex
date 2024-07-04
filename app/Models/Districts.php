@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\HiddenScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,9 +16,14 @@ class Districts extends Model
         'full_name',
         'full_name_en',
         'content',
-        'regions_code'
+        'regions_code',
+        'hidden'
     ];
     // Trong model Districts
+    protected static function booted()
+    {
+        static::addGlobalScope(new HiddenScope);
+    }
 public function populations()
 {
     return $this->hasMany(Populations::class, 'districts_id');

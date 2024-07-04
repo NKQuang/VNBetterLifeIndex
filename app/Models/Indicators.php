@@ -21,6 +21,10 @@ class Indicators extends Model
     {
         return $this->hasMany(Question::class);
     }
+    public function indicatorsvalue()
+    {
+        return $this->hasMany(IndicatorsValue::class);
+    }
     // Get all indicators
     public function getAll()
     {

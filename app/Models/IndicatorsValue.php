@@ -15,13 +15,17 @@ class IndicatorsValue extends Model
         'value',
         'type',
         'districts_id',
-        'question_code',
+        'indicators_id',
         'user_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'indicators_id'
     ];
 
-
+    public function question()
+    {
+        return $this->belongsTo(Question::class, 'indicators_id', 'indicator_id');
+    }
 
 
     public function getAll()
@@ -82,9 +86,9 @@ class IndicatorsValue extends Model
         return false;
     }
 
-    public function question()
+    public function indicators()
     {
-        return $this->belongsTo(Question::class, 'question_code', 'question_code');
+        return $this->belongsTo(Indicators::class, 'indicators_id');
     }
 
     public function district()
