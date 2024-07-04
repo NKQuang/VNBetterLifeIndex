@@ -100,6 +100,8 @@ Route::group(['middleware' => 'admin'], function () {
 
     Route::delete('/indicator-value-admin/{id}',[IndicatorValueController::class,'delete'])->name('indicators.value.destroy');
     Route::get('/indicator-value-admin/{id}/edit', [IndicatorValueController::class, 'edit'])->name('indicators.value.edit');
+    Route::get('/indicator-value-admin/create', [IndicatorValueController::class, 'create'])->name('indicators.value.create');
+Route::post('/indicator-value-admin/value', [IndicatorValueController::class, 'store'])->name('indicators.value.store');
 
 });
 

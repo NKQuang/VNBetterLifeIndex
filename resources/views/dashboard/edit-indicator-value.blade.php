@@ -13,7 +13,7 @@
                         @csrf
                         @method('PUT')
                         <div class="flex flex-col mb-3">
-                            <label for="districts_id" class="text-sm font-medium text-gray-700">Quận:</label>
+                            <label for="districts_id" class="text-sm font-medium text-gray-700">Quận/Huyện:</label>
                             <select name="districts_id" id="districts_id"
                                 class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" required>
                                 @foreach($districts as $district)
@@ -24,7 +24,7 @@
                             </select>
                         </div>
                         <div class="flex flex-col mb-3">
-                            <label for="indicators_id" class="text-sm font-medium text-gray-700">Loại:</label>
+                            <label for="indicators_id" class="text-sm font-medium text-gray-700">Loại Chỉ Số:</label>
                             <select name="indicators_id" id="indicators_id"
                                 class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" required>
                                 @foreach($indicator as $indicator)
@@ -35,16 +35,12 @@
                             </select>
                         </div>
                         <div class="flex flex-col">
-                            <label for="value" class="text-sm font-medium text-gray-700">Điểm đánh giá:</label>
+                            <label for="value" class="text-sm font-medium text-gray-700">Giá trị Mặc định</label>
                             <input type="number" name="value" id="value"
                                 class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                                 value="{{ old('value', $indicatorValue->value) }}" step="0.00000000000000001" min="0"
                                 max="10" required>
                         </div>
-
-
-
-
                         <div class="flex items-end justify-between">
                             <button type="submit"
                                 class=" text-blue-500 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">

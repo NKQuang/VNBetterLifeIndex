@@ -73,10 +73,9 @@ class DistrictController extends Controller
         $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
             $questions = Question::with('indicator:name,id')->get();
 
-
             $questions = $questions->map(function ($question) use ($thirtyDaysAgo, $district) {
                 $indicatorValue = IndicatorsValue::where('districts_id', $district->id)
-                    ->where('question_code', $question->question_code)
+                    ->where('indicators_id', $question->indicator_id) // Truy vấn bằng indicator_id thay vì question_code
                     ->where('created_at', '>=', $thirtyDaysAgo)
                     ->first();
                 $question->evaluated = $indicatorValue ? true : false;
@@ -92,6 +91,7 @@ class DistrictController extends Controller
             'districts' => $result,
         ]);
     }
+
     public function getAllQuestions()
     {
         // Lấy tất cả các câu hỏi từ bảng questions

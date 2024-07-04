@@ -5,7 +5,10 @@
     <div class="relative flex flex-col w-full min-w-0  break-words bg-white border-0 border-transparent border-solid shadow-soft-xl rounded-2xl bg-clip-border mb-4">
         <div class="p-6 pb-0 mb-0 bg-slate-400 rounded-t-2xl">
             <h6 class="font-semibold text-white">Quản lý quận huyện</h6>
-            <a href="{{ route('districts.create') }}" class="inline-block mt-2 px-3 py-2 bg-green-500 text-xs font-semibold leading-tight text-white rounded">Thêm mới Quận/Huyện</a>
+            <div class="flex items-center">
+            <a href="{{ route('districts.create') }}" class="text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 mb-2">Thêm mới Quận/Huyện</a>
+
+            </div>
         </div>
 
         <div class="flex-auto px-0 pt-0 pb-2">

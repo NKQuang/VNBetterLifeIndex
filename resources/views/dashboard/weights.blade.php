@@ -7,7 +7,7 @@
                 <h6 class="text-lg font-semibold text-white">Bảng trọng số</h6>
                 {{-- <a href="{{ route('weights.create') }}" class="font-semibold leading-tight text-xs text-white bg-green-500 px-3 py-2 rounded">Tạo mới</a> --}}
                 <a href="{{ route('weights.edit') }}"
-                    class="font-semibold leading-tight text-xs text-white bg-blue-500 px-3 py-2 rounded">Cập giá trị các
+                    class="ml-4 text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 mb-2">Cập giá trị các
                     trọng số</a>
 
                 <!-- Import Excel Form -->

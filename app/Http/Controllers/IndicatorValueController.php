@@ -29,6 +29,40 @@ class IndicatorValueController extends Controller
         return view('dashboard.edit-indicator-value', compact('indicatorValue','districts','indicator'), $data);
     }
 
+    public function create()
+    {
+        $districts = Districts::all(); // Lấy tất cả các quận từ cơ sở dữ liệu
+        $indicators = Indicators::all();
+        $data['title'] = "Tạo mới chỉ số mặc định";
+        return view('dashboard.create-indicator-value', compact('districts','indicators'),$data);
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'value' => 'required|numeric',
+            'district_id' => 'required',
+            'indicator_id' => 'required', // Thêm xác thực cho indicator_id
+            // Các quy tắc xác thực khác nếu cần
+        ]);
+        try {
+            $name = Indicators::find($request->input('indicator_id'))->name;
+            $indicatorValue = new IndicatorsValue();
+            $indicatorValue->name = $name;
+            $indicatorValue->value = $request->input('value');
+            $indicatorValue->districts_id = $request->input('district_id');
+            $indicatorValue->indicators_id = $request->input('indicator_id');
+            $indicatorValue->type = 1;// Lưu indicator_id
+            // Lưu indicator_id
+            $indicatorValue->save();
+            return redirect()->route('dashboard.indicator-value-admin')->with('success', 'Tạo mới giá trị thành công');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra vui lòng thử lại');
+
+        }
+        return redirect()->back()->with('success', 'Tạo mới giá trị thành công');
+    }
+
+
     public function update(Request $request, $id)
     {
         $indicatorValue = IndicatorsValue::findOrFail($id);
@@ -41,9 +75,8 @@ class IndicatorValueController extends Controller
 
         return redirect()->route('dashboard.indicator-value-admin')->with('success', 'Cập nhật thành công.');
     }
-    public function store(Request $request)
+    public function storeapi(Request $request)
     {
-
         // Validate request data
         $request->validate([
             'user_id' => 'nullable|sometimes',
@@ -130,6 +163,8 @@ class IndicatorValueController extends Controller
             'message' => 'Indicator values submitted successfully'
         ]);
     }
+
+
     function IndicatorsConstDetail(Request $request, $id)
     {
 

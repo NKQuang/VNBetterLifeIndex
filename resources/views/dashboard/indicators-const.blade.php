@@ -20,9 +20,9 @@
                             class="ml-4 text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">
                             Tải file mẫu
                         </a>
+                        <a href="{{ route('indicators.value.create') }}" class="ml-4 text-blue-600 font-bold py-2 px-4 rounded-lg bg-white border border-gray-300 hover:bg-gray-100">Thêm mới chỉ số mặc định</a>
                     </div>
                 </form>
-                <!-- Download Sample File Button -->
 
             </div>
 
