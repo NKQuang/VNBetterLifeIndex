@@ -117,6 +117,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="sm:col-span-3">
+                            <label for="role" class="block text-sm font-medium leading-6 text-gray-900">Chức vụ</label>
+                            <div class="mt-2">
+                                <select id="role" name="role" autocomplete="role"
+                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 p-2">
+                                    @foreach($roles as $roleKey => $roleName)
+                                        <option value="{{ $roleKey }}" {{ $user->role == $roleKey ? 'selected' : '' }}>{{ $roleName }}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-yellow-500 text-xs italic">Lưu ý: Admin không thể tự đổi role của mình</span>
+                                @error('role')
+                                    <span class="text-red-500 text-xs italic">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
                         <div class="col-span-full">
                             <label for="address" class="block text-sm font-medium leading-6 text-gray-900">Địa chỉ</label>
                             <div class="mt-2">

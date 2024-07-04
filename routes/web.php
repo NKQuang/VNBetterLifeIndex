@@ -84,6 +84,9 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('/districts/{id}/edit', [DistrictController::class, 'edit'])->name('districts.edit');
     Route::put('/districts/{id}', [DistrictController::class, 'update'])->name('districts.update');
 
+    Route::get('/districts/create', [DistrictController::class, 'create'])->name('districts.create');
+    Route::post('/districts', [DistrictController::class, 'store'])->name('districts.store');
+    Route::delete('/districts/{id}', [DistrictController::class, 'destroy'])->name('districts.destroy');
 
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::delete('/questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');

@@ -22,6 +22,27 @@ class DistrictController extends Controller
         return redirect()->back()->with('error', 'Không tìm thấy quận huyện.');
     }
 
+    public function create()
+    {
+        $data['title'] = "Thêm mới quận/huyện";
+        return view('dashboard.create-district', $data);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'full_name' => 'required',
+            'full_name_en' => 'required',
+            'content' => 'required',
+            'regions_code' => 'required',
+        ]);
+
+        $district = new Districts($request->all());
+        $district->save();
+
+        return redirect()->route('dashboard.districts')->with('success', 'Thêm mới quận/huyện thành công');
+    }
     // Phương thức để cập nhật quận huyện
     public function update(Request $request, $id)
     {
@@ -70,5 +91,19 @@ class DistrictController extends Controller
         return response()->json([
             'districts' => $result,
         ]);
+    }
+    public function destroy($id)
+    {
+        $district = Districts::find($id);
+        if ($district) {
+            try {
+                $district->delete();
+            return redirect()->route('dashboard.districts')->with('success', 'Xóa quận/huyện thành công');
+            } catch (\Throwable $th) {
+                return redirect()->route('dashboard.districts')->with('error', 'Không thể xóa quận/huyện đang chưa dữ liệu');
+            }
+
+        }
+        return redirect()->route('dashboard.districts')->with('error', 'Không thể tìm thấy quận/huyện');
     }
 }
