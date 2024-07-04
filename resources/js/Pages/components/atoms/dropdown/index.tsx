@@ -37,6 +37,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 <Select
                     value={value ? value : null}
                     options={options}
+                    isSearchable={false}
                     placeholder={placeholder}
                     onChange={handleOnChange}
                     className='a-dropdown_input'

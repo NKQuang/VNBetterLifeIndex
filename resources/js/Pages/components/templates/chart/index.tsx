@@ -235,6 +235,17 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             })
             return false;
         }
+        if (
+            isSignIn && !stateForm.district?.value ||
+            isSignIn && !stateForm.indicator?.value
+        ) {
+            setStateFormError({
+                ...stateFormError,
+                district: !stateForm.district?.value ? "Huyện là trường bắt buộc" : "",
+                indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
+            })
+            return false;
+        }
         if (!isContinue && stateForm.answers.some((i) => i === 0)) {
             setStateForm({
                 ...stateForm,
@@ -568,8 +579,13 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                 setStateForm({
                                     ...stateForm,
                                     district: value,
+                                });
+                                setStateFormError({
+                                    ...stateFormError,
+                                    district: ''
                                 })
                             }}
+                            error={stateFormError.district}
                         />
                         <Dropdown
                             isRequired
@@ -585,7 +601,12 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                                     questions: listQuestion,
                                     answers: listQuestion?.map((i, idx) => 0) as any,
                                 });
+                                setStateFormError({
+                                    ...stateFormError,
+                                    indicator: ''
+                                })
                             }}
+                            error={stateFormError.indicator}
                         />
 
                         {stateForm.indicator && stateForm.district?.id &&
