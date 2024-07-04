@@ -82,8 +82,7 @@
                         class="{{ strpos($currentUrl, '/indicator-value-admin') !== false ? 'bg-gradient-to-tl from-purple-700 to-pink-500 shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5' : 'shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5' }}">
                         <i class="fa-solid fa-database"></i>
                     </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Quản lý chỉ số cố
-                        định</span>
+                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Quản lý chỉ số mặc định</span>
                 </a>
             </li>
             {{-- <li class="mt-0.5 w-full">

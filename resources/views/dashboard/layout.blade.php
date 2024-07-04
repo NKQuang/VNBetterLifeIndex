@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/tailwind/tailwind.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/loopple/loopple.css') }}">
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
     @livewireStyles
 </head>
 
@@ -204,6 +205,13 @@
         };
     </script>
     <script src="{{ asset('assets/js/loopple/loopple.js') }}"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 </body>
 
 </html>

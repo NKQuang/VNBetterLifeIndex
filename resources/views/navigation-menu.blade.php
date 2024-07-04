@@ -13,7 +13,7 @@
                     <div class="flex items-center mb-4">
                         <a href="{{ route('dashboard') }}"
                             class="text-sm md:text-xl font-bold text-yellow-700 hover:text-indigo-500">
-                            <span class="text-yellow-700 font-mono">{{ __('PHỒN VINH - HẠNH PHÚC') }}</span>
+                            <span class="text-yellow-700 font-mono">{{ __('CHỈ SỐ PHỒN VINH - HẠNH PHÚC') }}</span>
                             <span class="text-green-700">{{ __('(WBI)') }}</span>
                         </a>
                     </div>

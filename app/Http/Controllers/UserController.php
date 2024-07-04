@@ -16,6 +16,10 @@ class UserController extends Controller
         $data['title'] = 'Chỉnh sửa người dùng';
         $data['user'] = $user;
         $data['districts'] = Districts::all();
+        $data['roles'] = [
+            'admin' => 'admin',
+            'user' => 'user',
+        ];
         return view('dashboard.editUser', $data);
     }
     public function updateUser(Request $request, $id)
@@ -24,6 +28,7 @@ class UserController extends Controller
         if (!$user) {
             return redirect()->route('dashboard.users')->with('error', 'Có lỗi xảy ra vui lòng thử lại.');
         }
+
         // Define validation rules
         $rules = [
             'name' => 'required|string|max:255',
@@ -32,6 +37,7 @@ class UserController extends Controller
             'regions' => 'required|string|max:255',
             'districts' => 'required|numeric',
             'address' => 'required|string|max:255',
+            'role' => 'nullable',
             'file-upload' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048', // Assuming you want to allow image uploads
         ];
 
@@ -50,18 +56,22 @@ class UserController extends Controller
         // Perform validation
         $validatedData = $request->validate($rules, $messages);
 
-        // Proceed with the update operation using $validatedData
-        $user = User::findOrFail($id);
+        // Kiểm tra nếu người dùng đang chỉnh sửa là admin và người dùng hiện tại cũng là admin
+        if ($user->role == 'admin' && auth()->user()->id == $user->id) {
+            unset($validatedData['role']); // Không cho phép thay đổi role
+        }
+
         try {
             $user->update($validatedData);
             $user->save();
         } catch (\Throwable $th) {
-            return redirect()->route('dashboard.users')->with('error', 'Có lỗi xảy ra vui lòng thử lại.' . $th);
+            return redirect()->route('dashboard.users')->with('error', 'Có lỗi xảy ra vui lòng thử lại. ' . $th->getMessage());
         }
 
         // Redirect or return response after successful update
         return redirect()->route('dashboard.users')->with('success', 'Cập nhật thông tin người dùng thành công.');
     }
+
     public function blockUser($id)
     {
         $user = User::findOrFail($id);
@@ -100,9 +110,10 @@ class UserController extends Controller
         // Return the data as a JSON response
         return response()->json($dataTable);
     }
-    function historyProfile() {
-        $ratelist = IndicatorsValue::with('question')->where('user_id',auth()->user()->id)->get();
+    function historyProfile()
+    {
+        $ratelist = IndicatorsValue::with('question')->where('user_id', auth()->user()->id)->get();
         $data['ratelist'] = $ratelist;
-        return view('profile.history-rate',$data);
+        return view('profile.history-rate', $data);
     }
 }
