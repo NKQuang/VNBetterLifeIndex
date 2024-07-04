@@ -111,7 +111,7 @@ const HomePage: React.FC = () => {
                     <div
                       className={mapModifiers('p-home_content_indicators_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
                       style={{
-                        height: i.value * 12,
+                        height: i.value > 0 ? i.value * 12 : 2,
                         width: '20px',
                         cursor: 'pointer'
                       }}

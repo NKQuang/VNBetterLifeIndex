@@ -31,7 +31,11 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         isSignIn,
         loading,
         districtActive,
-        districts, indicators, questions, handleSetInfoUser, isShowDetail, allIndicators
+        districts, indicators, questions, handleSetInfoUser, isShowDetail, allIndicators, chartData,
+        handleSetInfoDetail,
+        handleShowDetail,
+        handleSetDistrictActive,
+        districtIndicators
     } = useBetterLife();
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const refMenu = useRef<HTMLUListElement>(null)
@@ -430,9 +434,18 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                                 <div
                                                     className={mapModifiers('t-mobile_body_indicator_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
                                                     style={{
-                                                        height: i.value * 12,
+                                                        height: i.value > 0 ? i.value * 12 : 2,
                                                         width: '20px',
-                                                    }} />
+                                                    }}
+                                                    onTouchStart={() => {
+                                                        const districtItem = chartData?.find((y) => y.district_id === i.district_id);
+                                                        handleSetLoading(true);
+                                                        handleSetInfoDetail(districtItem as any);
+                                                        handleShowDetail(true);
+                                                        const districtActive = districtIndicators?.districts.filter((y) => y.id === i.district_id);
+                                                        handleSetDistrictActive((districtActive || [])[0]);
+                                                    }}
+                                                />
                                             </CTooltip>)}
                                         </div>
                                     </div>

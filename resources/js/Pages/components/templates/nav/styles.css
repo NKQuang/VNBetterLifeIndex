@@ -224,6 +224,24 @@
     margin-bottom: 4px;
 }
 
+.t-header .t-header_right_rating {
+    height: 45px;
+    z-index: 10;
+    min-width: 130px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #00a53f !important;
+    padding: 3px 8px;
+    border-radius: 4px;
+    gap: 6px;
+    box-shadow: 2px 2px 5px 0px rgba(172, 172, 172, 0.3);
+}
+
+.t-header .t-header_right .t-header_right_rating img {
+    width: 24px;
+}
+
 @media only screen and (max-width: 1280px) {
     .t-header .t-header_wrapper {
         width: 100vw;

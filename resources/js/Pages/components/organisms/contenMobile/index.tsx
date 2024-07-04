@@ -154,13 +154,13 @@ const ContentMobile: React.FC<ContentMobileProps> = ({
                             handleSetChartData(chartDataRoot as any);
                             handleSetLoading(true);
                             setIdIndicatorsActive(99);
-                        }}><i className="fa-solid fa-rotate-left" style={{ marginRight: 6 }}></i>Reset</button>
+                        }}><i className="fa-solid fa-rotate-left" style={{ marginRight: 6 }}></i>Bỏ chọn chỉ số</button>
                         <button
                             style={{ backgroundColor: softBy === 'rank' ? '#01a101' : '#cbcbcb', border: 'unset', color: softBy === 'rank' ? '#fff' : '#000', }}
                             onClick={() => {
                                 if (softBy === 'rank') return;
                                 handleSortData('rank')
-                            }}>Xếp hàng WBI</button>
+                            }}>Xếp hạng WBI</button>
 
                     </div>
                 </div>
