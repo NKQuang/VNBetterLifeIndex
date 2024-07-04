@@ -70,7 +70,7 @@ class DistrictController extends Controller
                 $query->where('created_at', '>=', $thirtyDaysAgo);
             }])->get();
 
-        $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
+    $result = $districts->map(function ($district) use ($thirtyDaysAgo) {
             $questions = Question::with('indicator:name,id')->get();
 
             $questions = $questions->map(function ($question) use ($thirtyDaysAgo, $district) {

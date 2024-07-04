@@ -337,6 +337,17 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             })
             return false;
         }
+        if (
+            isSignIn && !stateForm.district?.value ||
+            isSignIn && !stateForm.indicator?.value
+        ) {
+            setStateFormError({
+                ...stateFormError,
+                district: !stateForm.district?.value ? "Huyện là trường bắt buộc" : "",
+                indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
+            })
+            return false;
+        }
         if (!isContinue && stateForm.answers.some((i) => i === 0)) {
             setStateForm({
                 ...stateForm,
@@ -395,7 +406,11 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         </>
                     }
                     <button className='t-header_right_rating' onClick={() => {
-                        setIsOpenModalConfirm(true)
+                        if (isSignIn) {
+                            setIsOpenModal(true);
+                        } else {
+                            setIsOpenModalConfirm(true)
+                        }
                     }}>
                         <img src={icImprovementLight} />
                         <span>Chia sẻ ngay</span>
@@ -763,8 +778,13 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 setStateForm({
                                     ...stateForm,
                                     district: value,
+                                });
+                                setStateFormError({
+                                    ...stateFormError,
+                                    district: ''
                                 })
                             }}
+                            error={stateFormError.district}
                         />
                         <Dropdown
                             isRequired
@@ -780,9 +800,13 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                     questions: listQuestion,
                                     answers: listQuestion?.map((i, idx) => 0) as any,
                                 });
+                                setStateFormError({
+                                    ...stateFormError,
+                                    indicator: ''
+                                })
                             }}
+                            error={stateFormError.indicator}
                         />
-
                         {stateForm.indicator && stateForm.district?.id &&
                             <>
                                 <h2>Bộ câu hỏi</h2>
