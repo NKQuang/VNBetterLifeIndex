@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import Select from 'react-select';
 import './styles.css'
 import { mapModifiers } from '../../../utils/functions';
+import { useBetterLife } from '../../templates/provider';
 
 export interface DropdownType {
     value: string | number | undefined;
@@ -26,22 +27,21 @@ const Dropdown: React.FC<DropdownProps> = ({
     isRequired,
     handleOnChange,
     value,
-    error
+    error,
 }) => {
-    const selectRef = useRef(null)
+    const { sreenWidth
+    } = useBetterLife();
     return (
-
         < div className={mapModifiers('a-dropdown', !!error ? 'error' : '')} >
             <p className='a-dropdown_header'>{title}: {isRequired && <span>*</span>}</p>
             <div>
                 <Select
                     value={value ? value : null}
                     options={options}
-                    isSearchable={false}
+                    isSearchable={sreenWidth > 1280}
                     placeholder={placeholder}
                     onChange={handleOnChange}
                     className='a-dropdown_input'
-                    ref={selectRef}
                 />
             </div>
             <span>{error}</span>
