@@ -29,18 +29,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     error
 }) => {
     const selectRef = useRef(null)
-    // Hàm xử lý sự kiện focus
-    const handleFocus = (e: React.FocusEvent) => {
-        e.preventDefault();
-        if (selectRef.current) {
-            (selectRef.current as any).blur();
-        }
-    };
     return (
 
         < div className={mapModifiers('a-dropdown', !!error ? 'error' : '')} >
             <p className='a-dropdown_header'>{title}: {isRequired && <span>*</span>}</p>
-            <div onFocus={handleFocus}>
+            <div>
                 <Select
                     value={value ? value : null}
                     options={options}

@@ -395,7 +395,11 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         </>
                     }
                     <button className='t-header_right_rating' onClick={() => {
-                        setIsOpenModalConfirm(true)
+                        if (isSignIn) {
+                            setIsOpenModal(true);
+                        } else {
+                            setIsOpenModalConfirm(true)
+                        }
                     }}>
                         <img src={icImprovementLight} />
                         <span>Chia sẻ ngay</span>
