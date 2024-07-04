@@ -104,6 +104,7 @@
   width: fit-content;
   min-width: 60dvw;
   margin: 0;
+  max-height: 80dvh;
 }
 
 .o-modal-form-authen .react-responsive-modal-modal {
@@ -125,6 +126,7 @@
 @media screen and (max-width: 500px) {
   .o-modal-form_mobile .react-responsive-modal-modal {
     height: fit-content;
+    min-height: 80dvh;
     width: 95dvw;
     margin: 0;
   }

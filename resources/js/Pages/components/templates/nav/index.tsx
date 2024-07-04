@@ -102,15 +102,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalConfirm, setIsOpenModalConfirm] = useState(false);
     const [isOpenModalConfirmAfterSubmit, setIsOpenModalConfirmAfterSubmit] = useState(false);
-    const [states, setStates] = useState({
-        username: '',
-        password: '',
-        isHidePassword: false,
-        isOpenFormLogin: false,
-        pendding: false,
-    })
-    const [idIndicatorsActive, setIdIndicatorsActive] = useState<number>(99);
-
 
     useEffect(() => {
         setInfo(infoDetail);

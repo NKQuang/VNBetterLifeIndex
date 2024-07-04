@@ -42,6 +42,8 @@ const Dropdown: React.FC<DropdownProps> = ({
                     placeholder={placeholder}
                     onChange={handleOnChange}
                     className='a-dropdown_input'
+                    menuPosition="absolute"
+                    menuPlacement="auto"
                 />
             </div>
             <span>{error}</span>
