@@ -8,6 +8,7 @@ interface FlowerProps {
     data: Indicator[];
     onMouseEnter: () => void;
     onMouseLeave: () => void;
+    isActive?: boolean;
 }
 
 export const colorsPetal = [
@@ -16,7 +17,9 @@ export const colorsPetal = [
     '#992825', '#04566e'
 ];
 
-const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => {
+const Flower: React.FC<FlowerProps> = ({
+    data, onMouseEnter, onMouseLeave, isActive
+}) => {
     const { sreenWidth
     } = useBetterLife();
     return (
@@ -24,7 +27,7 @@ const Flower: React.FC<FlowerProps> = ({ data, onMouseEnter, onMouseLeave }) => 
             id='flower'
             viewBox="-140 -140 280 280"
             height={200}
-            style={{ animation: sreenWidth > 1025 ? 'flowerShower 1s ease-out forwards' : 'flowerShowerMobile 1s ease-out forwards' }}
+            style={{ animation: sreenWidth > 1025 ? (isActive ? 'unset' : 'flowerShower 1s ease-out forwards') : 'flowerShowerMobile 1s ease-out forwards' }}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

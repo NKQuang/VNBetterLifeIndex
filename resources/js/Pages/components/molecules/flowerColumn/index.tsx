@@ -91,23 +91,32 @@ const FlowerColumn: React.FC<FlowerColumnProps> = ({
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>
-                    <Flower data={data} onMouseEnter={() => {
-                        if (onMouseEnter) onMouseEnter(index);
-                    }}
+                    <Flower
+                        data={data}
+                        onMouseEnter={() => {
+                            if (onMouseEnter) onMouseEnter(index);
+                        }}
+
                         onMouseLeave={() => {
                             if (onMouseLeave) onMouseLeave(index);
-                        }} />
+                        }}
+                    />
                     <div ref={refLine} className="m-column_content_line" />
                 </div>
                 :
                 <div className="m-column_content">
                     <p>{value?.toFixed(2) ?? ''}</p>
-                    <Flower data={data} onMouseEnter={() => {
-                        if (onMouseEnter) onMouseEnter(index);
-                    }}
+                    <Flower
+                        isActive={isActive}
+                        data={data}
+                        onMouseEnter={() => {
+                            if (onMouseEnter) onMouseEnter(index);
+                        }}
+
                         onMouseLeave={() => {
                             if (onMouseLeave) onMouseLeave(index);
-                        }} />
+                        }}
+                    />
                     <div ref={refName} className="m-column_content_name">
                         {columnName}
                     </div>

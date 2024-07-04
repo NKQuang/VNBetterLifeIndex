@@ -79,6 +79,7 @@ const ChartDetailDistrict: React.FC = () => {
                         isHover={Number(chartData?.length) + 2 === idColumnHover}
                         index={Number(chartData?.length) + 2}
                         isDetail
+                        isActive
                     />
                 </div>
             </div>

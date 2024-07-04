@@ -1,0 +1,24 @@
+.m-richtext_editor {
+    width: 100%;
+    height: 'fit-content';
+    min-height: 200px;
+}
+
+.m-richtext_editor .ck-editor {
+    width: 100%;
+    height: 'fit-content';
+    min-height: 200px;
+}
+
+.m-richtext_editor-notHeadernotBordernotBG .ck-editor .ck-editor__top {
+    display: none !important;
+}
+
+.m-richtext_editor-notHeadernotBordernotBG .ck-editor .ck-content {
+    border: unset !important;
+    box-shadow: unset !important;
+    background-color: transparent !important;
+    padding: 2px 5px !important;
+    border-left: unset !important;
+    border-radius: 4px !important;
+}
