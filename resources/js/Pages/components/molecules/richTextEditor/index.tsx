@@ -3,6 +3,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import React from 'react';
 import './styles.css'
+import { mapModifiers } from "../../../utils/functions";
 
 type Variant = 'notHeadernotBordernotBGBoxShadown' | 'notHeadernotBordernotBG' | 'notHeadernotBorder' | 'notuseHeaderCustom'
 
@@ -47,7 +48,3 @@ RichTextEditor.defaultProps = {
 };
 
 export default RichTextEditor;
-function mapModifiers(arg0: string, arg1: string | boolean | undefined, arg2: string | boolean | undefined, typeText: string | undefined): string | undefined {
-    throw new Error('Function not implemented.');
-}
-

@@ -11,6 +11,7 @@ import Footer from '../../components/templates/footer';
 import MobileSreen from '../../components/templates/mobile';
 import CTooltip from '../../components/atoms/tooltip';
 import CSkeleton from '../../components/atoms/skeleton';
+import RichTextEditor from '../../components/molecules/richTextEditor';
 
 export const ChartContext = createContext({} as any);
 
@@ -139,9 +140,11 @@ const HomePage: React.FC = () => {
         <div className='p-home_desc_wrapper'>
           <div className='p-home_content_wrapper'>
             <h2>{districtActive?.full_name}</h2>
-            <p>
-              {districtActive?.content}
-            </p>
+            <RichTextEditor
+              data={districtActive?.content}
+              typeText="notHeadernotBordernotBG"
+              isDisabled
+            />
           </div>
           {renderChart()}
         </div>
