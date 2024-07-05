@@ -244,12 +244,13 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             gender: Number(statesSignUp.gender?.value),
             old: statesSignUp.old?.value,
             profession: statesSignUp?.profession?.value,
-            relationship: statesSignUp.relationship?.statesSignUp,
+            relationship: statesSignUp.relationship?.value,
             address: statesSignUp.address,
             password: statesSignUp.password,
             password_confirmation: statesSignUp.passwordConfirm,
             terms: true,
         }
+        console.log(bodySignUp);
         if (isSignUp) {
             handleRegister(bodySignUp);
             setStatesLogin({ ...statesLogin, pendding: true })
@@ -398,17 +399,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                     <div>(WBI)</div>
                 </div>
                 <div className="t-header_right">
-
-                    <button className='t-header_right_rating' onClick={() => {
-                        if (isSignIn) {
-                            setIsOpenModal(true);
-                        } else {
-                            setIsOpenModalConfirm(true)
-                        }
-                    }}>
-                        <img src={icImprovementLight} />
-                        <span>Chia sẻ ngay</span>
-                    </button>
                     {info?.name || userInfo?.name ?
                         <>
                             <p onClick={handleProfileRedirect}>Xin chào, {info?.name ?? userInfo?.name}</p>
@@ -422,6 +412,16 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                             }}>Đăng nhập/ Đăng kí</button>
                         </>
                     }
+                    <button className='t-header_right_rating' onClick={() => {
+                        if (isSignIn) {
+                            setIsOpenModal(true);
+                        } else {
+                            setIsOpenModalConfirm(true)
+                        }
+                    }}>
+                        <img src={icImprovementLight} />
+                        <span>Chia sẻ ngay</span>
+                    </button>
                 </div>
             </div>
             <CModal
