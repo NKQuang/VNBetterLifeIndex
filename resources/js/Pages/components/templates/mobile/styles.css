@@ -147,6 +147,10 @@
   margin: 12px;
 }
 
+.safari-brower .t-chart_form {
+  min-width: unset;
+}
+
 @media screen and (max-width: 500px) {
   .o-modal-form_mobile .react-responsive-modal-modal {
     height: fit-content;

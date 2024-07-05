@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './styles.css'
 import { mapModifiers } from '../../../utils/functions';
 import { useBetterLife } from '../provider';
@@ -36,7 +36,9 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
         handleSetInfoDetail,
         handleShowDetail,
         handleSetDistrictActive,
-        districtIndicators
+        districtIndicators,
+        handleCheckSafari,
+        isSafari
     } = useBetterLife();
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const refMenu = useRef<HTMLUListElement>(null)
@@ -126,6 +128,12 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             }
         }
     }, [isOpenMenu])
+
+    useLayoutEffect(() => {
+        const userAgentIsSafari = navigator.userAgent.includes("Version/") && navigator.userAgent.includes("iPhone;");
+        handleCheckSafari(userAgentIsSafari);
+    }, [])
+
 
     useEffect(() => {
         const domMenu = document.querySelector('.t-mobile .t-mobile_header');
@@ -311,8 +319,8 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
                 phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : !isSignIn && stateForm.phoneNumber.length < 9 ? "Số điện thoại không đúng định dạng" : "",
                 old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
-                profession: !stateForm.profession?.value ? "Nghề nghiệp là bắt buộc" : "",
-                gender: !stateForm.gender?.value ? "Giới tính là bắt buộc" : "",
+                profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
+                gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
             })
             return false;
         }
@@ -399,80 +407,373 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 <img src={icImprovementLight} />
                 <span>Chia sẻ ngay</span>
             </button>
-            <ContentMobile handleLogin={() => {
-                setStatesLogin({ ...statesLogin, isOpenFormLogin: true });
-                setIsSignUp(false);
-            }} />
-            <div style={{ marginTop: 12, padding: '4px 8px' }}>
-                {
-                    loading ?
-                        <div style={{ height: 'fit-content', width: '95vw' }}>
-                            <CSkeleton style={{ marginBottom: 8 }} height={48} />
-                            <CSkeleton count={3} height={20} />
-                        </div>
-                        :
-                        isShowDetail ? <div className='p-home_content p-home_desc'>
-                            <div className='p-home_content_wrapper'>
-                                <h2 style={{ marginBottom: 8 }}>{districtActive?.full_name}</h2>
-                                <RichTextEditor
-                                    data={districtActive?.content}
-                                    typeText="notHeadernotBordernotBG"
-                                    isDisabled
+            {isSafari && isOpenModal ?
+                <div
+                    className='safari-brower'
+                    style={{
+                        padding: '20px 16px 30px'
+                    }}>
+                    <p style={{ lineHeight: 1.5, fontStyle: 'italic', marginBottom: 4, paddingBottom: 4, borderBottom: '1px solid #dbdbdb' }}>Cảm ơn bạn đã chia sẻ đánh giá của bạn về Hạnh phúc với chúng tôi. <br />
+                        Cuộc khảo sát này sẽ không làm bạn mất quá 2 phút.<br />
+                        Thông tin và đánh giá của bạn sẽ được ẩn danh.</p>
+                    <div style={{
+                        height: '100%',
+                        paddingBottom: 30
+                    }}>
+                        {isSignIn ?
+                            <div className={mapModifiers('t-chart_form t-chart_form_signin')}>
+                                <Dropdown
+                                    isRequired
+                                    value={stateForm.district}
+                                    options={districts as any}
+                                    title='Huyện'
+                                    placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                                    handleOnChange={(value) => {
+                                        setStateForm({
+                                            ...stateForm,
+                                            district: value,
+                                        })
+                                    }}
                                 />
-                            </div>
-                        </div>
-                            : <div className='p-home_content p-home_desc' >
-                                <div className='p-home_content_wrapper' >
-                                    <h2 style={{ color: '#000', fontSize: 20, marginBottom: 8, fontWeight: 700 }}>Cuộc sống thế nào?</h2>
-                                    <p style={{ color: '#000' }}>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
-                                </div>
-                            </div>
-                }
-            </div>
-            <div className={mapModifiers('t-mobile_body_indicator')}>
-                {
-                    isShowDetail ?
-                        loading ?
-                            <div style={{ height: 'fit-content', width: '90vw' }}>
-                                <CSkeleton count={1} height={30} />
-                                <CSkeleton count={1} height={10} width={30} />
-                                <CSkeleton count={1} height={120} />
+                                <Dropdown
+                                    isRequired
+                                    value={stateForm.indicator}
+                                    options={indicators as any}
+                                    title='Chỉ số'
+                                    placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                                    handleOnChange={(value) => {
+                                        const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
+                                        setStateForm({
+                                            ...stateForm,
+                                            indicator: value,
+                                            questions: listQuestion,
+                                            answers: listQuestion?.map((i, idx) => 0) as any,
+                                        });
+                                    }}
+                                />
+
+                                {stateForm.indicator && stateForm.district?.id &&
+                                    <>
+                                        <h2>Bộ câu hỏi</h2>
+                                        <ul className='t-chart_form_list'>
+                                            {stateForm?.questions?.map((record, index) => (
+                                                <li key={record.value}>
+                                                    <p>{record.label}</p>
+                                                    <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
+                                                        const newSliderValues = [...stateForm.answers] as any;
+                                                        newSliderValues[index] = Number(value);
+                                                        setStateForm({
+                                                            ...stateForm,
+                                                            answers: newSliderValues
+                                                        });
+                                                    }} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                }
                             </div>
                             :
-                            indicators?.map((item, index) => {
-                                const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label).sort((a, b) => a.value - b.value)
-                                return (
-                                    <div className='t-mobile_body_indicator_item' key={index}>
-                                        <div className='t-mobile_body_indicator_item_title'>
-                                            <h2>{item.label}</h2>
-                                            <p>{aIndicator?.find((i) => i.district_id === districtActive?.id)?.value?.toFixed(2)}</p>
-                                        </div>
-                                        <div className='t-mobile_body_indicator_item_wrapper'>
-                                            {aIndicator?.map((i, idx) => <CTooltip key={idx} content={`${i.district}: ${i.value.toFixed(2)}`}>
-                                                <div
-                                                    className={mapModifiers('t-mobile_body_indicator_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
-                                                    style={{
-                                                        height: i.value > 0 ? i.value * 12 : 2,
-                                                        width: '20px',
-                                                    }}
-                                                    onTouchStart={() => {
-                                                        const districtItem = chartData?.find((y) => y.district_id === i.district_id);
-                                                        handleSetLoading(true);
-                                                        handleSetInfoDetail(districtItem as any);
-                                                        handleShowDetail(true);
-                                                        const districtActive = districtIndicators?.districts.filter((y) => y.id === i.district_id);
-                                                        handleSetDistrictActive((districtActive || [])[0]);
-                                                    }}
-                                                />
-                                            </CTooltip>)}
+                            <div className={'t-wrapper_form_rating'}>
+                                <div className='t-chart_info_customer'>
+                                    <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
+                                        <p>Họ tên <span>*</span></p>
+                                        <input
+                                            type='text'
+                                            autoFocus
+                                            placeholder='Nguyễn Văn A....'
+                                            value={stateForm.fullName}
+                                            onChange={(event) => {
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    fullName: event.target.value,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    fullName: ''
+                                                })
+                                            }}
+                                        />
+                                        <span>{stateFormError.fullName}</span>
+                                    </div>
+                                    <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
+                                        <p>Số điện thoại<span>*</span></p>
+                                        <input
+                                            type='text'
+                                            autoFocus
+                                            placeholder='0973xxxx....'
+                                            pattern="\d*"
+                                            value={stateForm.phoneNumber}
+                                            onChange={(event) => {
+                                                const phone = event.target.value.replace(/\D/g, '');
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    phoneNumber: phone,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    phoneNumber: ''
+                                                })
+                                            }}
+                                        />
+                                        <span>{stateFormError.phoneNumber}</span>
+                                    </div>
+
+                                    <Dropdown
+                                        isRequired
+                                        options={gender}
+                                        title='Giới tính'
+                                        placeholder='Chọn giới tính ...'
+                                        value={stateForm.gender}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                gender: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                gender: ''
+                                            });
+                                        }}
+                                        error={stateFormError.gender}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        options={RangeOld}
+                                        title='Độ tuổi'
+                                        placeholder='15-25 Tuổi'
+                                        value={stateForm.old}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                old: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                old: ''
+                                            });
+                                        }}
+                                        error={stateFormError.old}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        options={profession}
+                                        title='Nghề nghiệp'
+                                        placeholder='Chọn nghề nghiệp'
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                profession: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                profession: ''
+                                            });
+                                        }}
+                                        value={stateForm.profession}
+                                        error={stateFormError.profession}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        options={relationship}
+                                        title='Tình trạng hôn nhân'
+                                        placeholder='Chọn mối quan hệ'
+                                        value={stateForm.relationship}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                relationship: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                relationship: ''
+                                            })
+                                        }}
+                                        error={stateFormError.relationship}
+                                    />
+                                </div>
+                                <div className='t-chart_form'>
+                                    <Dropdown
+                                        isRequired
+                                        value={stateForm.district}
+                                        options={districts as any}
+                                        title='Huyện'
+                                        placeholder='Vui lòng chọn huyện bạn muốn đánh giá'
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                district: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                district: ''
+                                            })
+                                        }}
+                                        error={stateFormError.district}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        value={stateForm.indicator}
+                                        options={indicators as any}
+                                        title='Chỉ số'
+                                        placeholder='Vui lòng chọn chỉ số bạn muốn đánh giá'
+                                        handleOnChange={(value) => {
+                                            const listQuestion = questions?.filter((i: any) => i.group_name === value.label);
+                                            setStateForm({
+                                                ...stateForm,
+                                                indicator: value,
+                                                questions: listQuestion,
+                                                answers: listQuestion?.map((i, idx) => 0) as any,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                indicator: ''
+                                            })
+                                        }}
+                                        error={stateFormError.indicator}
+                                    />
+                                    {stateForm.indicator && stateForm.district?.id &&
+                                        <>
+                                            <h2>Bộ câu hỏi</h2>
+                                            <ul className='t-chart_form_list'>
+                                                {stateForm?.questions?.map((record, index) => (
+                                                    <li key={record.value}>
+                                                        <p>{record.label}</p>
+                                                        <Slider step={1} max={10} defaultValue={0} value={stateForm.answers[index]} onChange={(value) => {
+                                                            const newSliderValues = [...stateForm.answers] as any;
+                                                            newSliderValues[index] = Number(value);
+                                                            setStateForm({
+                                                                ...stateForm,
+                                                                answers: newSliderValues
+                                                            });
+                                                        }} />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        <div className='t-chart_form_submit'>
+                            <button onClick={() => {
+                                setIsOpenModal(false);
+                                setStateForm({
+                                    district: undefined as unknown as DropdownType,
+                                    indicator: undefined as unknown as DropdownType,
+                                    questions: undefined as any,
+                                    answers: [],
+                                    loading: false,
+                                    confirm: false,
+                                    isValidated: false,
+                                    fullName: "",
+                                    relationship: undefined as unknown as DropdownType,
+                                    phoneNumber: "",
+                                    old: undefined as unknown as DropdownType,
+                                    profession: undefined as unknown as DropdownType,
+                                    gender: undefined as unknown as DropdownType,
+                                });
+                                setStateFormError({
+                                    district: "",
+                                    indicator: "",
+                                    fullName: "",
+                                    relationship: "",
+                                    phoneNumber: "",
+                                    old: "",
+                                    profession: "",
+                                    gender: "",
+                                });
+                                setIsRating(false);
+                            }}>Hủy đánh giá</button>
+                            <button onClick={() => {
+                                handleSubmit()
+                            }}>
+                                {stateForm.loading ? <Loading />
+                                    :
+                                    'Gửi đánh giá'
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                :
+                <>
+                    <ContentMobile handleLogin={() => {
+                        setStatesLogin({ ...statesLogin, isOpenFormLogin: true });
+                        setIsSignUp(false);
+                    }} />
+                    <div style={{ marginTop: 12, padding: '4px 8px' }}>
+                        {
+                            loading ?
+                                <div style={{ height: 'fit-content', width: '95vw' }}>
+                                    <CSkeleton style={{ marginBottom: 8 }} height={48} />
+                                    <CSkeleton count={3} height={20} />
+                                </div>
+                                :
+                                isShowDetail ? <div className='p-home_content p-home_desc'>
+                                    <div className='p-home_content_wrapper'>
+                                        <h2 style={{ marginBottom: 8 }}>{districtActive?.full_name}</h2>
+                                        <RichTextEditor
+                                            data={districtActive?.content}
+                                            typeText="notHeadernotBordernotBG"
+                                            isDisabled
+                                        />
+                                    </div>
+                                </div>
+                                    : <div className='p-home_content p-home_desc' >
+                                        <div className='p-home_content_wrapper' >
+                                            <h2 style={{ color: '#000', fontSize: 20, marginBottom: 8, fontWeight: 700 }}>Cuộc sống thế nào?</h2>
+                                            <p style={{ color: '#000' }}>Cuộc sống còn nhiều điều thú vị hơn những con số GDP và thống kê kinh tế lạnh lùng – Chỉ số này cho phép bạn so sánh mức độ hạnh phúc giữa các huyện, dựa trên 12 chủ đề mà chúng tôi đã xác định là thiết yếu, trong các lĩnh vực điều kiện sống vật chất và chất lượng cuộc sống.</p>
                                         </div>
                                     </div>
-                                )
-                            })
-                        : null
-                }
-            </div>
-            <Footer />
+                        }
+                    </div>
+                    <div className={mapModifiers('t-mobile_body_indicator')}>
+                        {
+                            isShowDetail ?
+                                loading ?
+                                    <div style={{ height: 'fit-content', width: '90vw' }}>
+                                        <CSkeleton count={1} height={30} />
+                                        <CSkeleton count={1} height={10} width={30} />
+                                        <CSkeleton count={1} height={120} />
+                                    </div>
+                                    :
+                                    indicators?.map((item, index) => {
+                                        const aIndicator = allIndicators?.filter((indicator, yndex) => indicator.indicator === item.label).sort((a, b) => a.value - b.value)
+                                        return (
+                                            <div className='t-mobile_body_indicator_item' key={index}>
+                                                <div className='t-mobile_body_indicator_item_title'>
+                                                    <h2>{item.label}</h2>
+                                                    <p>{aIndicator?.find((i) => i.district_id === districtActive?.id)?.value?.toFixed(2)}</p>
+                                                </div>
+                                                <div className='t-mobile_body_indicator_item_wrapper'>
+                                                    {aIndicator?.map((i, idx) => <CTooltip key={idx} content={`${i.district}: ${i.value.toFixed(2)}`}>
+                                                        <div
+                                                            className={mapModifiers('t-mobile_body_indicator_item_wrapper_colum', districtActive?.id === i.district_id ? 'active' : 'normal')}
+                                                            style={{
+                                                                height: i.value > 0 ? i.value * 12 : 2,
+                                                                width: '20px',
+                                                            }}
+                                                            onTouchStart={() => {
+                                                                const districtItem = chartData?.find((y) => y.district_id === i.district_id);
+                                                                handleSetLoading(true);
+                                                                handleSetInfoDetail(districtItem as any);
+                                                                handleShowDetail(true);
+                                                                const districtActive = districtIndicators?.districts.filter((y) => y.id === i.district_id);
+                                                                handleSetDistrictActive((districtActive || [])[0]);
+                                                            }}
+                                                        />
+                                                    </CTooltip>)}
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                : null
+                        }
+                    </div>
+                    <Footer />
+                </>
+            }
             {/* Sign in / sign up */}
             <CModal
                 open={statesLogin.isOpenFormLogin}
@@ -723,7 +1024,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             </CModal>
             {/* Form Đánh giá */}
             <CModal
-                open={isOpenModal}
+                open={!isSafari && isOpenModal}
                 title='Bảng đánh giá'
                 onClose={() => {
                     setIsOpenModal(false);
