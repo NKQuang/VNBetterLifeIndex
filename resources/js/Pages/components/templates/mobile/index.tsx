@@ -363,7 +363,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             relationship: stateForm.relationship?.label,
             phone_number: stateForm.phoneNumber ?? userInfo?.phone,
             old: stateForm.old?.value,
-            profession: stateForm.profession.value,
+            profession: stateForm.profession?.value,
             user_id: userInfo?.id ?? null,
             gender: stateForm.gender?.value
         };
