@@ -74,6 +74,17 @@ const HomePage: React.FC = () => {
     }
   }, [token.local, districtIndicators]);
 
+  useEffect(() => {
+    const wrapper = document.querySelector('.p-home');
+    if (wrapper) {
+      wrapper.scrollIntoView({
+        inline: 'nearest',
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }, [token.local, districtIndicators]);
+
 
   const getWbi = async () => {
     const data = await getWBI();
@@ -141,7 +152,7 @@ const HomePage: React.FC = () => {
           <div className='p-home_content_wrapper'>
             <h2>{districtActive?.full_name}</h2>
             <RichTextEditor
-              data={districtActive?.content}
+              data={districtActive?.content ?? ''}
               typeText="notHeadernotBordernotBG"
               isDisabled
             />

@@ -8,7 +8,6 @@ import Loading from '../../atoms/loading';
 import Slider from '../../atoms/slider';
 import CModal from '../../organisms/modal';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
-import { getWBI, postDistrictsIndicators } from '../../../services/apis';
 import { toast } from 'react-toastify';
 
 export interface districtItem {

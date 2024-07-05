@@ -56,12 +56,11 @@
 
 .t-district_chart_main-flower_active .m-column_content_name {
     font-weight: 700;
-    /* transform: rotate(0); */
     text-align: center;
     color: rgb(228, 46, 0);
     width: max-content;
-    animation: backDefault .1s ease-in forwards;
-    transition: animation .1s ease-in;
+    animation: backDefault 1s ease-in forwards;
+    transition: animation 1s ease-in;
 }
 
 .t-district_chart_main-flower_active .m-column_content p {

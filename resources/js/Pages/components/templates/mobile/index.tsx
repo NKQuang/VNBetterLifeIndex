@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import './styles.css'
-import { mapModifiers } from '../../../utils/functions';
+import { checkPhoneNumber, mapModifiers } from '../../../utils/functions';
 import { useBetterLife } from '../provider';
 import HeaderMobile from '../../organisms/headerMobile';
 import ContentMobile from '../../organisms/contenMobile';
@@ -130,7 +130,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
     }, [isOpenMenu])
 
     useLayoutEffect(() => {
-        const userAgentIsSafari = navigator.userAgent.includes("Version/") && navigator.userAgent.includes("iPhone;");
+        const userAgentIsSafari = navigator.userAgent.includes("iPhone;");
         handleCheckSafari(userAgentIsSafari);
     }, [])
 
@@ -292,16 +292,21 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
 
     const submitIndicators = async (body: any) => {
         await postDistrictsIndicators(body)
-            .then(() => {
-                setStateForm({
-                    ...stateForm,
-                    loading: false,
-                    confirm: false,
-                    isValidated: false,
-                });
-                toast.success('Gửi đánh giá thành công!');
-                getWbi();
-                setIsOpenModalConfirmAfterSubmit(true);
+            .then((response) => {
+                if (response?.status === 200) {
+
+                    setStateForm({
+                        ...stateForm,
+                        loading: false,
+                        confirm: false,
+                        isValidated: false,
+                    });
+                    toast.success('Gửi đánh giá thành công!');
+                    getWbi();
+                    setIsOpenModalConfirmAfterSubmit(true);
+                } else {
+                    toast.error('Gửi đánh giá thất bại!');
+                }
             }).catch((error) => {
                 console.log('error', error)
 
@@ -314,8 +319,9 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             !isSignIn && !stateForm.relationship?.value ||
             !isSignIn && !stateForm.fullName ||
             !isSignIn && !stateForm.phoneNumber ||
-            !isSignIn && stateForm.phoneNumber.length < 9 ||
-            !isSignIn && stateForm.phoneNumber.length > 14 ||
+            !isSignIn && stateForm.phoneNumber.length < 10 ||
+            !isSignIn && stateForm.phoneNumber.length > 13 ||
+            !isSignIn && !checkPhoneNumber(stateForm.phoneNumber) ||
             !isSignIn && !stateForm.old?.value ||
             !isSignIn && !stateForm.gender?.value
         ) {
@@ -323,7 +329,8 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 ...stateFormError,
                 fullName: !stateForm.fullName ? "Họ tên là trường bắt buộc" : "",
                 relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
-                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : (!isSignIn && stateForm.phoneNumber.length < 9 || !isSignIn && stateForm.phoneNumber.length > 14) ? "Số điện thoại không đúng định dạng" : "",
+                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : (!isSignIn && stateForm.phoneNumber.length < 10 ||
+                    !isSignIn && stateForm.phoneNumber.length > 13) ? "Số điện thoại không đúng định dạng" : !isSignIn && !checkPhoneNumber(stateForm.phoneNumber) ? "Không tìm thấy đầu số này" : "",
                 old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
                 profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
                 gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
@@ -484,123 +491,125 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                             </div>
                             :
                             <div className={'t-wrapper_form_rating'}>
-                                <div className='t-chart_info_customer'>
-                                    <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
-                                        <p>Họ tên <span>*</span></p>
-                                        <input
-                                            type='text'
-                                            autoFocus
-                                            placeholder='Nguyễn Văn A....'
-                                            value={stateForm.fullName}
-                                            onChange={(event) => {
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    fullName: event.target.value,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    fullName: ''
-                                                })
-                                            }}
-                                        />
-                                        <span>{stateFormError.fullName}</span>
-                                    </div>
-                                    <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
-                                        <p>Số điện thoại<span>*</span></p>
-                                        <input
-                                            type='text'
-                                            autoFocus
-                                            placeholder='0973xxxx....'
-                                            pattern="\d*"
-                                            value={stateForm.phoneNumber}
-                                            onChange={(event) => {
-                                                const phone = event.target.value.replace(/\D/g, '');
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    phoneNumber: phone,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    phoneNumber: ''
-                                                })
-                                            }}
-                                        />
-                                        <span>{stateFormError.phoneNumber}</span>
-                                    </div>
+                                {!isRating &&
+                                    <div className='t-chart_info_customer'>
 
-                                    <Dropdown
-                                        isRequired
-                                        options={gender}
-                                        title='Giới tính'
-                                        placeholder='Chọn giới tính ...'
-                                        value={stateForm.gender}
-                                        handleOnChange={(value) => {
-                                            setStateForm({
-                                                ...stateForm,
-                                                gender: value,
-                                            });
-                                            setStateFormError({
-                                                ...stateFormError,
-                                                gender: ''
-                                            });
-                                        }}
-                                        error={stateFormError.gender}
-                                    />
-                                    <Dropdown
-                                        isRequired
-                                        options={RangeOld}
-                                        title='Độ tuổi'
-                                        placeholder='15-25 Tuổi'
-                                        value={stateForm.old}
-                                        handleOnChange={(value) => {
-                                            setStateForm({
-                                                ...stateForm,
-                                                old: value,
-                                            });
-                                            setStateFormError({
-                                                ...stateFormError,
-                                                old: ''
-                                            });
-                                        }}
-                                        error={stateFormError.old}
-                                    />
-                                    <Dropdown
-                                        isRequired
-                                        options={profession}
-                                        title='Nghề nghiệp'
-                                        placeholder='Chọn nghề nghiệp'
-                                        handleOnChange={(value) => {
-                                            setStateForm({
-                                                ...stateForm,
-                                                profession: value,
-                                            });
-                                            setStateFormError({
-                                                ...stateFormError,
-                                                profession: ''
-                                            });
-                                        }}
-                                        value={stateForm.profession}
-                                        error={stateFormError.profession}
-                                    />
-                                    <Dropdown
-                                        isRequired
-                                        options={relationship}
-                                        title='Tình trạng hôn nhân'
-                                        placeholder='Chọn mối quan hệ'
-                                        value={stateForm.relationship}
-                                        handleOnChange={(value) => {
-                                            setStateForm({
-                                                ...stateForm,
-                                                relationship: value,
-                                            });
-                                            setStateFormError({
-                                                ...stateFormError,
-                                                relationship: ''
-                                            })
-                                        }}
-                                        error={stateFormError.relationship}
-                                    />
-                                </div>
+                                        <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
+                                            <p>Họ tên <span>*</span></p>
+                                            <input
+                                                type='text'
+                                                autoFocus
+                                                placeholder='Nguyễn Văn A....'
+                                                value={stateForm.fullName}
+                                                onChange={(event) => {
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        fullName: event.target.value,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        fullName: ''
+                                                    })
+                                                }}
+                                            />
+                                            <span>{stateFormError.fullName}</span>
+                                        </div>
+                                        <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
+                                            <p>Số điện thoại<span>*</span></p>
+                                            <input
+                                                type='text'
+                                                placeholder='0973xxxx....'
+                                                pattern="\d*"
+                                                value={stateForm.phoneNumber}
+                                                onChange={(event) => {
+                                                    const phone = event.target.value.replace(/\D/g, '');
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        phoneNumber: phone,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        phoneNumber: ''
+                                                    })
+                                                }}
+                                            />
+                                            <span>{stateFormError.phoneNumber}</span>
+                                        </div>
+
+                                        <Dropdown
+                                            isRequired
+                                            options={gender}
+                                            title='Giới tính'
+                                            placeholder='Chọn giới tính ...'
+                                            value={stateForm.gender}
+                                            handleOnChange={(value) => {
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    gender: value,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    gender: ''
+                                                });
+                                            }}
+                                            error={stateFormError.gender}
+                                        />
+                                        <Dropdown
+                                            isRequired
+                                            options={RangeOld}
+                                            title='Độ tuổi'
+                                            placeholder='15-25 Tuổi'
+                                            value={stateForm.old}
+                                            handleOnChange={(value) => {
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    old: value,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    old: ''
+                                                });
+                                            }}
+                                            error={stateFormError.old}
+                                        />
+                                        <Dropdown
+                                            isRequired
+                                            options={profession}
+                                            title='Nghề nghiệp'
+                                            placeholder='Chọn nghề nghiệp'
+                                            handleOnChange={(value) => {
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    profession: value,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    profession: ''
+                                                });
+                                            }}
+                                            value={stateForm.profession}
+                                            error={stateFormError.profession}
+                                        />
+                                        <Dropdown
+                                            isRequired
+                                            options={relationship}
+                                            title='Tình trạng hôn nhân'
+                                            placeholder='Chọn mối quan hệ'
+                                            value={stateForm.relationship}
+                                            handleOnChange={(value) => {
+                                                setStateForm({
+                                                    ...stateForm,
+                                                    relationship: value,
+                                                });
+                                                setStateFormError({
+                                                    ...stateFormError,
+                                                    relationship: ''
+                                                })
+                                            }}
+                                            error={stateFormError.relationship}
+                                        />
+                                    </div>
+                                }
                                 <div className='t-chart_form'>
                                     <Dropdown
                                         isRequired
@@ -723,7 +732,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                     <div className='p-home_content_wrapper'>
                                         <h2 style={{ marginBottom: 8 }}>{districtActive?.full_name}</h2>
                                         <RichTextEditor
-                                            data={districtActive?.content}
+                                            data={districtActive?.content ?? ''}
                                             typeText="notHeadernotBordernotBG"
                                             isDisabled
                                         />

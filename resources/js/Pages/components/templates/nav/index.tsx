@@ -6,7 +6,7 @@ import Loading from '../../atoms/loading';
 import { toast } from 'react-toastify';
 import { useBetterLife } from '../provider';
 import icLogo from '../../../assets/images/logo.svg';
-import { mapModifiers } from '../../../utils/functions';
+import { checkPhoneNumber, mapModifiers } from '../../../utils/functions';
 import Dropdown, { DropdownType } from '../../atoms/dropdown';
 import { gender, profession, RangeOld, relationship } from '../../../assets/data';
 import icImprovementLight from '../../../assets/images/voting.svg';
@@ -102,6 +102,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenModalConfirm, setIsOpenModalConfirm] = useState(false);
     const [isOpenModalConfirmAfterSubmit, setIsOpenModalConfirmAfterSubmit] = useState(false);
+    const [isRating, setIsRating] = useState(false);
 
     useEffect(() => {
         setInfo(infoDetail);
@@ -292,16 +293,21 @@ const Header: React.FC<HeaderProps> = ({ }) => {
 
     const submitIndicators = async (body: any) => {
         await postDistrictsIndicators(body)
-            .then(() => {
-                setStateForm({
-                    ...stateForm,
-                    loading: false,
-                    confirm: false,
-                    isValidated: false,
-                })
-                toast.success('Gửi đánh giá thành công!');
-                getWbi();
-                setIsOpenModalConfirmAfterSubmit(true);
+            .then((response) => {
+                if (response?.status === 200) {
+
+                    setStateForm({
+                        ...stateForm,
+                        loading: false,
+                        confirm: false,
+                        isValidated: false,
+                    })
+                    toast.success('Gửi đánh giá thành công!');
+                    getWbi();
+                    setIsOpenModalConfirmAfterSubmit(true);
+                } else {
+                    toast.error('Gửi đánh giá thất bại!');
+                }
             }).catch((error) => {
                 console.log('error', error)
 
@@ -315,7 +321,9 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             !isSignIn && !stateForm.profession?.value ||
             !isSignIn && !stateForm.relationship?.value ||
             !isSignIn && !stateForm.fullName ||
-            !isSignIn && stateForm.phoneNumber.length < 9 ||
+            !isSignIn && stateForm.phoneNumber.length < 10 ||
+            !isSignIn && stateForm.phoneNumber.length > 13 ||
+            !isSignIn && !checkPhoneNumber(stateForm.phoneNumber) ||
             !isSignIn && !stateForm.phoneNumber ||
             !isSignIn && !stateForm.old?.value ||
             !isSignIn && !stateForm.gender?.value
@@ -326,11 +334,13 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
                 fullName: !stateForm.fullName ? "Họ tên là trường bắt buộc" : "",
                 relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
-                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : !isSignIn && stateForm.phoneNumber.length < 9 ? "Số điện thoại không đúng định dạng" : "",
+                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : (!isSignIn && stateForm.phoneNumber.length < 10 ||
+                    !isSignIn && stateForm.phoneNumber.length > 13) ? "Số điện thoại không đúng định dạng" : !isSignIn && !checkPhoneNumber(stateForm.phoneNumber) ? "Không tìm thấy đầu số này" : "",
                 old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
                 profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
                 gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
-            })
+            });
+            toast.error('Vui lòng nhập các trường bắt buộc.')
             return false;
         }
         if (
@@ -388,6 +398,17 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                     <div>(WBI)</div>
                 </div>
                 <div className="t-header_right">
+
+                    <button className='t-header_right_rating' onClick={() => {
+                        if (isSignIn) {
+                            setIsOpenModal(true);
+                        } else {
+                            setIsOpenModalConfirm(true)
+                        }
+                    }}>
+                        <img src={icImprovementLight} />
+                        <span>Chia sẻ ngay</span>
+                    </button>
                     {info?.name || userInfo?.name ?
                         <>
                             <p onClick={handleProfileRedirect}>Xin chào, {info?.name ?? userInfo?.name}</p>
@@ -401,16 +422,6 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                             }}>Đăng nhập/ Đăng kí</button>
                         </>
                     }
-                    <button className='t-header_right_rating' onClick={() => {
-                        if (isSignIn) {
-                            setIsOpenModal(true);
-                        } else {
-                            setIsOpenModalConfirm(true)
-                        }
-                    }}>
-                        <img src={icImprovementLight} />
-                        <span>Chia sẻ ngay</span>
-                    </button>
                 </div>
             </div>
             <CModal
@@ -757,6 +768,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         profession: "",
                         gender: "",
                     });
+                    setIsRating(false);
                 }}
                 zIndex="lv2"
                 className='form-rating'
@@ -827,138 +839,140 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         }
                     </div>
                     : <>
-                        <div className='t-chart_info_customer'>
-                            <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
-                                <p>Họ tên <span>*</span></p>
-                                <input
-                                    type='text'
-                                    autoFocus
-                                    placeholder='Nguyễn Văn A....'
-                                    value={stateForm.fullName}
-                                    onChange={(event) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            fullName: event.target.value,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            fullName: ''
-                                        })
-                                    }}
-                                />
-                                <span>{stateFormError.fullName}</span>
+                        {!isRating &&
+                            <div className='t-chart_info_customer'>
+                                <div className={mapModifiers('t-chart_info_item', stateFormError.fullName ? 'error' : '')}>
+                                    <p>Họ tên <span>*</span></p>
+                                    <input
+                                        type='text'
+                                        autoFocus
+                                        placeholder='Nguyễn Văn A....'
+                                        value={stateForm.fullName}
+                                        onChange={(event) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                fullName: event.target.value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                fullName: ''
+                                            })
+                                        }}
+                                    />
+                                    <span>{stateFormError.fullName}</span>
+                                </div>
+                                <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
+                                    <p>Số điện thoại<span>*</span></p>
+                                    <input
+                                        type='text'
+                                        autoFocus
+                                        placeholder='0973xxxx....'
+                                        pattern="\d*"
+                                        value={stateForm.phoneNumber}
+                                        onChange={(event) => {
+                                            const phone = event.target.value.replace(/\D/g, '');
+                                            setStateForm({
+                                                ...stateForm,
+                                                phoneNumber: phone,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                phoneNumber: ''
+                                            })
+                                        }}
+                                    />
+                                    <span>{stateFormError.phoneNumber}</span>
+                                </div>
+                                <div style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    gap: 12,
+                                }}>
+                                    <Dropdown
+                                        isRequired
+                                        options={gender}
+                                        title='Giới tính'
+                                        placeholder='Chọn giới tính ...'
+                                        value={stateForm.gender}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                gender: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                gender: ''
+                                            });
+                                        }}
+                                        error={stateFormError.gender}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        options={RangeOld}
+                                        title='Độ tuổi'
+                                        placeholder='Chọn độ tuổi của bạn'
+                                        value={stateForm.old}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                old: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                old: ''
+                                            });
+                                        }}
+                                        error={stateFormError.old}
+                                    />
+                                </div>
+                                <div style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    gap: 12,
+                                }}>
+                                    <Dropdown
+                                        isRequired
+                                        options={profession}
+                                        title='Nghề nghiệp'
+                                        placeholder='Chọn nghề nghiệp của bạn'
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                profession: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                profession: ''
+                                            });
+                                        }}
+                                        value={stateForm.profession}
+                                        error={stateFormError.profession}
+                                    />
+                                    <Dropdown
+                                        isRequired
+                                        options={relationship}
+                                        title='Tình trạng hôn nhân'
+                                        placeholder='Chọn mối quan hệ hiện tại'
+                                        value={stateForm.relationship}
+                                        handleOnChange={(value) => {
+                                            setStateForm({
+                                                ...stateForm,
+                                                relationship: value,
+                                            });
+                                            setStateFormError({
+                                                ...stateFormError,
+                                                relationship: ''
+                                            })
+                                        }}
+                                        error={stateFormError.relationship}
+                                    />
+                                </div>
                             </div>
-                            <div className={mapModifiers('t-chart_info_item', stateFormError.phoneNumber ? 'error' : '')}>
-                                <p>Số điện thoại<span>*</span></p>
-                                <input
-                                    type='text'
-                                    autoFocus
-                                    placeholder='0973xxxx....'
-                                    pattern="\d*"
-                                    value={stateForm.phoneNumber}
-                                    onChange={(event) => {
-                                        const phone = event.target.value.replace(/\D/g, '');
-                                        setStateForm({
-                                            ...stateForm,
-                                            phoneNumber: phone,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            phoneNumber: ''
-                                        })
-                                    }}
-                                />
-                                <span>{stateFormError.phoneNumber}</span>
-                            </div>
-                            <div style={{
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                gap: 12,
-                            }}>
-                                <Dropdown
-                                    isRequired
-                                    options={gender}
-                                    title='Giới tính'
-                                    placeholder='Chọn giới tính ...'
-                                    value={stateForm.gender}
-                                    handleOnChange={(value) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            gender: value,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            gender: ''
-                                        });
-                                    }}
-                                    error={stateFormError.gender}
-                                />
-                                <Dropdown
-                                    isRequired
-                                    options={RangeOld}
-                                    title='Độ tuổi'
-                                    placeholder='Chọn độ tuổi của bạn'
-                                    value={stateForm.old}
-                                    handleOnChange={(value) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            old: value,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            old: ''
-                                        });
-                                    }}
-                                    error={stateFormError.old}
-                                />
-                            </div>
-                            <div style={{
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                gap: 12,
-                            }}>
-                                <Dropdown
-                                    isRequired
-                                    options={profession}
-                                    title='Nghề nghiệp'
-                                    placeholder='Chọn nghề nghiệp của bạn'
-                                    handleOnChange={(value) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            profession: value,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            profession: ''
-                                        });
-                                    }}
-                                    value={stateForm.profession}
-                                    error={stateFormError.profession}
-                                />
-                                <Dropdown
-                                    isRequired
-                                    options={relationship}
-                                    title='Tình trạng hôn nhân'
-                                    placeholder='Chọn mối quan hệ hiện tại'
-                                    value={stateForm.relationship}
-                                    handleOnChange={(value) => {
-                                        setStateForm({
-                                            ...stateForm,
-                                            relationship: value,
-                                        });
-                                        setStateFormError({
-                                            ...stateFormError,
-                                            relationship: ''
-                                        })
-                                    }}
-                                    error={stateFormError.relationship}
-                                />
-                            </div>
-                        </div>
+                        }
                         <div className='t-chart_form'>
                             <Dropdown
                                 isRequired
@@ -1095,6 +1109,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 title='Xác nhận'
                 onClose={() => {
                     setIsOpenModalConfirmAfterSubmit(false);
+                    setIsRating(false);
                 }}
                 zIndex="lv3"
                 className='comfirm'
@@ -1123,6 +1138,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                         });
                         setIsOpenModalConfirmAfterSubmit(false);
                         setIsOpenModal(false);
+                        setIsRating(false);
                     }}>
                         Kết thúc Đánh giá
                     </button>
@@ -1142,7 +1158,8 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                             old: prve.old as unknown as DropdownType,
                             profession: prve.profession as unknown as DropdownType,
                             gender: prve.gender as unknown as DropdownType,
-                        }))
+                        }));
+                        setIsRating(true);
                     }} >
                         Đánh giá tiếp chỉ số khác
                     </button>
