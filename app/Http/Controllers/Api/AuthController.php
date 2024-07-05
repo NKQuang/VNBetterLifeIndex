@@ -94,15 +94,39 @@ class AuthController extends Controller
         // Validate request data
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email', // Email is required
-            'phone' => 'required|string|max:15|unique:users,phone', // Phone is required
+            'email' => 'required|email|max:255|unique:users,email', // Email là bắt buộc
+            'phone' => 'required|string|max:15|unique:users,phone', // Số điện thoại là bắt buộc
             'gender' => 'nullable|integer|in:0,1',
             'old' => 'nullable|string',
             'profession' => 'nullable|string|max:255',
             'relationship' => 'nullable',
             'address' => 'nullable|string',
-            'password' => 'required|string|min:8|confirmed', // Ensure password confirmation
-            'terms' => 'required|accepted', // Ensure terms are accepted
+            'password' => 'required|string|min:8|confirmed', // Xác nhận mật khẩu
+            'terms' => 'required|accepted', // Chấp nhận điều khoản
+        ], [
+            'name.required' => 'Tên là bắt buộc.',
+            'name.string' => 'Tên phải là một chuỗi ký tự.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email phải là một địa chỉ email hợp lệ.',
+            'email.max' => 'Email không được vượt quá 255 ký tự.',
+            'email.unique' => 'Email đã được sử dụng.',
+            'phone.required' => 'Số điện thoại là bắt buộc.',
+            'phone.string' => 'Số điện thoại phải là một chuỗi ký tự.',
+            'phone.max' => 'Số điện thoại không được vượt quá 15 ký tự.',
+            'phone.unique' => 'Số điện thoại đã được sử dụng.',
+            'gender.integer' => 'Giới tính phải được chọn.',
+            'gender.in' => 'Giới tính không hợp lệ.',
+            'old.string' => 'Tuổi phải là một chuỗi ký tự.',
+            'profession.string' => 'Nghề nghiệp phải là một chuỗi ký tự.',
+            'profession.max' => 'Nghề nghiệp không được vượt quá 255 ký tự.',
+            'address.string' => 'Địa chỉ phải là một chuỗi ký tự.',
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.string' => 'Mật khẩu phải là một chuỗi ký tự.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp.',
+            'terms.required' => 'Bạn phải chấp nhận các điều khoản.',
+            'terms.accepted' => 'Bạn phải chấp nhận các điều khoản.',
         ]);
 
         if ($validator->fails()) {
