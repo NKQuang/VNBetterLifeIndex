@@ -12,7 +12,7 @@
 }
 
 .t-chart-mobile .t-chart_main .m-column-flower-active .m-column_content-mobile {
-    transform: scale(1.4);
+    transform: scale(1.4) translateY(-4px);
     transform-origin: bottom;
 }
 

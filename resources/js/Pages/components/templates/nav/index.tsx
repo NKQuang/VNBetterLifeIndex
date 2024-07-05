@@ -311,6 +311,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             !isSignIn && !stateForm.profession?.value ||
             !isSignIn && !stateForm.relationship?.value ||
             !isSignIn && !stateForm.fullName ||
+            !isSignIn && stateForm.phoneNumber.length < 9 ||
             !isSignIn && !stateForm.phoneNumber ||
             !isSignIn && !stateForm.old?.value ||
             !isSignIn && !stateForm.gender?.value
@@ -321,7 +322,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 indicator: !stateForm.indicator?.value ? "Chọn một chỉ số để tiếp tục" : "",
                 fullName: !stateForm.fullName ? "Họ tên là trường bắt buộc" : "",
                 relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
-                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : "",
+                phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : !isSignIn && stateForm.phoneNumber.length < 9 ? "Số điện thoại không đúng định dạng" : "",
                 old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
                 profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
                 gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
