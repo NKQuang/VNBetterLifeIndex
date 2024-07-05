@@ -1328,7 +1328,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                             }
                         </div>
                     }
-                    {step === 1 &&
+                    {step === 1 && !isSignIn &&
                         <div className='t-chart_form_submit'>
                             <button onClick={() => {
                                 setIsOpenModal(false);
