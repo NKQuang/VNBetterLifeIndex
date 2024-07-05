@@ -147,6 +147,22 @@
   margin: 12px;
 }
 
+.o-modal-form_authen .react-responsive-modal-modal {
+  height: fit-content;
+  width: 90vw;
+  min-width: 90vw;
+  padding: 8px 20px;
+  margin: 12px;
+}
+
+.react-responsive-modal-modal {
+  height: fit-content;
+  overflow-y: scroll;
+  min-height: unset;
+  padding: 8px;
+  margin: 12px;
+}
+
 .safari-brower .t-chart_form {
   min-width: unset;
 }

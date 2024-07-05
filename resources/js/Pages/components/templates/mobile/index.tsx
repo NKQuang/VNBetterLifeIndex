@@ -397,16 +397,18 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 }}
             />
             <div style={{ display: 'block', height: 72 }} />
-            <button className='t-mobile_button_rating' onClick={() => {
-                if (isSignIn) {
-                    setIsOpenModal(true)
-                } else {
-                    setIsOpenModalConfirm(true)
-                }
-            }}>
-                <img src={icImprovementLight} />
-                <span>Chia sẻ ngay</span>
-            </button>
+            {!isOpenModal &&
+                <button className='t-mobile_button_rating' onClick={() => {
+                    if (isSignIn) {
+                        setIsOpenModal(true)
+                    } else {
+                        setIsOpenModalConfirm(true)
+                    }
+                }}>
+                    <img src={icImprovementLight} />
+                    <span>Chia sẻ ngay</span>
+                </button>
+            }
             {isSafari && isOpenModal ?
                 <div
                     className='safari-brower'
@@ -781,7 +783,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     setStatesLogin({ ...statesLogin, isOpenFormLogin: false })
                 }}
                 title={isSignUp ? 'Đăng kí tài khoản' : 'Đăng nhập ngay'}
-                className='form_mobile'
+                className='form_authen'
                 zIndex='top'
             >
                 {isSignUp ?
@@ -1011,6 +1013,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                     <button onClick={() => {
                         setStatesLogin({ ...statesLogin, isOpenFormLogin: true });
                         setIsSignUp(false);
+                        setIsOpenModalConfirm(false)
                     }}>
                         Đăng nhập
                     </button>
