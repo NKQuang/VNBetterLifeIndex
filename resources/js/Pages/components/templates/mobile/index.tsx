@@ -311,8 +311,8 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                 relationship: !stateForm.relationship?.value ? "Mối quan hệ là trường bắt buộc" : "",
                 phoneNumber: !stateForm.phoneNumber ? "Số điện thoại là trường bắt buộc" : !isSignIn && stateForm.phoneNumber.length < 9 ? "Số điện thoại không đúng định dạng" : "",
                 old: !stateForm.old?.value ? "Độ tuổi là trường bắt buộc" : "",
-                profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
-                gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
+                profession: !stateForm.profession?.value ? "Nghề nghiệp là bắt buộc" : "",
+                gender: !stateForm.gender?.value ? "Giới tính là bắt buộc" : "",
             })
             return false;
         }
@@ -909,42 +909,50 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                                 error={stateFormError.old}
                                             />
                                         </div>
-                                        <Dropdown
-                                            isRequired
-                                            options={profession}
-                                            title='Nghề nghiệp'
-                                            placeholder='Chọn nghề nghiệp của bạn'
-                                            handleOnChange={(value) => {
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    profession: value,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    profession: ''
-                                                });
-                                            }}
-                                            value={stateForm.profession}
-                                            error={stateFormError.profession}
-                                        />
-                                        <Dropdown
-                                            isRequired
-                                            options={relationship}
-                                            title='Tình trạng hôn nhân'
-                                            placeholder='Chọn mối quan hệ hiện tại'
-                                            value={stateForm.relationship}
-                                            handleOnChange={(value) => {
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    relationship: value,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    relationship: ''
-                                                })
-                                            }}
-                                            error={stateFormError.relationship}
-                                        />
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'flex-start',
+                                            gap: 12
+                                        }}>
+
+                                            <Dropdown
+                                                isRequired
+                                                options={profession}
+                                                title='Nghề nghiệp'
+                                                placeholder='Chọn nghề nghiệp'
+                                                handleOnChange={(value) => {
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        profession: value,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        profession: ''
+                                                    });
+                                                }}
+                                                value={stateForm.profession}
+                                                error={stateFormError.profession}
+                                            />
+                                            <Dropdown
+                                                isRequired
+                                                options={relationship}
+                                                title='Tình trạng hôn nhân'
+                                                placeholder='Chọn mối quan hệ'
+                                                value={stateForm.relationship}
+                                                handleOnChange={(value) => {
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        relationship: value,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        relationship: ''
+                                                    })
+                                                }}
+                                                error={stateFormError.relationship}
+                                            />
+                                        </div>
                                     </div>
                                 </>
                             }
