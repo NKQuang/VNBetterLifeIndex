@@ -151,9 +151,10 @@
   .o-modal-form_mobile .react-responsive-modal-modal {
     height: fit-content;
     min-height: 90dvh;
+    max-height: 90dvh;
     width: 95dvw;
     margin: 0;
-    overflow-y: scroll;
+    overflow: auto;
   }
 
   .o-modal-form_mobile .react-responsive-modal-modal::-webkit-scrollbar {
