@@ -151,6 +151,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             !statesSignUp.fullname ||
             !statesSignUp.email ||
             !statesSignUp.phoneNumber ||
+            statesSignUp.phoneNumber.length < 9 ||
             !statesSignUp.password ||
             statesSignUp.password.length < 8 ||
             !statesSignUp.passwordConfirm ||
@@ -164,7 +165,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             setStatesSignUpErr({
                 fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
                 email: !statesSignUp.email ? 'Email là bắt buộc' : '',
-                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : '',
+                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : statesSignUp.phoneNumber.length < 9 ? 'Số điện thoại không đúng định dạng' : '',
                 password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
                 passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
                 gender: !statesSignUp.gender?.value ? 'Giới tính là trường bắt buộc' : '',
@@ -464,10 +465,12 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                                 <input
                                     type='text'
                                     autoFocus
+                                    pattern="\d*"
                                     value={statesSignUp.phoneNumber}
                                     placeholder='096020000.....'
                                     onChange={(event) => {
-                                        setStatesSignUp({ ...statesSignUp, phoneNumber: event.target.value });
+                                        const phone = event.target.value.replace(/\D/g, '');
+                                        setStatesSignUp({ ...statesSignUp, phoneNumber: phone });
                                         setStatesSignUpErr({ ...statesSignUpErr, phoneNumber: '' });
                                     }}
                                 />

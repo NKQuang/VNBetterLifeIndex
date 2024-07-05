@@ -5,6 +5,10 @@
     border-radius: 8px;
 }
 
+.react-responsive-modal-modal::-webkit-scrollbar {
+    display: none;
+}
+
 .react-responsive-modal-closeButton:focus {
     outline: unset;
     border: unset;

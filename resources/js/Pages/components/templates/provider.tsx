@@ -102,13 +102,13 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
         setIsShowDetail(type);
         setTimeout(() => {
             setLoading(false)
-        }, 2000)
+        }, 1000)
     };
     const handleSetInfoDetail = (type: districtItem) => {
         setInfoDetail(type);
         setTimeout(() => {
             setLoading(false)
-        }, 2000)
+        }, 1000)
     }
 
     const handleSetChartData = (data: districtItem[]) => {
