@@ -724,7 +724,7 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
             {/* Form Đánh giá */}
             <CModal
                 open={isOpenModal}
-                title='Mẫu đánh giá'
+                title='Bảng đánh giá'
                 onClose={() => {
                     setIsOpenModal(false);
                     setIsRating(false);
@@ -866,43 +866,49 @@ const MobileSreen: React.FC<MobileSreenProps> = ({
                                             />
                                             <span>{stateFormError.phoneNumber}</span>
                                         </div>
-
-                                        <Dropdown
-                                            isRequired
-                                            options={gender}
-                                            title='Giới tính'
-                                            placeholder='Chọn giới tính ...'
-                                            value={stateForm.gender}
-                                            handleOnChange={(value) => {
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    gender: value,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    gender: ''
-                                                });
-                                            }}
-                                            error={stateFormError.gender}
-                                        />
-                                        <Dropdown
-                                            isRequired
-                                            options={RangeOld}
-                                            title='Độ tuổi'
-                                            placeholder='Chọn độ tuổi của bạn'
-                                            value={stateForm.old}
-                                            handleOnChange={(value) => {
-                                                setStateForm({
-                                                    ...stateForm,
-                                                    old: value,
-                                                });
-                                                setStateFormError({
-                                                    ...stateFormError,
-                                                    old: ''
-                                                });
-                                            }}
-                                            error={stateFormError.old}
-                                        />
+                                        <div style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'flex-start',
+                                            gap: 12
+                                        }}>
+                                            <Dropdown
+                                                isRequired
+                                                options={gender}
+                                                title='Giới tính'
+                                                placeholder='Chọn giới tính ...'
+                                                value={stateForm.gender}
+                                                handleOnChange={(value) => {
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        gender: value,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        gender: ''
+                                                    });
+                                                }}
+                                                error={stateFormError.gender}
+                                            />
+                                            <Dropdown
+                                                isRequired
+                                                options={RangeOld}
+                                                title='Độ tuổi'
+                                                placeholder='15-25 Tuổi'
+                                                value={stateForm.old}
+                                                handleOnChange={(value) => {
+                                                    setStateForm({
+                                                        ...stateForm,
+                                                        old: value,
+                                                    });
+                                                    setStateFormError({
+                                                        ...stateFormError,
+                                                        old: ''
+                                                    });
+                                                }}
+                                                error={stateFormError.old}
+                                            />
+                                        </div>
                                         <Dropdown
                                             isRequired
                                             options={profession}
