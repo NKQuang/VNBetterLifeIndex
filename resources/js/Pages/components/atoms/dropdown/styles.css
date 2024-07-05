@@ -32,3 +32,11 @@
 .a-dropdown-error .a-dropdown-error span {
     font-size: 13px;
 }
+
+.a-dropdown .css-13cymwt-control::placeholder {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
