@@ -123,12 +123,41 @@
   max-width: unset;
 }
 
+.t-wrapper_form_rating h1 {
+  text-align: center;
+  text-transform: capitalize;
+  width: 100%;
+  font-weight: 600;
+  font-size: 16px;
+  color: #005eca;
+  margin-bottom: 8px;
+}
+
+.o-modal-form_confirm_mobile .react-responsive-modal-modal {
+  height: fit-content;
+  overflow-y: scroll;
+  min-height: unset;
+}
+
+.o-modal-comfirm .react-responsive-modal-modal {
+  height: fit-content;
+  overflow-y: scroll;
+  min-height: unset;
+  padding: 8px;
+  margin: 12px;
+}
+
 @media screen and (max-width: 500px) {
   .o-modal-form_mobile .react-responsive-modal-modal {
     height: fit-content;
-    min-height: 80dvh;
+    min-height: 90dvh;
     width: 95dvw;
     margin: 0;
+    overflow-y: scroll;
+  }
+
+  .o-modal-form_mobile .react-responsive-modal-modal::-webkit-scrollbar {
+    display: none;
   }
 }
 
