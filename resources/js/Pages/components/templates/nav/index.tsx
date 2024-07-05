@@ -152,6 +152,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             !statesSignUp.email ||
             !statesSignUp.phoneNumber ||
             statesSignUp.phoneNumber.length < 9 ||
+            statesSignUp.phoneNumber.length > 14 ||
             !statesSignUp.password ||
             statesSignUp.password.length < 8 ||
             !statesSignUp.passwordConfirm ||
@@ -165,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
             setStatesSignUpErr({
                 fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
                 email: !statesSignUp.email ? 'Email là bắt buộc' : '',
-                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : statesSignUp.phoneNumber.length < 9 ? 'Số điện thoại không đúng định dạng' : '',
+                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : (statesSignUp.phoneNumber.length < 9 || statesSignUp.phoneNumber.length > 14) ? 'Số điện thoại không đúng định dạng' : '',
                 password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
                 passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
                 gender: !statesSignUp.gender?.value ? 'Giới tính là trường bắt buộc' : '',
@@ -174,6 +175,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 relationship: !statesSignUp.relationship?.value ? 'Mối quan hệ là trường bắt buộc' : '',
                 address: !statesSignUp.address?.trim() ? 'Địa chỉ là trường bắt buộc' : '',
             })
+            toast.error('Vui lòng kiểm tra lại thông tin đăng kí.');
             return false;
         }
         return true
@@ -188,6 +190,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
                 username: !statesLogin.username ? "Tài khoản là trường bắt buộc" : "",
                 password: !statesLogin.password ? "Mật khẩu là trường bắt buộc" : ""
             })
+            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập');
             return false;
         }
         return true

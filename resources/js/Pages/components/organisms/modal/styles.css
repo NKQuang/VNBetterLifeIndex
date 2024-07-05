@@ -5,6 +5,7 @@
     border-radius: 8px;
 }
 
+.react-responsive-modal-container::-webkit-scrollbar,
 .react-responsive-modal-modal::-webkit-scrollbar {
     display: none;
 }

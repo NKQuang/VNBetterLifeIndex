@@ -234,6 +234,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 profession: !stateForm.profession?.value ? "Nghề nghiệp là trường bắt buộc" : "",
                 gender: !stateForm.gender?.value ? "Giới tính là trường bắt buộc" : "",
             })
+            toast.error('Vui lòng nhập các trường thông tin bắt buộc.');
             return false;
         }
         if (
@@ -350,6 +351,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             !statesSignUp.fullname ||
             !statesSignUp.email ||
             !statesSignUp.phoneNumber ||
+            statesSignUp.phoneNumber.length < 9 ||
+            statesSignUp.phoneNumber.length > 14 ||
             !statesSignUp.password ||
             statesSignUp.password.length < 8 ||
             !statesSignUp.passwordConfirm ||
@@ -363,7 +366,8 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
             setStatesSignUpErr({
                 fullname: !statesSignUp.fullname ? 'Họ và tên là bắt buộc' : '',
                 email: !statesSignUp.email ? 'Email là bắt buộc' : '',
-                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : '',
+                phoneNumber: !statesSignUp.phoneNumber ? 'Số điện thoại là bắt buộc' : (statesSignUp.phoneNumber.length < 9 ||
+                    statesSignUp.phoneNumber.length > 14) ? 'Số điện thoại không đúng định dạng' : '',
                 password: !statesSignUp.password ? 'Mật khẩu là bắt buộc' : (statesSignUp.password.length < 8 ? 'Mật khẩu tối thiểu 8 kí tự' : ''),
                 passwordConfirm: !statesSignUp.passwordConfirm ? 'Xác nhận mật khẩu là bắt buộc' : (statesSignUp.passwordConfirm !== statesSignUp.password ? 'Xác nhận mật khẩu không chính xác' : ''),
                 gender: !statesSignUp.gender?.value ? 'Giới tính là trường bắt buộc' : '',
@@ -372,6 +376,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 relationship: !statesSignUp.relationship?.value ? 'Mối quan hệ là trường bắt buộc' : '',
                 address: !statesSignUp.address?.trim() ? 'Địa chỉ là trường bắt buộc' : '',
             })
+            toast.error('Vui lòng kiểm tra lại thông tin đăng kí.')
             return false;
         }
         return true
@@ -387,6 +392,7 @@ const FlowerChart: React.FC<FlowerChartProps> = ({ isDetail }) => {
                 username: !statesLogin.username ? "Tài khoản là trường bắt buộc" : "",
                 password: !statesLogin.password ? "Mật khẩu là trường bắt buộc" : ""
             })
+            toast.error('Vui lòng kiểm tra lại thông tin đăng nhập.')
             return false;
         }
         return true
