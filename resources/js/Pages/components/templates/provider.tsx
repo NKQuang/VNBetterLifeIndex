@@ -41,6 +41,8 @@ interface ChartContextData {
     userInfo: User | undefined;
     handleSetInfoUser: (newTheme: User) => void;
     allIndicators: renderChartIndicator[] | undefined
+    handleCheckSafari: (value: boolean) => void;
+    isSafari: boolean;
 }
 
 interface ChartProviderProps {
@@ -67,6 +69,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
     const [theme, setTheme] = useState<ThemeType>('light');
     const [userInfo, setUserInfo] = useState<User>();
     const [allIndicators, setAllIndicators] = useState<renderChartIndicator[]>();
+    const [isSafari, setIsSafari] = useState(false);
 
     useEffect(() => {
         window.addEventListener("resize", () => {
@@ -74,6 +77,7 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
         });
     }, [window.innerWidth])
 
+    const handleCheckSafari = (brower: boolean) => setIsSafari(brower);
     const handleSetTheme = (newTheme: ThemeType) => setTheme(newTheme);
     const handleSetInfoUser = (newTheme: User) => setUserInfo(newTheme);
 
@@ -170,7 +174,9 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             handleSetTheme,
             userInfo,
             handleSetInfoUser,
-            allIndicators
+            allIndicators,
+            handleCheckSafari,
+            isSafari
         }),
         [chartData,
             loading,
@@ -188,7 +194,8 @@ const ChartProvider: React.FC<ChartProviderProps> = ({ children }) => {
             sreenWidth,
             theme,
             userInfo,
-            allIndicators
+            allIndicators,
+            isSafari
         ]
     );
 
