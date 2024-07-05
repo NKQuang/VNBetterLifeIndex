@@ -150,11 +150,12 @@
 @media screen and (max-width: 500px) {
   .o-modal-form_mobile .react-responsive-modal-modal {
     height: fit-content;
-    min-height: 90dvh;
-    max-height: 90dvh;
+    min-height: 95dvh;
+    max-height: 95dvh;
     width: 95dvw;
     margin: 0;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .o-modal-form_mobile .react-responsive-modal-modal::-webkit-scrollbar {
